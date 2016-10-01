@@ -12,6 +12,10 @@ import {
 import Icon from  'react-native-vector-icons/MaterialIcons'
 import { Header,SwipeHeader } from './widgets/Header'
 import Home from './Home'
+import Square from './Square'
+import Fez from './Fez'
+import Noti from './Noti'
+import EvilIcon from  'react-native-vector-icons/EvilIcons'
 
 class App extends Component {
   constructor(props){
@@ -21,7 +25,7 @@ class App extends Component {
     }
   }
   _renderContent(title) {
-    let content = null,head = null
+    let content = null,head = <Header/>
     const { navigator } = this.props
     switch(title){
       case "探索":
@@ -29,19 +33,29 @@ class App extends Component {
           <Home navigator={navigator}/>
         )
         head = (
-          <SwipeHeader swiper={['地图','品牌','关注']} selectedIndex={0} selectCategory={()=>{}}/>
+          <Header
+            left={{
+              icon: "navicon",
+              call: ()=>{}
+            }}
+            center={{title:'探索'}}
+            />
         )
         break;
       case "我本":
         content = (
-          <Home navigator={navigator}/>
+          <Fez navigator={navigator}/>
         )
         break;
       case "广场":
         content = (
-          <Home navigator={navigator}/>
+          <Square navigator={navigator}/>
         )
         break;
+      case "消息":
+        content = (
+          <Noti navigator={navigator} />
+        )
       default:
         break;
     }

@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import React,{Component,PropTypes} from 'react'
 
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
 const {height, width} = Dimensions.get('window')
 import Spinner from 'react-native-spinkit'
@@ -35,7 +34,7 @@ export class Header extends Component {
                 }}
                 >
                 <View style={styles.back}>
-                  {(t.icon!=undefined && t.icon!='') && (<Icon
+                  {(t.icon!=undefined && t.icon!='') && (<EvilIcon
                     name={t.icon}
                     size={35}
                     color="white"

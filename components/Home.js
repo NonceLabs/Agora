@@ -14,19 +14,82 @@ import {
 } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-const {height, width} = Dimensions.get('window')
+import Icon from  'react-native-vector-icons/MaterialIcons'
+import EvilIcon from  'react-native-vector-icons/EvilIcons'
+import Ionicon from  'react-native-vector-icons/Ionicons'
 import Topic from './Topic'
+import s from './widgets/Styles'
+const {height, width} = Dimensions.get('window')
 
 class Home extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      newTopicModal: false,
+      mapModal: false,
+      content: "",
+      addons: []
+    }
+  }
   render() {
     const { home,navigator } = this.props
+    const { content, addons, newTopicModal,mapModal } = this.state
     return (
-      <View style={styles.homeWrapper}>
-        <ScrollView style={styles.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={styles.topicsContentStyle}>
+      <View style={s.root}>
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={newTopicModal}
+          onRequestClose={() => {}}
+          >
+          <View style={s.topicModal}>
+            <TouchableOpacity style={{flexDirection:'column',alignItems:'flex-end',width:width*0.95}} onPress={()=>{
+              this.setState({newTopicModal: false});
+            }}>
+              <EvilIcon name="close" size={50} color="#999"/>
+            </TouchableOpacity>
+            <TextInput
+              multiline={true}
+              style={s.newTopicInput}
+              onChangeText={(content) => this.setState({content})}
+              value={content}
+            />
+            <View style={{flexDirection:'column',width:width}}>
+              {addons.map((t,idx)=>{
+
+              })}
+              {addons.length<=3 && (<TouchableOpacity style={{marginLeft:20,marginTop:6,alignSelf:'flex-start'}}>
+                <EvilIcon name="image" size={50} color={"gray"}/>
+              </TouchableOpacity>)}
+            </View>
+            
+            <View style={s.btnView}>
+              <Text style={s.btnText}>发布</Text>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={mapModal}
+          onRequestClose={() => {}}
+          >
+          <View style={s.topicModal}>
+            <TouchableOpacity style={{flexDirection:'column',alignItems:'flex-end',width:width*0.95}} onPress={()=>{
+              this.setState({mapModal: false});
+            }}>
+              <EvilIcon name="close" size={50} color="#999"/>
+            </TouchableOpacity>
+            <View style={{flexDirection:'column',width:width}}>
+              
+            </View>            
+          </View>
+        </Modal> 
+        <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {home.topics.map((t,idx)=>{
             return (
               <TouchableOpacity
-                key={idx} style={styles.topicWrapper}
+                key={idx} style={s.topicWrapper}
                 onPress={(e) => {
                   navigator.push({
                     id: 'nav',
@@ -35,94 +98,45 @@ class Home extends Component {
                 }}
                 >
                 <View>
-                  <View style={styles.topicAuthor}>
-                    <Image style={styles.avatar} source={t.author.avatarUrl} />
-                    <Text style={styles.name}>{t.author.nickname}</Text>
+                  <View style={s.topicAuthor}>
+                    <Image style={s.avatar} source={t.author.avatarUrl} />
+                    <Text style={s.name}>{t.author.nickname}</Text>
+                    <TouchableOpacity style={s.flexEnd}>
+                      <Icon name="more-horiz" size={20} />
+                    </TouchableOpacity>
                   </View>
-                  <View style={styles.topicContent}>
-                    <Text style={styles.content}>{t.content}</Text>
+                  <View style={s.topicContent}>
+                    <Text style={s.content}>{t.content}</Text>
                   </View>
-                  <View style={styles.topicInfo}>
-                    <Text style={styles.metaInfo}>{"热度"+t.heat}</Text>
-                    <Text style={styles.metaInfo}>{" · "}</Text>
-                    <Text style={styles.metaInfo}>{t.updated}</Text>
+                  <View style={s.topicInfo}>
+                    <Text style={s.metaInfo}>{"热度"+t.heat}</Text>
+                    <Text style={s.metaInfo}>{" · "}</Text>
+                    <Text style={s.metaInfo}>{t.updated}</Text>
                   </View>
                 </View>
               </TouchableOpacity>
             )
           })}
         </ScrollView>
+
+        <View style={s.floatMenu}>
+          <TouchableOpacity onPress={()=> this.setState({mapModal:true})}>
+            <View style={[s.floatMenuItem,{}]}>
+              <Ionicon name="ios-map-outline" size={30} color="black" />
+              <Text style={{marginLeft: 4}}>地图</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=> this.setState({newTopicModal:true})}>
+            <View style={[s.floatMenuItem,{borderLeftWidth:1,marginLeft: 5,paddingLeft:10}]}>
+              <Text style={{marginRight: 4}}>说两句</Text>
+              <Ionicon name="ios-add-circle-outline" size={30} color="black" />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  homeWrapper:{
-    flexDirection: 'column'
-  },
-  topicsContainer:{
-    backgroundColor: 'azure',
-    height: height-110,
-    width: width,
-    position: 'absolute',
-    left: 0,
-    paddingTop: 0
-  },
-  topicsContentStyle:{
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  topicWrapper:{
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    width: width,
-    borderBottomWidth: 1,
-    borderColor: '#999',
-    backgroundColor: 'white',
-    shadowRadius: 1,
-    shadowColor: '#333',
-    shadowOpacity: 0.5,
-    shadowOffset: {height: 1,width: 1},
-    padding: 10,
-    paddingBottom: 5,
-    marginTop: 8
-  },
-  topicAuthor:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: 5
-  },
-  topicContent:{
-    paddingBottom: 5
-  },
-  topicInfo:{
-    flexDirection: 'row',
-    alignSelf: 'flex-start'
-  },
-  metaInfo:{
-    color: '#999',
-    fontSize: 12,
-    fontWeight: '200'
-  },
-  avatar:{
-    width: 20,
-    height: 20,
-    borderRadius: 10
-  },
-  name:{
-    marginLeft: 10,
-    fontSize: 15,
-    fontWeight: '400'
-  },
-  content:{
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: '300'
-  }
-})
 
 function mapStateToProps(state) {
   return {
@@ -140,3 +154,12 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Home)
+
+
+// <TouchableOpacity>
+//             <View style={s.floatMenuItem}>
+//               <Ionicon name="options-outline" size={30} color="black" />
+//               <Text>筛选</Text>
+//             </View>
+//           </TouchableOpacity>
+          

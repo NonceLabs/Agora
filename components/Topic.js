@@ -10,8 +10,10 @@ import {
 } from 'react-native';
 
 import Icon from  'react-native-vector-icons/MaterialIcons'
+import EvilIcon from  'react-native-vector-icons/EvilIcons'
 import { Header,SwipeHeader } from './widgets/Header'
 const {height, width} = Dimensions.get('window')
+import s from './widgets/Styles'
 
 class Topic extends Component {
   render() {
@@ -19,41 +21,41 @@ class Topic extends Component {
     return (
       <View>
         <Header />
-        <ScrollView style={styles.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={styles.topicsContentStyle}>
+        <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {cozes.map((t,idx)=>{
             return (
               <TouchableOpacity
-                key={idx} style={styles.topicWrapper}
+                key={idx} style={[s.topicWrapper,{width:width-20,borderRadius: 5}]}
                 onPress={(e) => {
                   
                 }}
                 >
                 <View>
-                  <View style={styles.topicAuthor}>
-                    <Image style={styles.avatar} source={require('../assets/avatar.png')} />
-                    <Text style={styles.name}>{t.author.nickname}</Text>
-                    <Text style={styles.metaInfo}>{t.coze.date}</Text>
+                  <View style={[s.topicAuthor,{width: width-40}]}>
+                    <Image style={s.avatar} source={require('../assets/avatar.png')} />
+                    <Text style={s.name}>{t.author.nickname}</Text>
+                    <Text style={[s.flexEnd,{marginRight:30}]}>{t.coze.date}</Text>
                   </View>
                   {t.to!=undefined && (
-                    <View style={styles.toTopicContent}>
-                      <Text style={styles.toAuthor}>
+                    <View style={s.toTopicContent}>
+                      <Text style={s.toAuthor}>
                         {t.to.author.nickname+" : "}
-                        <Text style={styles.toContent}>{t.to.coze.content}</Text>
+                        <Text style={s.toContent}>{t.to.coze.content}</Text>
                       </Text>                      
                     </View>
                   )}
-                  <View style={styles.topicContent}>
-                    <Text style={styles.content}>{t.coze.content}</Text>
+                  <View style={s.topicContent}>
+                    <Text style={s.content}>{t.coze.content}</Text>
                   </View>
                   {t.coze.addons!=undefined && t.coze.addons.map((addon,index)=>{
                     return (
                       <TouchableOpacity
-                        key={idx} style={styles.addonWrapper}
+                        key={idx} style={s.addonWrapper}
                         onPress={(e) => {
                           
                         }}
                         >
-                        <Image style={styles.addon} source={{uri: addon}} />
+                        <Image style={s.addon} source={{uri: addon}} />
                       </TouchableOpacity>
                     )
                   })}
@@ -62,10 +64,8 @@ class Topic extends Component {
             )
           })}
           {joinable && (
-            <TouchableOpacity>
-              <View style={styles.joinWrapper}>
-                <Icon name="add" size={55} color="white"/>
-              </View>
+            <TouchableOpacity style={{marginTop: 20}}>
+              <EvilIcon name="plus" size={72} color="#333"/>
             </TouchableOpacity>
           )}
         </ScrollView>
@@ -136,107 +136,5 @@ Topic.defaultProps = {
       }
     }]
 }
-
-const styles = StyleSheet.create({
-  homeWrapper:{
-    flexDirection: 'column'
-  },
-  topicsContainer:{
-    backgroundColor: 'azure',
-    height: height-60,
-    width: width,
-    position: 'absolute',
-    left: 0,
-    paddingTop: 0
-  },
-  topicsContentStyle:{
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  topicWrapper:{
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    width: width-20,
-    borderBottomWidth: 1,
-    borderColor: '#999',
-    backgroundColor: 'white',
-    shadowRadius: 1,
-    shadowColor: '#333',
-    shadowOpacity: 0.5,
-    shadowOffset: {height: 1,width: 1},
-    padding: 10,
-    paddingBottom: 5,
-    marginTop: 8
-  },
-  topicAuthor:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: 5,
-    width: width-40
-  },
-  topicContent:{
-    paddingBottom: 5,
-    paddingTop: 4
-  },
-  toTopicContent:{
-    backgroundColor: '#999',
-    padding: 4,
-    borderRadius: 4
-  },
-  toAuthor:{
-    
-  },
-  toContent:{
-    color: '#333'
-  },
-  topicInfo:{
-    flexDirection: 'row',
-    alignSelf: 'flex-start'
-  },
-  metaInfo:{
-    color: '#999',
-    fontSize: 12,
-    fontWeight: '200',
-    position: 'absolute',
-    right: 10
-  },
-  avatar:{
-    width: 20,
-    height: 20,
-    borderRadius: 10
-  },
-  name:{
-    marginLeft: 10,
-    fontSize: 15,
-    fontWeight: '400'
-  },
-  content:{
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: '300'
-  },
-  addon:{
-    width: width*0.2,
-    height: width*0.2,
-    borderWidth: 1,
-    borderColor: '#999'
-  },
-  addonWrapper:{
-    flexDirection: 'row',
-    alignSelf: 'flex-start'
-  },
-  joinWrapper:{
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: width*0.05,
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'darkslateblue'
-  }
-})
 
 export default Topic;
