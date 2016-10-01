@@ -59,7 +59,7 @@ class Home extends Component {
 
               })}
               {addons.length<=3 && (<TouchableOpacity style={{marginLeft:20,marginTop:6,alignSelf:'flex-start'}}>
-                <EvilIcon name="image" size={50} color={"gray"}/>
+                <EvilIcon name="camera" size={50} color={"gray"}/>
               </TouchableOpacity>)}
             </View>
             
@@ -122,14 +122,14 @@ class Home extends Component {
         <View style={s.floatMenu}>
           <TouchableOpacity onPress={()=> this.setState({mapModal:true})}>
             <View style={[s.floatMenuItem,{}]}>
-              <Ionicon name="ios-map-outline" size={30} color="black" />
-              <Text style={{marginLeft: 4}}>地图</Text>
+              <Ionicon name="ios-map-outline" size={20} color="black" />
+              <Text style={{marginLeft: 4,fontSize: 14}}>地图</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=> this.setState({newTopicModal:true})}>
             <View style={[s.floatMenuItem,{borderLeftWidth:1,marginLeft: 5,paddingLeft:10}]}>
-              <Text style={{marginRight: 4}}>说两句</Text>
-              <Ionicon name="ios-add-circle-outline" size={30} color="black" />
+              <Text style={{marginRight: 4,fontSize: 14}}>说两句</Text>
+              <Ionicon name="ios-add-circle-outline" size={20} color="black" />
             </View>
           </TouchableOpacity>
         </View>

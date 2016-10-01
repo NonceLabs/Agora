@@ -13,7 +13,7 @@ export default styles = StyleSheet.create({
   },
   topicsContainer:{
     backgroundColor: 'aquamarine',
-    height: height-110,
+    height: height-60,
     width: width,
     position: 'absolute',
     left: 0,
@@ -148,7 +148,7 @@ export default styles = StyleSheet.create({
     zIndex: 10,
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 120,
+    bottom: 90,
     padding: 10,
     paddingTop: 8,
     paddingBottom: 8,
@@ -177,5 +177,42 @@ export default styles = StyleSheet.create({
     fontWeight: '100',
     marginLeft: 10,
     marginRight: 10
+  },
+  mask:{
+    width: width,
+    height: height,
+    opacity: 1,
+    backgroundColor: 'black',
+    position: 'absolute',
+    left: width,
+    top: height
+  },
+  menuImage:{
+    width: width*0.6,
+    height: width*0.6
+  },
+  menuWrapper:{
+    flexDirection:'column',
+    paddingTop: 6
+  },
+  menuItemWrapper:{
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingBottom: 6,
+    paddingTop: 6,
+    paddingLeft: 12
+  },
+  menuItemText:{
+    fontSize: 16,
+    fontWeight: '300',
+    marginLeft: 18
+  },
+  avatarInMenu:{
+    position: 'absolute',
+    top: width*0.2,
+    left: width*0.15,
+    width: width*0.3,
+    height: width*0.3 
   }
 })
