@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import Icon from  'react-native-vector-icons/MaterialIcons'
-import { Header } from './widgets/Header'
+import { Header,SwipeHeader } from './widgets/Header'
 import Home from './Home'
 
 class App extends Component {
@@ -29,15 +29,7 @@ class App extends Component {
           <Home navigator={navigator}/>
         )
         head = (
-          <Header
-            right={{
-              icon: 'map',
-              title: '',
-              call: ()=>{
-
-              }
-            }}
-          />
+          <SwipeHeader swiper={['地图','品牌','关注']} selectedIndex={0} selectCategory={()=>{}}/>
         )
         break;
       case "我本":
@@ -82,7 +74,7 @@ class App extends Component {
                   key={idx}
                   renderAsOriginal
                   title={t.title}
-                  icon={require('../assets/Fez.icns')}
+                  icon={require('../assets/ibar.png')}
                   selectedIcon={require('../assets/ibared.png')}
                   selected={selectedTab === t.title}
                   onPress={() => {

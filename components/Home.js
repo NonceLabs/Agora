@@ -14,31 +14,41 @@ import {
 } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-const {height, width} = Dimensions.get('window');
+const {height, width} = Dimensions.get('window')
+import Topic from './Topic'
 
 class Home extends Component {
   render() {
-    const { home } = this.props
-    console.log(home);
+    const { home,navigator } = this.props
     return (
       <View style={styles.homeWrapper}>
         <ScrollView style={styles.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={styles.topicsContentStyle}>
           {home.topics.map((t,idx)=>{
             return (
-              <View key={idx} style={styles.topicWrapper}>
-                <View style={styles.topicAuthor}>
-                  <Image style={styles.avatar} source={t.author.avatarUrl} />
-                  <Text style={styles.name}>{t.author.nickname}</Text>
+              <TouchableOpacity
+                key={idx} style={styles.topicWrapper}
+                onPress={(e) => {
+                  navigator.push({
+                    id: 'nav',
+                    nav: <Topic navigator={navigator}/>,
+                  })
+                }}
+                >
+                <View>
+                  <View style={styles.topicAuthor}>
+                    <Image style={styles.avatar} source={t.author.avatarUrl} />
+                    <Text style={styles.name}>{t.author.nickname}</Text>
+                  </View>
+                  <View style={styles.topicContent}>
+                    <Text style={styles.content}>{t.content}</Text>
+                  </View>
+                  <View style={styles.topicInfo}>
+                    <Text style={styles.metaInfo}>{"热度"+t.heat}</Text>
+                    <Text style={styles.metaInfo}>{" · "}</Text>
+                    <Text style={styles.metaInfo}>{t.updated}</Text>
+                  </View>
                 </View>
-                <View style={styles.topicContent}>
-                  <Text style={styles.content}>{t.content}</Text>
-                </View>
-                <View style={styles.topicInfo}>
-                  <Text style={styles.metaInfo}>{"热度"+t.heat}</Text>
-                  <Text style={styles.metaInfo}>{" · "}</Text>
-                  <Text style={styles.metaInfo}>{t.updated}</Text>
-                </View>
-              </View>
+              </TouchableOpacity>
             )
           })}
         </ScrollView>
