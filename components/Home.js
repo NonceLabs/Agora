@@ -10,7 +10,8 @@ import {
   Dimensions,
   Alert,
   ScrollView,
-  TextInput
+  TextInput,
+  MapView
 } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -20,12 +21,13 @@ import Ionicon from  'react-native-vector-icons/Ionicons'
 import Topic from './Topic'
 import s from './widgets/Styles'
 const {height, width} = Dimensions.get('window')
+import TextModal from './widgets/TextModal'
 
 class Home extends Component {
   constructor(props){
     super(props)
     this.state = {
-      newTopicModal: false,
+      textModalVisible: false,
       mapModal: false,
       content: "",
       addons: []
@@ -33,41 +35,12 @@ class Home extends Component {
   }
   render() {
     const { home,navigator } = this.props
-    const { content, addons, newTopicModal,mapModal } = this.state
+    const { content, addons, textModalVisible,mapModal } = this.state
     return (
       <View style={s.root}>
-        <Modal
-          animationType={"slide"}
-          transparent={false}
-          visible={newTopicModal}
-          onRequestClose={() => {}}
-          >
-          <View style={s.topicModal}>
-            <TouchableOpacity style={{flexDirection:'column',alignItems:'flex-end',width:width*0.95}} onPress={()=>{
-              this.setState({newTopicModal: false});
-            }}>
-              <EvilIcon name="close" size={50} color="#999"/>
-            </TouchableOpacity>
-            <TextInput
-              multiline={true}
-              style={s.newTopicInput}
-              onChangeText={(content) => this.setState({content})}
-              value={content}
-            />
-            <View style={{flexDirection:'column',width:width}}>
-              {addons.map((t,idx)=>{
-
-              })}
-              {addons.length<=3 && (<TouchableOpacity style={{marginLeft:20,marginTop:6,alignSelf:'flex-start'}}>
-                <EvilIcon name="camera" size={50} color={"gray"}/>
-              </TouchableOpacity>)}
-            </View>
-            
-            <View style={s.btnView}>
-              <Text style={s.btnText}>发布</Text>
-            </View>
-          </View>
-        </Modal>
+        {textModalVisible && (
+          <TextModal title="话题" submit={()=>{}} btnText="发布" hide={()=>{ this.setState({textModalVisible:false});}}/>
+        )}
         <Modal
           animationType={"slide"}
           transparent={false}
@@ -78,7 +51,7 @@ class Home extends Component {
             <TouchableOpacity style={{flexDirection:'column',alignItems:'flex-end',width:width*0.95}} onPress={()=>{
               this.setState({mapModal: false});
             }}>
-              <EvilIcon name="close" size={50} color="#999"/>
+              <EvilIcon name="close-o" size={50} color="#999"/>
             </TouchableOpacity>
             <View style={{flexDirection:'column',width:width}}>
               
@@ -126,7 +99,7 @@ class Home extends Component {
               <Text style={{marginLeft: 4,fontSize: 14}}>地图</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=> this.setState({newTopicModal:true})}>
+          <TouchableOpacity onPress={()=> this.setState({textModalVisible:true})}>
             <View style={[s.floatMenuItem,{borderLeftWidth:1,marginLeft: 5,paddingLeft:10}]}>
               <Text style={{marginRight: 4,fontSize: 14}}>说两句</Text>
               <Ionicon name="ios-add-circle-outline" size={20} color="black" />

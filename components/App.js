@@ -10,7 +10,9 @@ import {
   Animated,
   PanResponder,
   Easing,
-  Modal
+  Modal,
+  TouchableOpacity,
+  TextInput
 } from 'react-native';
 
 import Icon from  'react-native-vector-icons/MaterialIcons'
@@ -23,16 +25,22 @@ import EvilIcon from  'react-native-vector-icons/EvilIcons'
 import Menu from './Menu'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
+import { openMenu,selectMenuitem } from '../actions/OpAction'
+import TextModal from './widgets/TextModal'
+import History from './History'
+import Hot from './Hot'
+import Setting from './Setting'
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedTab: '探索',
       theta: new Animated.Value(0),
       slideTo: 'right',
       animateV: 0,
-      offsetLimit: props.defaultOffset
+      offsetLimit: props.defaultOffset,
+      feedback: "",
+      addons: []
     }
   }
   componentWillMount() {
@@ -42,8 +50,8 @@ class App extends Component {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => false,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => false,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
 
       onPanResponderGrant: (evt, gestureState) => {
         
@@ -86,9 +94,11 @@ class App extends Component {
   open(){
     const { offsetLimit } = this.state
     this._animate(offsetLimit)
+    this.props.openMenu()
   }
   close(){
     this._animate(0)
+    this.props.openMenu()
   }
   _toggle(){
     const { animateV,offsetLimit } = this.state
@@ -99,132 +109,88 @@ class App extends Component {
       this.open()
     }
   }
-  _renderContent(title) {
-    let content = null,head = <Header/>
-    const { navigator } = this.props
-    switch(title){
-      case "探索":
-        content = (
-          <Home navigator={navigator}/>
-        )
-        head = (
-          <Header
-            left={{
-              icon: "navicon",
-              call: ()=>{}
-            }}
-            center={{title:'探索'}}
-            />
-        )
-        break;
-      case "我本":
-        content = (
-          <Fez navigator={navigator}/>
-        )
-        break;
-      case "广场":
-        content = (
-          <Square navigator={navigator}/>
-        )
-        break;
-      case "消息":
-        content = (
-          <Noti navigator={navigator} />
-        )
-      default:
-        break;
-    }
-    return (
-      <View>
-        {head}
-        {content}
-      </View>
-    );
-  }
+  
   render() {
-    const { navigator,defaultOffset } = this.props
+    const { navigator,defaultOffset,op,selectMenuitem } = this.props
     const { offsetLimit,animateV } = this.state
 
     return (
-      <View style={styles.flipCardContainer} {...this._panResponder.panHandlers}>
-        <Animated.View style={[styles.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
-          <Menu />
+      <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
+        <Animated.View style={[s.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
+          <Menu closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
         </Animated.View>
         <Animated.View style={[
-          styles.flipCard,{backgroundColor: 'blue',top: 0,left: this.state.theta}]}>
-          <View>
-            {animateV>0 && (<View style={s.mask}>
-            </View>)}
-            <Header
-              left={{
-                icon: "navicon",
-                call: ()=>{ this._toggle() }
-              }}
-              center={{title:'探索'}}
-              />
-            <Home  navigator={navigator}/>
-          </View>
+          s.flipCard,{backgroundColor: 'blue',top: 0,left: this.state.theta}]}>
+          {this.renderMain(op.menuItem,navigator,op.menuOpen)}
         </Animated.View>
+        {op.menuItem=="反馈" && (
+          <TextModal title="意见与建议" submit={()=>{}} btnText="发送" hide={()=>{ this.props.selectMenuitem("首页")} }/>
+        )}
       </View>
     )
   }
 
-  renderAsTab(){
-    const { selectedTab } = this.state
-    const { tabs } = this.props
+  renderMain(item,navigator,menuOpen){
+    let head = (
+      <Header
+        left={{
+          icon: menuOpen ? "arrow-left" : "navicon",
+          call: ()=>{ this._toggle() }
+        }}
+        center={{title:''}}
+        />
+    )
+    let content = null 
+    switch(item){
+      case "我":
+        content = <Fez />
+        head = (
+          <Header
+            left={{
+              icon: menuOpen ? "arrow-left" : "navicon",
+              call: ()=>{ this._toggle() }
+            }}
+            right={{icon:'pencil',call:()=>{}}}
+            />
+        )
+        break;
+      case "消息":
+        content = <Noti />
+        break;
+      case "反馈":
+        head = null
+        content = (
+          <View style={s.root}>
+          </View>
+        )
+        break;
+      case "历史":
+        content = (
+          <History />
+        )
+        break;
+      case "热门":
+        content = (
+          <Hot />
+        )
+        break;
+      case "设置":
+        content = (
+          <Setting />
+        )
+        break;
+      default: 
+        content = <Home navigator={navigator}/>
+    }
+
     return (
-        <TabBarIOS
-          tintColor="white"
-          barTintColor="darkslateblue"
-          style={styles.tabBar}>
-          {tabs.map((t,idx)=>{
-            if (idx==3) {
-              return (
-                <TabBarIOS.Item
-                  key={idx}
-                  renderAsOriginal
-                  title={t.title}
-                  icon={require('../assets/ibar.png')}
-                  selectedIcon={require('../assets/ibared.png')}
-                  selected={selectedTab === t.title}
-                  onPress={() => {
-                    this.setState({
-                      selectedTab: t.title,
-                    });
-                  }}>
-                  {this._renderContent(t.title)}
-                </TabBarIOS.Item>
-              )
-            }
-            return (
-              <Icon.TabBarItem
-                key={idx}
-                title={t.title}
-                badge={null}
-                iconName={t.icon}
-                selectedIconName={t.icon}
-                selected={selectedTab === t.title}
-                onPress={() => {
-                  this.setState({selectedTab: t.title});
-                }}>
-                {this._renderContent(t.title)}
-              </Icon.TabBarItem>
-            )
-          })}
-        </TabBarIOS>
-      );
+      <View style={{borderRightWidth: 1,}}>
+        {head}
+        {content}
+      </View>
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  tabBar:{
-    height: 0,
-    backgroundColor: 'darkslateblue'
-  },
-  wrapper:{
-    flex: 1,
-  },
-});
 
 App.defaultProps = {
   defaultOffset: width*0.6,
@@ -245,35 +211,18 @@ App.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    
+    op: state.op
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
- 
- }
+    openMenu: bindActionCreators(openMenu, dispatch),
+    selectMenuitem: bindActionCreators(selectMenuitem, dispatch)
+  }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App)
-
-
-            // return (
-            //   <TabBarIOS.Item
-            //     key={idx}
-            //     renderAsOriginal
-            //     title={t.title}
-            //     icon={require('../assets/bar.png')}
-            //     selectedIcon={require('../assets/bar.png')}
-            //     selected={this.state.selectedTab === t.title}
-            //     onPress={() => {
-            //       this.setState({
-            //         selectedTab: t.title,
-            //       });
-            //     }}>
-            //     {this._renderContent(t.title)}
-            //   </TabBarIOS.Item>
-            // )

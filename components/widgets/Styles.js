@@ -9,10 +9,10 @@ export default styles = StyleSheet.create({
     flexDirection: 'column',
     width: width,
     height: height,
-    backgroundColor: 'bisque'
+    backgroundColor: 'white'
   },
   topicsContainer:{
-    backgroundColor: 'aquamarine',
+    backgroundColor: 'white',
     height: height-60,
     width: width,
     position: 'absolute',
@@ -121,7 +121,7 @@ export default styles = StyleSheet.create({
     width: width*0.9,
     height: width*0.5,
     borderColor: '#999',
-    marginTop: 80,
+    marginTop: 20,
     alignSelf: 'center',
     borderBottomWidth: 3,
     borderTopWidth: 3,
@@ -184,8 +184,8 @@ export default styles = StyleSheet.create({
     opacity: 1,
     backgroundColor: 'black',
     position: 'absolute',
-    left: width,
-    top: height
+    left: 0,
+    top: 0
   },
   menuImage:{
     width: width*0.6,
@@ -210,9 +210,74 @@ export default styles = StyleSheet.create({
   },
   avatarInMenu:{
     position: 'absolute',
-    top: width*0.2,
-    left: width*0.15,
+    top: width*0.1,
+    left: width*0.05,
     width: width*0.3,
     height: width*0.3 
+  },
+  flipCardContainer: {
+    width: width,
+    height: height,
+    backgroundColor: 'white'
+  },
+  flipCard: {
+    width: width*0.6,
+    height: height
+  },
+  fezAvatar:{
+    width: width*0.3,
+    height: width*0.3,
+    borderRadius: width*0.15,
+    padding: 4,
+    borderWidth: 4,
+    borderColor: 'darkslateblue'
+  },
+  fezName:{
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#666',
+    marginRight: 20    
+  },
+  h1:{
+    fontSize: 24,
+    textAlign: 'center',
+    fontWeight: '700'
+  },
+  gray:{
+    color: '#999'
+  },
+  h2:{
+    fontSize: 22,
+    textAlign: 'center',
+    fontWeight: '700'
+  },
+  deepGray:{
+    color: '#666'
+  },
+  rowCenter:{
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  columnStart:{
+    flexDirection: 'column',
+    alignItems: 'flex-start'
+  },
+  setList:{
+    width: width-20,
+    marginLeft: 10,
+    paddingTop: 18,
+    paddingBottom: 18,
+    borderBottomWidth: 1,
+    borderColor: '#999'
+  },
+  h3:{
+    fontSize: 20,
+  },
+  h4:{
+    fontSize: 18
+  },
+  h5:{
+    fontSize: 16
   }
 })

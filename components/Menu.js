@@ -19,25 +19,37 @@ const {height, width} = Dimensions.get('window')
 
 class Menu extends Component {
   render() {
-    const { menus } = this.props
+    const { menus,closeMenu,selectMenuitem } = this.props
     return (
       <View style={[s.root,{
         zIndex:10,
+        width: width*0.6-2,
+        borderRightWidth: 1,
         shadowRadius: 1,
         shadowColor: '#333',
         shadowOpacity: 0.5,
         shadowOffset: {height: 1,width: 1},}]}>
         <View>
           <Image source={require('../assets/menu_bg.jpg')} style={s.menuImage}/>
-          <Image source={require('../assets/avatar.png')} style={s.avatarInMenu}/>
+          <TouchableOpacity style={s.avatarInMenu} onPress={()=>{
+            closeMenu()
+            selectMenuitem("我")
+          }}>
+            <Image source={require('../assets/avatar.png')} style={s.avatarInMenu}/>
+          </TouchableOpacity>
         </View>
         <View style={s.menuWrapper}>
           {menus.map((t,idx)=>{
             return (
-              <View key={idx} style={s.menuItemWrapper}>
-                <EvilIcon name={t.icon} size={30} color="darkslateblue"/>
-                <Text style={s.menuItemText}>{t.title}</Text>
-              </View>
+              <TouchableOpacity key={idx} onPress={()=>{
+                closeMenu()
+                selectMenuitem(t.title)
+              }}>
+                <View style={s.menuItemWrapper}>
+                  <EvilIcon name={t.icon} size={30} color="darkslateblue"/>
+                  <Text style={s.menuItemText}>{t.title}</Text>
+                </View>
+              </TouchableOpacity>
             )
           })}
         </View>
@@ -48,20 +60,17 @@ class Menu extends Component {
 
 Menu.defaultProps = {
   menus:[{
+    icon: 'location',
+    title: '首页'
+  },{
     icon: 'bell',
     title: '消息'
   },{
-    icon: 'star',
-    title: '话题'
-  },{
     icon: 'tag',
-    title: '标签'
+    title: '热门'
   },{
-    icon: 'eye',
+    icon: 'clock',
     title: '历史'
-  },{
-    icon: 'user',
-    title: '个人资料'
   },{
     icon: 'gear',
     title: '设置'

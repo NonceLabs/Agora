@@ -4,7 +4,8 @@ import rootReducer from '../reducers'
 
 const initial={
   user:{},
-  home:{}
+  home:{},
+  op:{}
 }
 
 export const store = createStore(

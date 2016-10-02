@@ -14,20 +14,39 @@ import EvilIcon from  'react-native-vector-icons/EvilIcons'
 import { Header,SwipeHeader } from './widgets/Header'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
+import TextModal from './widgets/TextModal'
 
 class Topic extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      cozeModalVisible: false
+    }
+  }
   render() {
     const { cozes,navigator,joinable } = this.props
+    const { cozeModalVisible } = this.state
     return (
       <View>
-        <Header />
+        {cozeModalVisible && (
+          <TextModal title="回复" btnText="发送" submit={()=>{
+
+          }} hide={()=> this.setState({cozeModalVisible:false})}/>
+        )}
+        <Header left={{
+          icon: 'arrow-left',
+          title: '',
+          call: ()=>{
+            navigator.pop()
+          }
+        }}/>
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {cozes.map((t,idx)=>{
             return (
               <TouchableOpacity
                 key={idx} style={[s.topicWrapper,{width:width-20,borderRadius: 5}]}
                 onPress={(e) => {
-                  
+                  this.setState({cozeModalVisible: true});
                 }}
                 >
                 <View>
@@ -64,7 +83,7 @@ class Topic extends Component {
             )
           })}
           {joinable && (
-            <TouchableOpacity style={{marginTop: 20}}>
+            <TouchableOpacity style={{marginTop: 20}} onPress={()=> this.setState({cozeModalVisible:true})}>
               <EvilIcon name="plus" size={72} color="#333"/>
             </TouchableOpacity>
           )}

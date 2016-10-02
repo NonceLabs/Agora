@@ -28,20 +28,21 @@ export class Header extends Component {
           const not_null = (t != undefined && t!=null)
           return (
             <View style={[ss[idx],(not_null && t.style!=undefined) ? t.style : {}]} key={idx}>
-              {not_null && (<TouchableOpacity
-                onPress={(e) => {
-                  t.call();
-                }}
-                >
-                <View style={styles.back}>
-                  {(t.icon!=undefined && t.icon!='') && (<EvilIcon
-                    name={t.icon}
-                    size={35}
-                    color="white"
-                    />)}
-                  {(t.title!=undefined && t.title!='')&&(<Text style={styles.title}>{t.title}</Text>)}
-                </View>
-              </TouchableOpacity>)}
+              {not_null && (
+                <TouchableOpacity
+                  onPress={(e) => {
+                    t.call();
+                  }}
+                  >
+                  <View style={styles.back}>
+                    {(t.icon!=undefined && t.icon!='') && (<EvilIcon
+                      name={t.icon}
+                      size={42}
+                      color="black"
+                      />)}
+                    {(t.title!=undefined && t.title!='')&&(<Text style={styles.title}>{t.title}</Text>)}
+                  </View>
+                </TouchableOpacity>)}
             </View>
           )
         })}
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   header:{
     height: 60,
     width: width,
-    backgroundColor: 'darkslateblue',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'flex-end',
     flexDirection: 'row'

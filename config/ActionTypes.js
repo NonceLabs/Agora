@@ -1,0 +1,3 @@
+export const OPEN_MENU = 'OPEN_MENU'
+
+export const SELECT_MENUITEM = 'SELECT_MENUITEM'
