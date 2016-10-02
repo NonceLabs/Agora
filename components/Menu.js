@@ -40,12 +40,13 @@ class Menu extends Component {
         </View>
         <View style={s.menuWrapper}>
           {menus.map((t,idx)=>{
+            const sep = t.title=="历史" && {borderBottomWidth:1,borderColor:'#999'}
             return (
               <TouchableOpacity key={idx} onPress={()=>{
                 closeMenu()
                 selectMenuitem(t.title)
               }}>
-                <View style={s.menuItemWrapper}>
+                <View style={[s.menuItemWrapper,sep]}>
                   <EvilIcon name={t.icon} size={30} color="darkslateblue"/>
                   <Text style={s.menuItemText}>{t.title}</Text>
                 </View>

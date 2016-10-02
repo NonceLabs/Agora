@@ -150,7 +150,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: '#999'
   },
   title:{
     color: 'white',
