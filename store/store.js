@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 import rootReducer from '../reducers'
 
 const initial={
-  user:{},
+  fez:{},
   home:{},
   op:{}
 }
@@ -13,6 +13,6 @@ export const store = createStore(
   {},
   applyMiddleware(thunk)
 )
-// store.subscribe(() => {  
-//   console.log(state);
-// })
+store.subscribe(() => {  
+  console.log(store.getState());
+})

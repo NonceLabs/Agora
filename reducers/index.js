@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
-import user from './user'
+import fez from './fez'
 import home from './home'
 import op from './op'
 const rootReducer = combineReducers({
-  user,
+  fez,
   home,
   op
 })

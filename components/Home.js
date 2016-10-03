@@ -22,7 +22,9 @@ import Topic from './Topic'
 import s from './widgets/Styles'
 const {height, width} = Dimensions.get('window')
 import TextModal from './widgets/TextModal'
-
+import axios from 'axios'
+import { AVATAR } from '../config/index'
+import { createTopic } from '../actions/TopicAction'
 class Home extends Component {
   constructor(props){
     super(props)
@@ -33,13 +35,31 @@ class Home extends Component {
       addons: []
     }
   }
+
+  componentDidMount() {
+    
+  }
+  
+
   render() {
-    const { home,navigator } = this.props
+    const { home,navigator,createTopic,fez } = this.props
     const { content, addons, textModalVisible,mapModal } = this.state
     return (
       <View style={s.root}>
         {textModalVisible && (
-          <TextModal title="话题" submit={()=>{}} btnText="发布" hide={()=>{ this.setState({textModalVisible:false});}}/>
+          <TextModal title="话题" submit={(content,addons)=>{
+            createTopic({
+              content,
+              addons,
+              date: new Date(),
+              author: {
+                id: fez._id,
+                nickname: fez.nickname,
+                avatarUrl: fez.avatarUrl
+              },
+              location: [1,1]
+            })
+          }} btnText="发布" hide={()=>{ this.setState({textModalVisible:false});}}/>
         )}
         <Modal
           animationType={"slide"}
@@ -59,32 +79,32 @@ class Home extends Component {
           </View>
         </Modal> 
         <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
-          {home.topics.map((t,idx)=>{
+          {home.topics.map((t,idx)=>{            
             return (
               <TouchableOpacity
                 key={idx} style={s.topicWrapper}
                 onPress={(e) => {
                   navigator.push({
                     id: 'nav',
-                    nav: <Topic navigator={navigator}/>,
+                    nav: <Topic navigator={navigator} topic={t}/>,
                   })
                 }}
                 >
                 <View>
                   <View style={s.topicAuthor}>
-                    <Image style={s.avatar} source={t.author.avatarUrl} />
+                    <Image style={s.avatar} source={{uri: t.author.avatarUrl||AVATAR}} />
                     <Text style={s.name}>{t.author.nickname}</Text>
                     <TouchableOpacity style={s.flexEnd}>
-                      <Icon name="more-horiz" size={20} />
+                      <Icon name="more-horiz" size={20} color="#999"/>
                     </TouchableOpacity>
                   </View>
                   <View style={s.topicContent}>
                     <Text style={s.content}>{t.content}</Text>
                   </View>
                   <View style={s.topicInfo}>
-                    <Text style={s.metaInfo}>{"热度"+t.heat}</Text>
+                    <Text style={s.metaInfo}>{"热度"}</Text>
                     <Text style={s.metaInfo}>{" · "}</Text>
-                    <Text style={s.metaInfo}>{t.updated}</Text>
+                    <Text style={s.metaInfo}>{t.updated||(new Date()).toLocaleTimeString()}</Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -113,14 +133,15 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    home: state.home 
+    home: state.home,
+    fez: state.fez
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
- 
- }
+    createTopic: bindActionCreators(createTopic, dispatch)
+  }
 }
 
 export default connect(

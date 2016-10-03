@@ -9,64 +9,110 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Icon from  'react-native-vector-icons/MaterialIcons'
 import EvilIcon from  'react-native-vector-icons/EvilIcons'
 import { Header,SwipeHeader } from './widgets/Header'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import TextModal from './widgets/TextModal'
+import { fetchCozes,createCoze } from '../actions/TopicAction'
 
 class Topic extends Component {
   constructor(props){
     super(props)
     this.state = {
-      cozeModalVisible: false
+      cozeModalVisible: false,
+      cozeTo: null
     }
   }
+  
+  componentWillMount() {
+    const { fetchCozes,topic,fez } = this.props
+    fetchCozes(topic._id,fez._id)
+  }
+  
+  richTo(cozes){
+    return cozes.map((t)=>{
+      if (t.to != undefined) {
+        return Object.assign({},t,{
+          to: cozes.filter((it)=> it._id==t.to)[0]
+        })
+      }
+      return t
+    })
+  }
+
   render() {
-    const { cozes,navigator,joinable } = this.props
-    const { cozeModalVisible } = this.state
+    const { home,navigator,joinable,fez,createCoze,topic } = this.props
+    const { cozeModalVisible,cozeTo } = this.state
+
+    const unity = [topic].concat(this.richTo(home.cozes))
+    console.log(unity);
     return (
       <View>
         {cozeModalVisible && (
-          <TextModal title="回复" btnText="发送" submit={()=>{
-
-          }} hide={()=> this.setState({cozeModalVisible:false})}/>
+          <TextModal title="回复" btnText="发送" submit={(content,addons)=>{
+            createCoze(topic._id,{
+              content,
+              addons,
+              date: new Date(),
+              author:{
+                id: fez._id,
+                nickname: fez.nickname,
+                avatarUrl: fez.avatarUrl
+              },
+              to: cozeTo!=null ? cozeTo.cozeId : undefined
+            })
+          }} hide={()=> this.setState({cozeModalVisible:false})} extra={cozeTo}/>
         )}
-        <Header left={{
+        <Header
+         left={{
           icon: 'arrow-left',
           title: '',
           call: ()=>{
             navigator.pop()
           }
-        }}/>
+         }}
+         right={{
+           icon: 'plus',
+           call: ()=>{
+             this.setState({cozeModalVisible:true,cozeTo:null})
+           }
+         }}
+         />
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
-          {cozes.map((t,idx)=>{
+          {unity.map((t,idx)=>{
             return (
               <TouchableOpacity
                 key={idx} style={[s.topicWrapper,{width:width-20,borderRadius: 5}]}
                 onPress={(e) => {
-                  this.setState({cozeModalVisible: true});
+                  this.setState({cozeModalVisible: true,cozeTo:{
+                    name: t.author.nickname,
+                    coze: t.content,
+                    cozeId: t._id
+                  }});
                 }}
                 >
                 <View>
                   <View style={[s.topicAuthor,{width: width-40}]}>
                     <Image style={s.avatar} source={require('../assets/avatar.png')} />
                     <Text style={s.name}>{t.author.nickname}</Text>
-                    <Text style={[s.flexEnd,{marginRight:30}]}>{t.coze.date}</Text>
+                    <Text style={[s.flexEnd,{marginRight:30}]}>{typeof(t.date)=="string"?(new Date(t.date)).toLocaleString():t.date.toLocaleString()}</Text>
                   </View>
                   {t.to!=undefined && (
                     <View style={s.toTopicContent}>
                       <Text style={s.toAuthor}>
                         {t.to.author.nickname+" : "}
-                        <Text style={s.toContent}>{t.to.coze.content}</Text>
+                        <Text style={s.toContent}>{t.to.content}</Text>
                       </Text>                      
                     </View>
                   )}
                   <View style={s.topicContent}>
-                    <Text style={s.content}>{t.coze.content}</Text>
+                    <Text style={s.content}>{t.content}</Text>
                   </View>
-                  {t.coze.addons!=undefined && t.coze.addons.map((addon,index)=>{
+                  {t.addons!=undefined && t.addons.map((addon,index)=>{
                     return (
                       <TouchableOpacity
                         key={idx} style={s.addonWrapper}
@@ -82,11 +128,6 @@ class Topic extends Component {
               </TouchableOpacity>
             )
           })}
-          {joinable && (
-            <TouchableOpacity style={{marginTop: 20}} onPress={()=> this.setState({cozeModalVisible:true})}>
-              <EvilIcon name="plus" size={72} color="#333"/>
-            </TouchableOpacity>
-          )}
         </ScrollView>
       </View>
     );
@@ -94,66 +135,24 @@ class Topic extends Component {
 }
 
 Topic.defaultProps = {
-  joinable: true,
-  cozes:[{
-      id: 'a1',
-      author: {
-        id: '',
-        nickname: '曹东'
-      },
-      coze: {
-        type: 'text',
-        content: '哎呀呀，你看你手上拿的是什么啊',
-        date: (new Date()).toLocaleTimeString()
-      }
-    },{
-      id: 'a2',
-      author: {
-        id: '',
-        nickname: '万青'
-      },
-      coze: {
-        type: 'text',
-        content: '那东西我们早就不屑啦',
-        date: (new Date()).toLocaleTimeString()
-      }
-    },{
-      id: 'a3',
-      to: {
-        id: 'a2',
-        toid: '',
-        author: {
-          id: '',
-          nickname: '万青'
-        },
-        coze: {
-          type: 'text',
-          content: '那东西我们早就不屑啦',
-          date: (new Date()).toLocaleTimeString()
-        }
-      },
-      author: {
-        id: '',
-        nickname: '惘闻'
-      },
-      coze: {
-        type: 'text',
-        content: '我们在原野上找一面墙,我们在标签里找方向，我们在废墟般的垃圾里找一块红砖，我们在工整的巷子里找家',
-        date: (new Date()).toLocaleTimeString()
-      }
-    },{
-      id: 'a4',
-      author: {
-        id: '',
-        nickname: '新裤子'
-      },
-      coze: {
-        type: 'text',
-        content: '我们在标签里找方向\n我们在废墟中的垃圾里找一块红砖\n我们在工整的巷子里找家',
-        addons:['http://vimg.mangocity.com/vimg/trip/big_188320_1398048439653.jpg'],
-        date: (new Date()).toLocaleTimeString()
-      }
-    }]
+  joinable: true
 }
 
-export default Topic;
+function mapStateToProps(state) {
+  return {
+    home: state.home,
+    fez: state.fez
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchCozes: bindActionCreators(fetchCozes, dispatch),
+    createCoze: bindActionCreators(createCoze, dispatch)
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Topic)

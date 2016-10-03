@@ -82,7 +82,9 @@ export default styles = StyleSheet.create({
   },
   addonWrapper:{
     flexDirection: 'row',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    marginLeft: 5,
+    marginRight: 5
   },
   joinWrapper:{
     flexDirection: 'row',

@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "axios": "^0.14.0",
     "react": "15.3.2",
     "react-native": "0.34.1",
     "react-native-blur": "^1.0.1",

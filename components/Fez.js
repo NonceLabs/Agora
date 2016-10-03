@@ -17,19 +17,19 @@ import s from './widgets/Styles'
 
 class Fez extends Component {
   render() {
-    const { user } = this.props
+    const { fez } = this.props
     return (
       <View style={[s.root,{alignItems:'center'}]}>
-        <Image source={user.avatarUrl} style={s.fezAvatar}/>
+        <Image source={{uri:fez.avatarUrl}} style={s.fezAvatar}/>
         <View style={{flexDirection:'row',paddingTop: 20}}>
-          <Text style={s.fezName}>{user.nickname}</Text>
-          {this.getGender(user.gender)}          
+          <Text style={s.fezName}>{fez.nickname}</Text>
+          {this.getGender(fez.gender)}          
         </View>
 
         <View style={{flexDirection:'row',paddingTop: 20,alignItems:'center'}}>
-          <Text style={[s.fezName,{fontSize: 16,marginRight: 5}]}>{user.province}</Text>
-          <Text style={[s.fezName,{fontSize: 16,marginRight: 5,marginLeft:5}]}>{user.city}</Text>
-          <Text style={[s.fezName,{fontSize: 16,marginRight:0}]}>{", "+user.country}</Text>
+          <Text style={[s.fezName,{fontSize: 16,marginRight: 5}]}>{fez.province}</Text>
+          <Text style={[s.fezName,{fontSize: 16,marginRight: 5,marginLeft:5}]}>{fez.city}</Text>
+          <Text style={[s.fezName,{fontSize: 16,marginRight:0}]}>{", "+fez.country}</Text>
         </View>
       </View>
     );
@@ -50,7 +50,7 @@ class Fez extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.user 
+    fez: state.fez 
   }
 }
 

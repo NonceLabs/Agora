@@ -26,10 +26,14 @@ import Menu from './Menu'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import { openMenu,selectMenuitem } from '../actions/OpAction'
+import { fetchUser } from '../actions/FezAction'
+import { fetchTopics } from '../actions/TopicAction'
+
 import TextModal from './widgets/TextModal'
 import History from './History'
 import Hot from './Hot'
 import Setting from './Setting'
+
 
 class App extends Component {
   constructor(props){
@@ -81,6 +85,12 @@ class App extends Component {
     });
   }
 
+  componentDidMount() {
+    this.props.fetchUser('57f1f59b46df4f1ebd65053a')
+    this.props.fetchTopics(1,1,1)
+  }
+  
+
   _animate(v) {
     this.setState({animateV:v})
     Animated.timing(this.state.theta, {
@@ -116,6 +126,23 @@ class App extends Component {
 
     return (
       <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={false}
+          onRequestClose={() => {}}
+          >
+          <View style={s.topicModal}>
+            <TouchableOpacity style={{flexDirection:'column',alignItems:'flex-end',width:width*0.95}} onPress={()=>{
+              
+            }}>
+              <EvilIcon name="close-o" size={50} color="#999"/>
+            </TouchableOpacity>
+            <View style={{flexDirection:'column',width:width}}>
+              
+            </View>            
+          </View>
+        </Modal>
         <Animated.View style={[s.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
           <Menu closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
         </Animated.View>
@@ -218,7 +245,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     openMenu: bindActionCreators(openMenu, dispatch),
-    selectMenuitem: bindActionCreators(selectMenuitem, dispatch)
+    selectMenuitem: bindActionCreators(selectMenuitem, dispatch),
+    fetchUser: bindActionCreators(fetchUser, dispatch),
+    fetchTopics: bindActionCreators(fetchTopics, dispatch)
   }
 }
 
