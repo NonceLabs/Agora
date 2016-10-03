@@ -452,7 +452,8 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = KJB8DLYA43;
+						DevelopmentTeam = UJY4NHS9W7;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -753,10 +754,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: chezhe@outlook.com (48NH7FPG2P)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Liang Wang (R5X75GZQD2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Liang Wang (R5X75GZQD2)";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = KJB8DLYA43;
+				DEVELOPMENT_TEAM = UJY4NHS9W7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -772,8 +774,10 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.loaf.square;
 				PRODUCT_NAME = Agora;
-				PROVISIONING_PROFILE = "fb13cf0f-debd-4700-9457-5151c2e911c3";
+				PROVISIONING_PROFILE = "2fbb5156-9ead-45ff-aa7c-ce6e55fa69d1";
+				PROVISIONING_PROFILE_SPECIFIER = "广场";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -782,8 +786,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Liang Wang (R5X75GZQD2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Liang Wang (R5X75GZQD2)";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KJB8DLYA43;
+				DEVELOPMENT_TEAM = UJY4NHS9W7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -799,8 +805,10 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.loaf.square;
 				PRODUCT_NAME = Agora;
-				PROVISIONING_PROFILE = "fb13cf0f-debd-4700-9457-5151c2e911c3";
+				PROVISIONING_PROFILE = "2fbb5156-9ead-45ff-aa7c-ce6e55fa69d1";
+				PROVISIONING_PROFILE_SPECIFIER = "广场";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
