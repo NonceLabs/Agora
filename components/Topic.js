@@ -18,6 +18,7 @@ const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import TextModal from './widgets/TextModal'
 import { fetchCozes,createCoze } from '../actions/TopicAction'
+import { Card } from './widgets/Card'
 
 class Topic extends Component {
   constructor(props){
@@ -29,8 +30,8 @@ class Topic extends Component {
   }
   
   componentWillMount() {
-    const { fetchCozes,topic,fez } = this.props
-    fetchCozes(topic._id,fez._id)
+    const { fetchCozes,topicId,fez } = this.props
+    fetchCozes(topicId,fez._id)
   }
   
   richTo(cozes){
@@ -45,16 +46,16 @@ class Topic extends Component {
   }
 
   render() {
-    const { home,navigator,joinable,fez,createCoze,topic } = this.props
+    const { home,navigator,joinable,fez,createCoze,topicId } = this.props
     const { cozeModalVisible,cozeTo } = this.state
 
-    const unity = [topic].concat(this.richTo(home.cozes))
-    console.log(unity);
+    const unity = this.richTo(home.cozes)
+    
     return (
       <View>
         {cozeModalVisible && (
           <TextModal title="回复" btnText="发送" submit={(content,addons)=>{
-            createCoze(topic._id,{
+            createCoze(topicId,{
               content,
               addons,
               date: new Date(),
@@ -85,47 +86,13 @@ class Topic extends Component {
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {unity.map((t,idx)=>{
             return (
-              <TouchableOpacity
-                key={idx} style={[s.topicWrapper,{width:width-20,borderRadius: 5}]}
-                onPress={(e) => {
-                  this.setState({cozeModalVisible: true,cozeTo:{
-                    name: t.author.nickname,
-                    coze: t.content,
-                    cozeId: t._id
-                  }});
-                }}
-                >
-                <View>
-                  <View style={[s.topicAuthor,{width: width-40}]}>
-                    <Image style={s.avatar} source={require('../assets/avatar.png')} />
-                    <Text style={s.name}>{t.author.nickname}</Text>
-                    <Text style={[s.flexEnd,{marginRight:30}]}>{typeof(t.date)=="string"?(new Date(t.date)).toLocaleString():t.date.toLocaleString()}</Text>
-                  </View>
-                  {t.to!=undefined && (
-                    <View style={s.toTopicContent}>
-                      <Text style={s.toAuthor}>
-                        {t.to.author.nickname+" : "}
-                        <Text style={s.toContent}>{t.to.content}</Text>
-                      </Text>                      
-                    </View>
-                  )}
-                  <View style={s.topicContent}>
-                    <Text style={s.content}>{t.content}</Text>
-                  </View>
-                  {t.addons!=undefined && t.addons.map((addon,index)=>{
-                    return (
-                      <TouchableOpacity
-                        key={idx} style={s.addonWrapper}
-                        onPress={(e) => {
-                          
-                        }}
-                        >
-                        <Image style={s.addon} source={{uri: addon}} />
-                      </TouchableOpacity>
-                    )
-                  })}
-                </View>
-              </TouchableOpacity>
+              <Card key={idx} press={()=>{
+                this.setState({cozeModalVisible: true,cozeTo:{
+                  name: t.author.nickname,
+                  coze: t.content,
+                  cozeId: t._id
+                }});
+              }} t={t}/>
             )
           })}
         </ScrollView>

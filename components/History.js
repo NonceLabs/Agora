@@ -8,37 +8,73 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
-
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Icon from  'react-native-vector-icons/MaterialIcons'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
+import { fetchFezCreated,fetchFezJoined,fetchFezViewed } from '../actions/TopicAction'
+import { Card } from './widgets/Card'
+import { Header,SwipeHeader } from './widgets/Header'
+import Topic from './Topic'
 
 class History extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selected: '参与'
+      selected: 'created'
     }
   }
+  
+  componentWillMount() {
+    const { fez, home, fetchFezCreated } = this.props
+    fetchFezCreated(fez._id)
+  }
+  
   render() {
-    const { tabs } = this.props
+    const { tabs,home,fez,fetchFezViewed,fetchFezJoined,navigator,menuOpen,toggle,fetchFezCreated } = this.props
     const { selected } = this.state
     return (
-      <View style={s.root}>
-        <View style={s.rowCenter}>
-          {tabs.map((t,idx)=>{
-            const sd = selected==t.title ? {borderBottomWidth: 3,borderColor: '#666'} : {}
+      <View style={[s.root,{paddingTop: 10}]}>
+        <SwipeHeader
+          left={{
+            icon: menuOpen ? "arrow-left" : "navicon",
+            call: ()=>{ toggle() }
+          }}
+          swiper={tabs}
+          selected={selected}
+          select={(t)=>{
+            this.setState({selected: t.key});
+            if (home[t.key].length == 0) {
+              switch(t.key){
+                case "joined":
+                  fetchFezJoined(fez._id)
+                  break;
+                case "viewed":
+                  fetchFezViewed(fez._id)
+                  break;
+                case "created":
+                  fetchFezCreated(fez._id)
+                  break;
+                default:
+                  break;
+              } 
+            }
+          }}
+          />
+        <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
+          {home[selected].map((t,idx)=>{            
             return (
-              <View key={idx} style={[sd,{paddingBottom: 4,marginLeft: 6,marginRight: 6}]}>
-                <TouchableOpacity onPress={()=> this.setState({selected:t.title})}>
-                  <Text style={[s.h2,s.deepGray]}>
-                    {t.title}
-                  </Text>
-                </TouchableOpacity>
-              </View>              
+              <Card navigator={navigator} key={idx} t={t} press={()=>{
+                const tid = t.topicId || t._id
+                navigator.push({
+                  id: 'nav',
+                  nav: <Topic navigator={navigator} topicId={tid}/>,
+                })
+              }}/>
             )
           })}
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -46,10 +82,34 @@ class History extends Component {
 
 History.defaultProps = {
   tabs: [{
-    title: '参与'
+    title: '创建',
+    key: 'created'
   },{
-    title: '浏览'
+    title: '参与',
+    key: 'joined'
+  },{
+    title: '浏览',
+    key: 'viewed'
   }]
 }
 
-export default History;
+
+function mapStateToProps(state) {
+  return {
+    home: state.home,
+    fez: state.fez
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchFezCreated: bindActionCreators(fetchFezCreated, dispatch),
+    fetchFezJoined: bindActionCreators(fetchFezJoined, dispatch),
+    fetchFezViewed: bindActionCreators(fetchFezViewed, dispatch)
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(History)

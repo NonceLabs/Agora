@@ -16,6 +16,7 @@ import EvilIcon from 'react-native-vector-icons/EvilIcons';
 const {height, width} = Dimensions.get('window')
 import Spinner from 'react-native-spinkit'
 import s from './Styles'
+
 export class Header extends Component {
   render(){
     const { left,center,right } = this.props
@@ -104,28 +105,40 @@ export class SearchHeader extends Component {
 }
 
 export class SwipeHeader extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      
-    }
-  }
   render(){
-    const { swiper,selectCategory,selectedIndex } = this.props
-    const selectedStyle = {borderBottomWidth:4,borderColor:'white',paddingBottom:2}
+    const { swiper,left,select,selected } = this.props
+    const selectedStyle = { borderBottomWidth: 4,borderColor:'#666',paddingBottom:2}
+    console.log(swiper);
     return (
-      <View style={[styles.header,{justifyContent:'center',alignItems:'flex-end'}]}>
-        {swiper.map((t,idx)=>{
-          return (
-            <TouchableOpacity key={idx} onPress={()=>{
-              selectCategory(idx)
-            }}>
-              <View style={[styles.swiperTextWrapper,idx==selectedIndex && selectedStyle]}>
-                <Text style={styles.swiperText}>{t}</Text>
-              </View>
-            </TouchableOpacity>
-          )
-        })}
+      <View style={[styles.header]}>
+        <View style={[styles.left]}>
+          <TouchableOpacity
+            onPress={(e) => {
+              left.call(e);
+            }}
+            >
+            <View style={styles.back}>
+              <EvilIcon
+                name={left.icon}
+                size={42}
+                color="black"
+                />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection:'row',alignItems:'flex-end',justifyContent:'center',width: width*0.75,height: 60,marginBottom: 12 }}>
+          {swiper.map((t,idx)=>{
+            return (
+              <TouchableOpacity key={idx} onPress={()=>{
+                select(t)
+              }}>
+                <View style={[styles.swiperTextWrapper,t.key==selected && selectedStyle]}>
+                  <Text style={[s.h3,s.deepGray]}>{t.title}</Text>
+                </View>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
       </View>
     )
   }

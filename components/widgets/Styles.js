@@ -32,11 +32,11 @@ export default styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#999',
     backgroundColor: 'white',
-    shadowRadius: 1,
+    shadowRadius: 2,
     shadowColor: '#333',
     shadowOpacity: 0.5,
     shadowOffset: {height: 1,width: 1},
-    padding: 10,
+    // padding: 10,
     paddingBottom: 5,
     marginTop: 8
   },
@@ -314,5 +314,13 @@ export default styles = StyleSheet.create({
     position: 'absolute',
     top: 80,
     left: 100
+  },
+  cozeWithTitle:{
+    backgroundColor: '#008cd5',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    width: width-20,
+    padding: 4,
+    marginBottom: 5
   }
 })

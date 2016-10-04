@@ -36,6 +36,7 @@ import Hot from './Hot'
 import Setting from './Setting'
 
 const offsetLimit = width*0.7
+const timeLimit = 120
 
 class App extends Component {
   constructor(props){
@@ -96,11 +97,11 @@ class App extends Component {
         const ox = this.state.offsetX._value
         // console.log(this.state.offsetX);
         if (ox < width*0.3) {
-          this._animate(0, (ox*200)/(width*0.6))
+          this._animate(0, (ox*timeLimit)/(width*0.6))
           this.setState({open: false});
           this.props.openMenu(false)
         }else{
-          this._animate(offsetLimit, ((offsetLimit-ox)*200)/(width*0.6))
+          this._animate(offsetLimit, ((offsetLimit-ox)*timeLimit)/(width*0.6))
           this.setState({open: true});
           this.props.openMenu(true)
         }
@@ -126,11 +127,11 @@ class App extends Component {
   }
 
   open(){
-    this._animate(offsetLimit)
+    this._animate(offsetLimit,timeLimit)
     this.props.openMenu(true)
   }
   close(){
-    this._animate(0)
+    this._animate(0,timeLimit)
     this.props.openMenu(false)
   }
   _toggle(){
@@ -218,8 +219,9 @@ class App extends Component {
         break;
       case "历史":
         content = (
-          <History />
+          <History navigator={navigator} toggle={this._toggle.bind(this)} menuOpen={this.props.op.menuOpen}/>
         )
+        head = null
         break;
       case "热门":
         content = (

@@ -21,8 +21,7 @@ import Topic from './Topic'
 import s from './widgets/Styles'
 const {height, width} = Dimensions.get('window')
 import TextModal from './widgets/TextModal'
-import axios from 'axios'
-import { AVATAR } from '../config/index'
+import { Card } from './widgets/Card'
 import { createTopic } from '../actions/TopicAction'
 import Mapbox,{ MapView } from 'react-native-mapbox-gl';
 Mapbox.setAccessToken('pk.eyJ1IjoiY2hlemhlMTQzIiwiYSI6ImNpdHV4ZnU3dDAwMGIzb3A2ZDY4dXB1cHcifQ.lNI7a0-kJ8u_AXE4yIJVXg');
@@ -121,33 +120,12 @@ class Home extends Component {
         <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {home.topics.map((t,idx)=>{            
             return (
-              <TouchableOpacity
-                key={idx} style={s.topicWrapper}
-                onPress={(e) => {
-                  navigator.push({
-                    id: 'nav',
-                    nav: <Topic navigator={navigator} topic={t}/>,
-                  })
-                }}
-                >
-                <View>
-                  <View style={s.topicAuthor}>
-                    <Image style={s.avatar} source={{uri: t.author.avatarUrl||AVATAR}} />
-                    <Text style={s.name}>{t.author.nickname}</Text>
-                    <TouchableOpacity style={s.flexEnd}>
-                      <Icon name="more-horiz" size={20} color="#999"/>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={s.topicContent}>
-                    <Text style={s.content}>{t.content}</Text>
-                  </View>
-                  <View style={s.topicInfo}>
-                    <Text style={s.metaInfo}>{"热度"}</Text>
-                    <Text style={s.metaInfo}>{" · "}</Text>
-                    <Text style={s.metaInfo}>{t.updated||(new Date()).toLocaleTimeString()}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
+              <Card edge={false} key={idx} t={t} press={()=>{
+                navigator.push({
+                  id: 'nav',
+                  nav: <Topic navigator={navigator} topicId={t._id}/>,
+                })
+              }}/>
             )
           })}
         </ScrollView>
