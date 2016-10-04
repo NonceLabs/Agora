@@ -1,8 +1,29 @@
 import {
   FETCH_USER,
-  LOCATE_FEZ
+  LOCATE_FEZ,
+  UPDATE_FEZ
 } from '../config/ActionTypes'
 import axios from 'axios'
+
+export function updateFez(obj){
+  return (dispatch)=>{
+    dispatch(fezUpdated(obj))
+
+    axios.post(`http://localhost:3000/user/${obj._id}`,obj).then((response) => {
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+}
+
+function fezUpdated(obj){
+  return {
+    type: UPDATE_FEZ,
+    obj
+  }
+}
 
 export function locateFez(location){
   return {

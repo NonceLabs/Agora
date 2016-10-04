@@ -1,11 +1,12 @@
 import {
   FETCH_USER,
   NEW_TOPIC,
-  LOCATE_FEZ
+  LOCATE_FEZ,
+  UPDATE_FEZ
 } from '../config/ActionTypes'
 
 const initial = {
-  avatarUrl: require('../assets/avatar.png'),
+  avatarUrl: '../assets/avatar.png',
   nickname: '逍遥',
   gender: 2,
   province: '北京',
@@ -14,11 +15,16 @@ const initial = {
   viewed:[],
   created:[],
   joined:[],
-  location: {"longitude":-122.0312186,"latitude":37.33233141}
+  location: {"longitude":-122.0312186,"latitude":37.33233141},
+  repliedNoti: true,
+  updatedNoti: true
 }
 
 export default function user(state=initial,action){
   switch(action.type){
+    case UPDATE_FEZ:
+      console.log(action.obj);
+      return Object.assign({}, state, action.obj)
     case LOCATE_FEZ:
       return Object.assign({},state,{
         location: action.location

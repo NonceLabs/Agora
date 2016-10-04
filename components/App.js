@@ -26,15 +26,16 @@ import Menu from './Menu'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import { openMenu,selectMenuitem,feedback } from '../actions/OpAction'
-import { fetchUser } from '../actions/FezAction'
+import { fetchUser,updateFez } from '../actions/FezAction'
 import { fetchTopics } from '../actions/TopicAction'
 
 import TextModal from './widgets/TextModal'
+import FezModal from './widgets/FezModal'
 import History from './History'
 import Hot from './Hot'
 import Setting from './Setting'
 
-const offsetLimit = width*0.6
+const offsetLimit = width*0.7
 
 class App extends Component {
   constructor(props){
@@ -44,7 +45,8 @@ class App extends Component {
       slideTo: 'right',
       animateV: 0,
       feedback: "",
-      open: false
+      open: false,
+      fezModalVisible: false
     }
   }
   componentWillMount() {
@@ -142,28 +144,18 @@ class App extends Component {
   }
   
   render() {
-    const { navigator,defaultOffset,op,selectMenuitem,fez } = this.props
-    const { animateV } = this.state
+    const { navigator,defaultOffset,op,selectMenuitem,fez,updateFez } = this.props
+    const { animateV,fezModalVisible } = this.state
 
     return (
       <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
-        <Modal
-          animationType={"slide"}
-          transparent={false}
-          visible={false}
-          onRequestClose={() => {}}
-          >
-          <View style={s.topicModal}>
-            <TouchableOpacity style={{flexDirection:'column',alignItems:'flex-end',width:width*0.95}} onPress={()=>{
-              
-            }}>
-              <EvilIcon name="close-o" size={50} color="#999"/>
-            </TouchableOpacity>
-            <View style={{flexDirection:'column',width:width}}>
-              
-            </View>            
-          </View>
-        </Modal>
+        {fezModalVisible && (
+          <FezModal fez={fez} hide={()=> this.setState({fezModalVisible:false})} submit={(nfez)=>{
+            console.log(nfez);
+            updateFez(nfez)
+          }} btnText={"更新"}/>
+        )}
+        
         <Animated.View style={[s.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
           <Menu closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
         </Animated.View>
@@ -190,6 +182,7 @@ class App extends Component {
   }
 
   renderMain(item,navigator,menuOpen){
+    const { fez,updateFez } = this.props
     let head = (
       <Header
         left={{
@@ -209,7 +202,7 @@ class App extends Component {
               icon: menuOpen ? "arrow-left" : "navicon",
               call: ()=>{ this._toggle() }
             }}
-            right={{icon:'pencil',call:()=>{}}}
+            right={{icon:'pencil',call:()=>{ this.setState({fezModalVisible:true});}}}
             />
         )
         break;
@@ -235,7 +228,7 @@ class App extends Component {
         break;
       case "设置":
         content = (
-          <Setting />
+          <Setting fez={fez} navigator={navigator} updateFez={updateFez}/>
         )
         break;
       default: 
@@ -288,7 +281,8 @@ function mapDispatchToProps(dispatch) {
     openMenu: bindActionCreators(openMenu, dispatch),
     selectMenuitem: bindActionCreators(selectMenuitem, dispatch),
     fetchUser: bindActionCreators(fetchUser, dispatch),
-    fetchTopics: bindActionCreators(fetchTopics, dispatch)
+    fetchTopics: bindActionCreators(fetchTopics, dispatch),
+    updateFez: bindActionCreators(updateFez, dispatch)
   }
 }
 

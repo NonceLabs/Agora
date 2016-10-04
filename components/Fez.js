@@ -6,7 +6,9 @@ import {
   Dimensions,
   ScrollView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput,
+  Modal
 } from 'react-native';
 
 import { bindActionCreators } from 'redux'
@@ -19,7 +21,7 @@ class Fez extends Component {
   render() {
     const { fez } = this.props
     return (
-      <View style={[s.root,{alignItems:'center'}]}>
+      <View style={[s.root,{alignItems:'center',paddingTop: 10}]}>
         <Image source={{uri:fez.avatarUrl}} style={s.fezAvatar}/>
         <View style={{flexDirection:'row',paddingTop: 20}}>
           <Text style={s.fezName}>{fez.nickname}</Text>

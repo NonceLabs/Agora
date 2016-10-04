@@ -17,21 +17,7 @@ import EvilIcon from 'react-native-vector-icons/EvilIcons';
 const {height, width} = Dimensions.get('window')
 import s from './Styles'
 import ImagePicker from 'react-native-image-picker'
-
-// More info on all the options is below in the README...just some common use cases shown here
-const options = {
-  title: '选择照片',
-  cancelButtonTitle: '算了吧',
-  takePhotoButtonTitle:'拍照',
-  chooseFromLibraryButtonTitle:'相册',
-  mediaType: 'photo',
-  cameraType: 'front',
-  storageOptions: {
-    skipBackup: true,
-    path: 'images'
-  },
-  noData: true
-};
+import { IMAGER_OPTION } from '../../config/index'
 
 class TextModal extends Component {
   constructor(props){
@@ -110,7 +96,7 @@ class TextModal extends Component {
     );
   }
   addImage(){
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(IMAGER_OPTION, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       }

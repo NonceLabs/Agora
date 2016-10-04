@@ -23,7 +23,7 @@ class Menu extends Component {
     return (
       <View style={[s.root,{
         zIndex:10,
-        width: width*0.6-2,
+        width: width*0.7-2,
         borderRightWidth: 1,
         shadowRadius: 1,
         shadowColor: '#333',

@@ -190,8 +190,8 @@ export default styles = StyleSheet.create({
     top: 0
   },
   menuImage:{
-    width: width*0.6,
-    height: width*0.6
+    width: width*0.7-2,
+    height: width*0.7-2
   },
   menuWrapper:{
     flexDirection:'column',
@@ -271,7 +271,9 @@ export default styles = StyleSheet.create({
     paddingTop: 18,
     paddingBottom: 18,
     borderBottomWidth: 1,
-    borderColor: '#999'
+    borderColor: '#999',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   h3:{
     fontSize: 20,
@@ -284,6 +286,33 @@ export default styles = StyleSheet.create({
   },
   map:{
     width: width*0.9,
-    height:width*1.2
+    height:width*1.2,
+    borderColor: '#999',
+    borderWidth: 3,
+    borderRadius: 4
+  },
+  singleLineInput:{
+    borderWidth: 1,
+    borderColor: '#999',
+    width: width*0.5,
+    height: 30,
+    textAlign: 'center',
+    color: '#666'
+  },
+  changeGender:{
+    width:30,
+    height:30,
+    marginLeft: 10,
+    marginRight:10,
+    borderRadius: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1
+  },
+  changeAvatar:{
+    position: 'absolute',
+    top: 80,
+    left: 100
   }
 })
