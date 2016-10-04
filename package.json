@@ -11,6 +11,7 @@
     "react-native": "0.34.1",
     "react-native-blur": "^1.0.1",
     "react-native-image-picker": "^0.22.9",
+    "react-native-mapbox-gl": "^5.0.0",
     "react-native-qiniu": "^0.2.2",
     "react-native-spinkit": "^0.1.1",
     "react-native-swiper": "^1.4.3",

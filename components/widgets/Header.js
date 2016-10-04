@@ -59,7 +59,7 @@ export class HomeHeader extends Component {
         <View style={[styles.left]}>
           <TouchableOpacity
             onPress={(e) => {
-              left.call();
+              left.call(e);
             }}
             >
             <View style={styles.back}>

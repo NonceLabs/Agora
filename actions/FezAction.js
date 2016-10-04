@@ -1,7 +1,15 @@
 import {
-  FETCH_USER
+  FETCH_USER,
+  LOCATE_FEZ
 } from '../config/ActionTypes'
 import axios from 'axios'
+
+export function locateFez(location){
+  return {
+    type: LOCATE_FEZ,
+    location
+  }
+}
 
 export function fetchUser(id){
   return (dispatch)=>{

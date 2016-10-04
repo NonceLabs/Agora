@@ -11,7 +11,7 @@ export default function op(state=initial,action){
   switch(action.type){
     case OPEN_MENU:
       return Object.assign({},state,{
-        menuOpen: !state.menuOpen
+        menuOpen: action.open
       })
     case SELECT_MENUITEM:
       return Object.assign({},state,{

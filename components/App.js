@@ -34,54 +34,76 @@ import History from './History'
 import Hot from './Hot'
 import Setting from './Setting'
 
+const offsetLimit = width*0.6
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      theta: new Animated.Value(0),
+      offsetX: new Animated.Value(0),
       slideTo: 'right',
       animateV: 0,
-      offsetLimit: props.defaultOffset,
       feedback: "",
-      addons: []
+      open: false
     }
   }
   componentWillMount() {
-    if (this.props.distance!=undefined) {
-      this.setState({offsetLimit: this.props.distance})
-    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = JSON.stringify(position);
+        console.log(initialPosition);
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => false,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) => false,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
-
-      onPanResponderGrant: (evt, gestureState) => {
+      onStartShouldSetPanResponder: (evt, gestureState)=> true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => {
+        return false
+      },
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
         
+        return false
       },
+      
       onPanResponderMove: (evt, gestureState) => {
-        const { offsetLimit } = this.state
-        if (gestureState.dx > 30 && gestureState.dx<offsetLimit) {
-          this.setState({slideTo: 'right'})
-          this._animate(gestureState.dx-30)
+        if (gestureState.x0 < 10) {
+          if (gestureState.dx > 30 && gestureState.dx<offsetLimit+30) {
+            // console.log(gestureState);
+            this.state.offsetX.setValue(gestureState.dx-30)
+          }
+          if (gestureState.dx>=offsetLimit+30) {
+            this.setState({open: true});
+            this.props.openMenu(true)
+          }          
         }
-        if (gestureState.dx < -30 && -gestureState.dx<offsetLimit) {
-          this.setState({slideTo: 'left'})
-          this._animate((offsetLimit-Math.abs(gestureState.dx+30)))
+        if (this.state.open) {
+          let offsetX = offsetLimit+gestureState.dx-30
+          offsetX = offsetX <= 0 ? 0 : offsetX
+          if (offsetX==0) {
+            this.setState({open: false});
+            this.props.openMenu(false)
+          }
+          if (gestureState.dx < -30 && -gestureState.dx<offsetLimit) {
+            // console.log(gestureState.dx);
+            this.state.offsetX.setValue(offsetX)
+          }          
         }
       },
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
-        const { offsetLimit } = this.state
-        this._animate(this.state.slideTo=='left'?0:offsetLimit)
-      },
-      onPanResponderTerminate: (evt, gestureState) => {
-
-      },
-      onShouldBlockNativeResponder: (evt, gestureState) => {
-        return true;
-      },
+        const ox = this.state.offsetX._value
+        // console.log(this.state.offsetX);
+        if (ox < width*0.3) {
+          this._animate(0, (ox*200)/(width*0.6))
+          this.setState({open: false});
+          this.props.openMenu(false)
+        }else{
+          this._animate(offsetLimit, ((offsetLimit-ox)*200)/(width*0.6))
+          this.setState({open: true});
+          this.props.openMenu(true)
+        }
+        // this._animate(this.state.slideTo=='left'?0:offsetLimit,10)
+      }      
     });
   }
 
@@ -91,27 +113,26 @@ class App extends Component {
   }
   
 
-  _animate(v) {
+  _animate(v, dur) {
     this.setState({animateV:v})
-    Animated.timing(this.state.theta, {
+    Animated.timing(this.state.offsetX, {
       toValue: v,
       easing: Easing.linear,
       friction: 12,
-      duration: 20
+      duration: dur
     }).start();
   }
 
   open(){
-    const { offsetLimit } = this.state
     this._animate(offsetLimit)
-    this.props.openMenu()
+    this.props.openMenu(true)
   }
   close(){
     this._animate(0)
-    this.props.openMenu()
+    this.props.openMenu(false)
   }
   _toggle(){
-    const { animateV,offsetLimit } = this.state
+    const { animateV } = this.state
     let v = -1
     if (Math.abs(animateV-offsetLimit)<5) {
       this.close()
@@ -122,7 +143,7 @@ class App extends Component {
   
   render() {
     const { navigator,defaultOffset,op,selectMenuitem,fez } = this.props
-    const { offsetLimit,animateV } = this.state
+    const { animateV } = this.state
 
     return (
       <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
@@ -147,7 +168,7 @@ class App extends Component {
           <Menu closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
         </Animated.View>
         <Animated.View style={[
-          s.flipCard,{backgroundColor: 'blue',top: 0,left: this.state.theta}]}>
+          s.flipCard,{backgroundColor: 'blue',top: 0,left: this.state.offsetX}]}>
           {this.renderMain(op.menuItem,navigator,op.menuOpen)}
         </Animated.View>
         {op.menuItem=="反馈" && (
@@ -223,7 +244,7 @@ class App extends Component {
           <HomeHeader
             left={{
               icon: menuOpen ? "arrow-left" : "navicon",
-              call: ()=>{ this._toggle() }
+              call: (e)=>{ this._toggle(); }
             }}
             center={{title:''}}
             />
@@ -240,7 +261,6 @@ class App extends Component {
 }
 
 App.defaultProps = {
-  defaultOffset: width*0.6,
   tabs: [{
     icon: 'polymer',
     title: '探索',    

@@ -10,8 +10,7 @@ import {
   Dimensions,
   Alert,
   ScrollView,
-  TextInput,
-  MapView
+  TextInput
 } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -25,6 +24,9 @@ import TextModal from './widgets/TextModal'
 import axios from 'axios'
 import { AVATAR } from '../config/index'
 import { createTopic } from '../actions/TopicAction'
+import Mapbox,{ MapView } from 'react-native-mapbox-gl';
+Mapbox.setAccessToken('pk.eyJ1IjoiY2hlemhlMTQzIiwiYSI6ImNpdHV4ZnU3dDAwMGIzb3A2ZDY4dXB1cHcifQ.lNI7a0-kJ8u_AXE4yIJVXg');
+
 class Home extends Component {
   constructor(props){
     super(props)
@@ -37,13 +39,31 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    
+    this.annotations = [{
+      coordinates:[37.332,-122.03],
+      type: 'point',
+      title: '标记',
+      subtitle: '久未放晴的天空',
+      rightCalloutAccessory: {
+        source: { uri: 'https://cldup.com/9Lp0EaBw5s.png' },
+        height: 25,
+        width: 25
+      },
+      annotationImage: {
+        source: { uri: 'https://cldup.com/CnRLZem9k9.png' },
+        height: 25,
+        width: 25
+      },
+      id: 'marker1'
+    }]
   }
   
 
   render() {
     const { home,navigator,createTopic,fez } = this.props
     const { content, addons, textModalVisible,mapModal } = this.state
+
+    const location = fez.location
     return (
       <View style={s.root}>
         {textModalVisible && (
@@ -57,7 +77,7 @@ class Home extends Component {
                 nickname: fez.nickname,
                 avatarUrl: fez.avatarUrl
               },
-              location: [1,1]
+              location: [location.longitude,location.latitude]
             })
           }} btnText="发布" hide={()=>{ this.setState({textModalVisible:false});}}/>
         )}
@@ -73,8 +93,28 @@ class Home extends Component {
             }}>
               <EvilIcon name="close-o" size={50} color="#999"/>
             </TouchableOpacity>
-            <View style={{flexDirection:'column',width:width}}>
-              
+            <View style={s.rowCenter}>
+              <MapView 
+                style={s.map}
+                initialCenterCoordinate={location}
+                initialZoomLevel={16}
+                initialDirection={0}
+                rotateEnabled={false}
+                scrollEnabled={false}
+                zoomEnabled={false}
+                pitchEnabled={false}
+                annotationsPopUpEnabled={true}
+                showsUserLocation={true}
+                userTrackingMode={Mapbox.userTrackingMode.follow}
+                userLocationVerticalAlignment={Mapbox.userLocationVerticalAlignment.center}
+                styleURL={Mapbox.mapStyles.light}
+                logoIsHidden={true}
+                compassIsHidden={true}
+                annotations={this.annotations}
+                onRightAnnotationTapped={()=>{
+                  
+                }}
+                />
             </View>            
           </View>
         </Modal> 

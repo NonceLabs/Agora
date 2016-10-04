@@ -5,9 +5,10 @@ import {
 } from '../config/ActionTypes'
 import axios from 'axios'
 
-export function openMenu(){
+export function openMenu(open){
   return {
-    type: OPEN_MENU
+    type: OPEN_MENU,
+    open
   }
 }
 

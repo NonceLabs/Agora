@@ -281,5 +281,9 @@ export default styles = StyleSheet.create({
   },
   h5:{
     fontSize: 16
+  },
+  map:{
+    width: width*0.9,
+    height:width*1.2
   }
 })
