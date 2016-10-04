@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 
 import Icon from  'react-native-vector-icons/MaterialIcons'
-import { Header,SwipeHeader } from './widgets/Header'
+import { Header,HomeHeader } from './widgets/Header'
 import Home from './Home'
 import Square from './Square'
 import Fez from './Fez'
@@ -25,7 +25,7 @@ import EvilIcon from  'react-native-vector-icons/EvilIcons'
 import Menu from './Menu'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
-import { openMenu,selectMenuitem } from '../actions/OpAction'
+import { openMenu,selectMenuitem,feedback } from '../actions/OpAction'
 import { fetchUser } from '../actions/FezAction'
 import { fetchTopics } from '../actions/TopicAction'
 
@@ -121,7 +121,7 @@ class App extends Component {
   }
   
   render() {
-    const { navigator,defaultOffset,op,selectMenuitem } = this.props
+    const { navigator,defaultOffset,op,selectMenuitem,fez } = this.props
     const { offsetLimit,animateV } = this.state
 
     return (
@@ -151,7 +151,18 @@ class App extends Component {
           {this.renderMain(op.menuItem,navigator,op.menuOpen)}
         </Animated.View>
         {op.menuItem=="反馈" && (
-          <TextModal title="意见与建议" submit={()=>{}} btnText="发送" hide={()=>{ this.props.selectMenuitem("首页")} }/>
+          <TextModal title="意见与建议" submit={(content, addons)=>{
+            feedback({
+              content,
+              addons,
+              date: new Date(),
+              author: {
+                id: fez._id,
+                nickname: fez.nickname,
+                avatarUrl: fez.avatarUrl
+              },
+            })
+          }} btnText="发送" hide={()=>{ this.props.selectMenuitem("首页")} }/>
         )}
       </View>
     )
@@ -208,6 +219,15 @@ class App extends Component {
         break;
       default: 
         content = <Home navigator={navigator}/>
+        head = (
+          <HomeHeader
+            left={{
+              icon: menuOpen ? "arrow-left" : "navicon",
+              call: ()=>{ this._toggle() }
+            }}
+            center={{title:''}}
+            />
+        )
     }
 
     return (
@@ -238,7 +258,8 @@ App.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    op: state.op
+    op: state.op,
+    fez: state.fez
   }
 }
 

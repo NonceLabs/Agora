@@ -15,7 +15,7 @@ import React,{Component,PropTypes} from 'react'
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
 const {height, width} = Dimensions.get('window')
 import Spinner from 'react-native-spinkit'
-
+import s from './Styles'
 export class Header extends Component {
   render(){
     const { left,center,right } = this.props
@@ -48,6 +48,35 @@ export class Header extends Component {
         })}
       </View>
     );
+  }
+}
+
+export class HomeHeader extends Component {
+  render(){
+    const { left } = this.props
+    return (
+      <View style={[styles.header]}>
+        <View style={[styles.left]}>
+          <TouchableOpacity
+            onPress={(e) => {
+              left.call();
+            }}
+            >
+            <View style={styles.back}>
+              <EvilIcon
+                name={left.icon}
+                size={42}
+                color="black"
+                />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <Image source={require('../../assets/logo.png')} style={{
+          width: 40,height: 32,marginTop: 10
+        }}/>
+        <Text style={[s.deepGray,s.h4,{marginTop:12,fontWeight:'800',marginLeft: 8}]}>TUK</Text>
+      </View>
+    )
   }
 }
 
@@ -149,7 +178,7 @@ const styles = StyleSheet.create({
     width: width,
     backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: '#999'
