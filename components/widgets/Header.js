@@ -107,8 +107,8 @@ export class SearchHeader extends Component {
 export class SwipeHeader extends Component {
   render(){
     const { swiper,left,select,selected } = this.props
-    const selectedStyle = { borderBottomWidth: 4,borderColor:'#666',paddingBottom:2}
-    console.log(swiper);
+    const selectedStyle = { borderBottomWidth: 2,borderColor:'#999',paddingBottom:0}
+
     return (
       <View style={[styles.header]}>
         <View style={[styles.left]}>

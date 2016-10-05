@@ -12,7 +12,27 @@ const initial = {
   cozes: [],
   joined: [],
   viewed: [],
-  created: []
+  created: [],
+  tome: [],
+  tojoined: [{
+    author: {
+      nickname: '刘德华',
+      avatarUrl: '../assets/avatar.png',
+      id: ''
+    },
+    to:{
+      id: 'a2',
+      author: {
+        id: '',
+        nickname: '万青'
+      },
+      content: '那东西我们早就不屑啦',
+      date: (new Date()).toLocaleTimeString()
+    },
+    content: '去你的',
+    addons: [],
+    date: (new Date()).toLocaleTimeString()
+  }]
 }
 export default function home(state=initial,action){
   switch(action.type){

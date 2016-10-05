@@ -209,7 +209,8 @@ class App extends Component {
         )
         break;
       case "消息":
-        content = <Noti />
+        content = <Noti navigator={navigator} toggle={this._toggle.bind(this)} menuOpen={this.props.op.menuOpen}/>
+        head = null
         break;
       case "反馈":
         head = null

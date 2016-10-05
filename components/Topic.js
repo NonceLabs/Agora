@@ -55,6 +55,9 @@ class Topic extends Component {
       <View>
         {cozeModalVisible && (
           <TextModal title="回复" btnText="发送" submit={(content,addons)=>{
+            const joined = fez.joined.includes(topicId) 
+            console.log(fez.joined);
+            console.log(topicId);           
             createCoze(topicId,{
               content,
               addons,
@@ -65,7 +68,7 @@ class Topic extends Component {
                 avatarUrl: fez.avatarUrl
               },
               to: cozeTo!=null ? cozeTo.cozeId : undefined
-            })
+            },joined)
           }} hide={()=> this.setState({cozeModalVisible:false})} extra={cozeTo}/>
         )}
         <Header

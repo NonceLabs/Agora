@@ -1,5 +1,7 @@
 import {
   FETCH_TOPICS,
+  JOIN_TOPIC,
+  VIEW_TOPIC,
   FETCH_COZES,
   NEW_COZE,
   NEW_TOPIC,
@@ -72,10 +74,13 @@ function topicCreated(topicId){
   }
 }
 
-export function createCoze(topicId, one){
+export function createCoze(topicId, one, joined){
   return (dispatch)=>{
-    axios.put(`http://localhost:3000/topic/${topicId}`, one)
-      .then((response) => {
+    const urlto = joined ? 'topic' : 'join'
+    if (!joined) {
+      dispatch(topicJoined(topicId))
+    }
+    axios.put(`http://localhost:3000/${urlto}/${topicId}`,one).then((response) => {
         dispatch(cozeCreated( Object.assign({},one,{
           _id: response.data,
           topicId
@@ -156,5 +161,31 @@ function fezCreatedCreated(topics){
   return {
     type: FETCH_FEZ_CREATED,
     topics
+  }
+}
+
+export function viewTopic(tid,uid){
+  return (dispatch)=>{
+    axios.put(`http://localhost:3000/view/${tid}`,{
+      uid
+    }).then((response) => {        
+        dispatch(topicViewed( response.data ))
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
+}
+
+function topicViewed(tid){
+  return {
+    type: VIEW_TOPIC,
+    tid
+  }
+}
+
+function topicJoined(tid){
+  return {
+    type: JOIN_TOPIC,
+    tid
   }
 }

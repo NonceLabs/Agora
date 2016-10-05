@@ -1,8 +1,10 @@
 import {
   FETCH_USER,
+  VIEW_TOPIC,
   NEW_TOPIC,
   LOCATE_FEZ,
-  UPDATE_FEZ
+  UPDATE_FEZ,
+  JOIN_TOPIC
 } from '../config/ActionTypes'
 
 const initial = {
@@ -22,8 +24,15 @@ const initial = {
 
 export default function user(state=initial,action){
   switch(action.type){
+    case JOIN_TOPIC:
+      return Object.assign({},state,{
+        joined: [...state.viewed, action.tid]
+      })
+    case VIEW_TOPIC:
+      return Object.assign({},state,{
+        viewed: [...state.viewed, action.tid]
+      })
     case UPDATE_FEZ:
-      console.log(action.obj);
       return Object.assign({}, state, action.obj)
     case LOCATE_FEZ:
       return Object.assign({},state,{

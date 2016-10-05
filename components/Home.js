@@ -22,7 +22,7 @@ import s from './widgets/Styles'
 const {height, width} = Dimensions.get('window')
 import TextModal from './widgets/TextModal'
 import { Card } from './widgets/Card'
-import { createTopic } from '../actions/TopicAction'
+import { createTopic,viewTopic } from '../actions/TopicAction'
 import Mapbox,{ MapView } from 'react-native-mapbox-gl';
 Mapbox.setAccessToken('pk.eyJ1IjoiY2hlemhlMTQzIiwiYSI6ImNpdHV4ZnU3dDAwMGIzb3A2ZDY4dXB1cHcifQ.lNI7a0-kJ8u_AXE4yIJVXg');
 
@@ -43,7 +43,7 @@ class Home extends Component {
   
 
   render() {
-    const { home,navigator,createTopic,fez } = this.props
+    const { home,navigator,createTopic,fez,viewTopic } = this.props
     const { content, addons, textModalVisible,mapModal } = this.state
 
     const location = fez.location
@@ -119,21 +119,28 @@ class Home extends Component {
                   
                 }}
                 onRightAnnotationTapped={(anno)=>{
-                  console.log(anno);
                   this.setState({mapModal: false});
+                  if (!fez.viewed.includes(anno.id)) {
+                    viewTopic(anno.id)
+                  }
                   navigator.push({
                     id: 'nav',
                     nav: <Topic navigator={navigator} topicId={anno.id}/>,
                   })
                 }}
                 />
-            </View>            
+            </View>
           </View>
         </Modal> 
         <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {home.topics.map((t,idx)=>{            
             return (
               <Card edge={false} key={idx} t={t} press={()=>{
+                if (!fez.viewed.includes(t._id)) {
+                  console.log(fez.viewed);
+                  console.log(t._id);                
+                  viewTopic(t._id,fez._id)
+                }
                 navigator.push({
                   id: 'nav',
                   nav: <Topic navigator={navigator} topicId={t._id}/>,
@@ -171,7 +178,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createTopic: bindActionCreators(createTopic, dispatch)
+    createTopic: bindActionCreators(createTopic, dispatch),
+    viewTopic: bindActionCreators(viewTopic, dispatch)
   }
 }
 

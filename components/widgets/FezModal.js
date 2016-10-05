@@ -47,7 +47,7 @@ class FezModal extends Component {
           <View style={{alignItems:'center'}}>
             <Image source={{uri:fez.avatarUrl}} style={s.fezAvatar}/>
             <TouchableOpacity style={s.changeAvatar} onPress={()=> this.addImage()}>
-              <Ionicon name="ios-camera" size={50} color="darkslateblue" style={{
+              <Ionicon name="ios-camera" size={50} color="#008cd5" style={{
                 backgroundColor: 'transparent'
               }}/>
             </TouchableOpacity>

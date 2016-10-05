@@ -8,56 +8,49 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
-
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Icon from  'react-native-vector-icons/MaterialIcons'
-const {height, width} = Dimensions.get('window')
+const { height, width } = Dimensions.get('window')
 import s from './widgets/Styles'
+import { Header,SwipeHeader } from './widgets/Header'
+import { Card } from './widgets/Card'
+import Topic from './Topic'
 
 class Noti extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      selected: "tome"
+    }
+  }
   render() {
-    const { comments } = this.props
+    const { comments, menuOpen, toggle, tabs, navigator, home } = this.props
+    const { selected } = this.state
     return (
       <View style={s.root}>
+        <SwipeHeader
+          left={{
+            icon: menuOpen ? "arrow-left" : "navicon",
+            call: ()=>{ toggle() }
+          }}
+          swiper={tabs}
+          selected={selected}
+          select={(t)=>{
+            this.setState({selected: t.key});
+            
+          }}
+          />
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
-          {comments.map((t,idx)=>{
+          {home[selected].map((t,idx)=>{            
             return (
-              <TouchableOpacity
-                key={idx} style={[s.topicWrapper,{width:width-20,borderRadius: 5}]}
-                onPress={(e) => {
-                  
-                }}
-                >
-                <View>
-                  <View style={[s.topicAuthor,{width: width-40}]}>
-                    <Image style={s.avatar} source={require('../assets/avatar.png')} />
-                    <Text style={s.name}>{t.author.nickname}</Text>
-                    <Text style={[s.flexEnd,{marginRight:30}]}>{t.coze.date}</Text>
-                  </View>
-                  {t.to!=undefined && (
-                    <View style={s.toTopicContent}>
-                      <Text style={s.toAuthor}>
-                        {t.to.author.nickname+" : "}
-                        <Text style={s.toContent}>{t.to.coze.content}</Text>
-                      </Text>                      
-                    </View>
-                  )}
-                  <View style={s.topicContent}>
-                    <Text style={s.content}>{t.coze.content}</Text>
-                  </View>
-                  {t.coze.addons!=undefined && t.coze.addons.map((addon,index)=>{
-                    return (
-                      <TouchableOpacity
-                        key={idx} style={s.addonWrapper}
-                        onPress={(e) => {
-                          
-                        }}
-                        >
-                        <Image style={s.addon} source={{uri: addon}} />
-                      </TouchableOpacity>
-                    )
-                  })}
-                </View>
-              </TouchableOpacity>
+              <Card navigator={navigator} key={idx} t={t} press={()=>{
+                const tid = t.topicId || t._id
+                navigator.push({
+                  id: 'nav',
+                  nav: <Topic navigator={navigator} topicId={tid}/>,
+                })
+              }}/>
             )
           })}
         </ScrollView>        
@@ -67,55 +60,29 @@ class Noti extends Component {
 }
 
 Noti.defaultProps = {
-  comments:[{
-    author: {
-      nickname: '刘德华',
-      avatarUrl: require('../assets/avatar.png'),
-      id: ''
-    },
-    to:{
-      id: 'a2',
-      toid: '',
-      author: {
-        id: '',
-        nickname: '万青'
-      },
-      coze: {
-        type: 'text',
-        content: '那东西我们早就不屑啦',
-        date: (new Date()).toLocaleTimeString()
-      }
-    },
-    coze: {
-      content: '去你的',
-      addons: [],
-      date: (new Date()).toLocaleTimeString()
-    }
+  tabs: [{
+    title: '@我',
+    key: 'tome'
   },{
-    author: {
-      nickname: '古天乐',
-      avatarUrl: require('../assets/avatar.png'),
-      id: ''
-    },
-    to:{
-      id: 'a2',
-      toid: '',
-      author: {
-        id: '',
-        nickname: '万青'
-      },
-      coze: {
-        type: 'text',
-        content: '那东西我们早就不屑啦',
-        date: (new Date()).toLocaleTimeString()
-      }
-    },
-    coze: {
-      content: '我什么都说',
-      addons: [],
-      date: (new Date()).toLocaleTimeString()
-    }
+    title: '更新',
+    key: 'tojoined'
   }]
 }
 
-export default Noti;
+function mapStateToProps(state) {
+  return {
+    home: state.home,
+    fez: state.fez
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Noti)
