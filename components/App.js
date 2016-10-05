@@ -26,7 +26,7 @@ import Menu from './Menu'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import { openMenu,selectMenuitem,feedback } from '../actions/OpAction'
-import { fetchUser,updateFez } from '../actions/FezAction'
+import { fetchUser,updateFez,locateFez } from '../actions/FezAction'
 import { fetchTopics } from '../actions/TopicAction'
 
 import TextModal from './widgets/TextModal'
@@ -52,9 +52,11 @@ class App extends Component {
   }
   componentWillMount() {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        var initialPosition = JSON.stringify(position);
-        console.log(initialPosition);
+      (pos) => {
+        const coords = pos.coords
+        this.props.fetchTopics(coords.longitude,coords.latitude,1)
+        this.props.locateFez(coords)
+        console.log(coords);
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
@@ -112,7 +114,6 @@ class App extends Component {
 
   componentDidMount() {
     this.props.fetchUser('57f1f59b46df4f1ebd65053a')
-    this.props.fetchTopics(1,1,1)
   }
   
 
@@ -284,7 +285,8 @@ function mapDispatchToProps(dispatch) {
     selectMenuitem: bindActionCreators(selectMenuitem, dispatch),
     fetchUser: bindActionCreators(fetchUser, dispatch),
     fetchTopics: bindActionCreators(fetchTopics, dispatch),
-    updateFez: bindActionCreators(updateFez, dispatch)
+    updateFez: bindActionCreators(updateFez, dispatch),
+    locateFez: bindActionCreators(locateFez, dispatch)
   }
 }
 

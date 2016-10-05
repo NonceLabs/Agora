@@ -38,23 +38,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.annotations = [{
-      coordinates:[37.332,-122.03],
-      type: 'point',
-      title: '标记',
-      subtitle: '久未放晴的天空',
-      rightCalloutAccessory: {
-        source: { uri: 'https://cldup.com/9Lp0EaBw5s.png' },
-        height: 25,
-        width: 25
-      },
-      annotationImage: {
-        source: { uri: 'https://cldup.com/CnRLZem9k9.png' },
-        height: 25,
-        width: 25
-      },
-      id: 'marker1'
-    }]
+    
   }
   
 
@@ -63,6 +47,27 @@ class Home extends Component {
     const { content, addons, textModalVisible,mapModal } = this.state
 
     const location = fez.location
+    
+    this.annotations = home.topics.map((t)=>{
+      return {
+        coordinates: [t.location[1],t.location[0]],
+        type: 'point',
+        title: '标记',
+        subtitle: '久未放晴的天空',
+        rightCalloutAccessory: {
+          source: { uri: 'http://localhost:3000/images/view.png' },
+          height: 50,
+          width: 50
+        },
+        annotationImage: {
+          source: { uri: 'http://localhost:3000/images/topic.png' },
+          height: 50,
+          width: 50
+        },
+        id: t._id
+      }
+    })
+    console.log(this.annotations);
     return (
       <View style={s.root}>
         {textModalVisible && (
@@ -103,7 +108,7 @@ class Home extends Component {
                 zoomEnabled={false}
                 pitchEnabled={false}
                 annotationsPopUpEnabled={true}
-                showsUserLocation={true}
+                showsUserLocation={false}
                 userTrackingMode={Mapbox.userTrackingMode.follow}
                 userLocationVerticalAlignment={Mapbox.userLocationVerticalAlignment.center}
                 styleURL={Mapbox.mapStyles.light}
@@ -112,6 +117,14 @@ class Home extends Component {
                 annotations={this.annotations}
                 onRightAnnotationTapped={()=>{
                   
+                }}
+                onRightAnnotationTapped={(anno)=>{
+                  console.log(anno);
+                  this.setState({mapModal: false});
+                  navigator.push({
+                    id: 'nav',
+                    nav: <Topic navigator={navigator} topicId={anno.id}/>,
+                  })
                 }}
                 />
             </View>            

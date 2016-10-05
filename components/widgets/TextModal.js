@@ -18,6 +18,8 @@ const {height, width} = Dimensions.get('window')
 import s from './Styles'
 import ImagePicker from 'react-native-image-picker'
 import { IMAGER_OPTION } from '../../config/index'
+import Qiniu,{Auth,ImgOps,Conf,Rs,Rpc} from 'react-native-qiniu';
+
 
 class TextModal extends Component {
   constructor(props){
@@ -62,7 +64,6 @@ class TextModal extends Component {
             />
             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',width:width*0.9}}>
               {addons.map((t,idx)=>{
-                console.log(t);
                 return (
                   <TouchableOpacity
                     key={idx} style={s.addonWrapper}
@@ -116,6 +117,21 @@ class TextModal extends Component {
         } else {
           source = {uri: response.uri, isStatic: true};
         }
+        Conf.ACCESS_KEY = 'PK87R6EAMpnIpTaukjNI51jJO013a5Y8mLNam8xq'
+        Conf.SECRET_KEY = '8dEFoCBC2wPXuWDe_jMCgU1p_zEDpKGRlUodu5Kw'
+        var putPolicy = new Auth.PutPolicy2(
+            {scope: "agora:kkk.jpg"}
+        );
+        var uptoken = putPolicy.token();
+        let formInput = {
+            key : "kkk.jpg",
+        }
+        
+        Rpc.uploadFile(source.uri, uptoken, formInput)
+          .then((response) => console.log(response))
+          .catch((error) => {
+            console.log(error);
+          });
 
         const addons = this.state.addons.concat([source])
         this.setState({

@@ -12,9 +12,11 @@ import axios from 'axios'
 export function fetchTopics(long,lat,page){
   return (dispatch)=>{
     axios.get(`http://localhost:3000/topic`,{
-      long,
-      lat,
-      page
+      params: {
+        long,
+        lat,
+        page
+      }
     }).then((response) => {
         dispatch(topicsFetched(response.data))
       })
