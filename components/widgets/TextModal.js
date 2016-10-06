@@ -66,7 +66,7 @@ class TextModal extends Component {
                 {extra!=null && (
                   <Text style={[s.deepGray]}>{extra.name+" : "}</Text>
                 )}
-                {extra!=null && extra.coze}
+                {extra!=null && extra.content}
               </Text>            
             </View>
             <TextInput

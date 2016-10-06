@@ -16,17 +16,24 @@ import s from './widgets/Styles'
 import { Header,SwipeHeader } from './widgets/Header'
 import { Card } from './widgets/Card'
 import Topic from './Topic'
+import { readNotice } from '../actions/FezAction'
 
-class Noti extends Component {
+class Notice extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selected: "tome"
+      selected: "replyToMe"
     }
   }
+  
+  componentWillMount() {
+    this.props.readNotice()
+  }
+  
   render() {
-    const { comments, menuOpen, toggle, tabs, navigator, home } = this.props
+    const { comments, menuOpen, toggle, tabs, navigator, fez } = this.props
     const { selected } = this.state
+    console.log(fez.replyToMe);
     return (
       <View style={s.root}>
         <SwipeHeader
@@ -37,12 +44,11 @@ class Noti extends Component {
           swiper={tabs}
           selected={selected}
           select={(t)=>{
-            this.setState({selected: t.key});
-            
+            this.setState({selected: t.key});            
           }}
           />
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
-          {home[selected].map((t,idx)=>{            
+          {fez[selected].map((t,idx)=>{            
             return (
               <Card navigator={navigator} key={idx} t={t} press={()=>{
                 const tid = t.topicId || t._id
@@ -59,13 +65,13 @@ class Noti extends Component {
   }
 }
 
-Noti.defaultProps = {
+Notice.defaultProps = {
   tabs: [{
     title: '@我',
-    key: 'tome'
+    key: 'replyToMe'
   },{
     title: '更新',
-    key: 'tojoined'
+    key: 'replyToAll'
   }]
 }
 
@@ -78,11 +84,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    
+    readNotice: bindActionCreators(readNotice, dispatch) 
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Noti)
+)(Notice)

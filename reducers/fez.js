@@ -4,7 +4,9 @@ import {
   NEW_TOPIC,
   LOCATE_FEZ,
   UPDATE_FEZ,
-  JOIN_TOPIC
+  JOIN_TOPIC,
+  FETCH_NOTICE,
+  READ_NOTICE
 } from '../config/ActionTypes'
 
 const initial = {
@@ -25,7 +27,31 @@ const initial = {
 }
 
 export default function user(state=initial,action){
+  console.log(action);
   switch(action.type){
+    case READ_NOTICE:
+      return Object.assign({},state,{
+        replyToMe: state.replyToMe.map((t)=>{
+          return Object.assign({},t,{
+            read: true
+          })
+        })
+      })
+    case FETCH_NOTICE:
+      return Object.assign({},state,{
+        replyToMe: action.notices.map((t)=>{
+          return Object.assign({},t,{
+            to:{
+              content: t.to.content,
+              author:{
+                nickname: state.nickname,
+                avatarUrl: state.avatarUrl,
+                id: state._id
+              }
+            }
+          })
+        })
+      })
     case JOIN_TOPIC:
       return Object.assign({},state,{
         joined: [...state.viewed, action.tid]

@@ -19,7 +19,7 @@ const {height, width} = Dimensions.get('window')
 
 class Menu extends Component {
   render() {
-    const { menus,closeMenu,selectMenuitem } = this.props
+    const { menus,closeMenu,selectMenuitem,fez } = this.props
     return (
       <View style={[s.root,{
         zIndex:10,
@@ -40,7 +40,18 @@ class Menu extends Component {
         </View>
         <View style={s.menuWrapper}>
           {menus.map((t,idx)=>{
-            const sep = t.title=="历史" && {borderBottomWidth:1,borderColor:'#999'}
+            let sep = {},badge = null
+            switch(t.title){
+              case "历史":
+                sep = {borderBottomWidth:1,borderColor:'#999'}
+                break;
+              case "消息":
+                if (fez.replyToMe.filter((rtm)=> !rtm.read).length!=0) {
+                  badge = (<View style={s.badge}></View>)
+                }
+                break;
+            }
+
             return (
               <TouchableOpacity key={idx} onPress={()=>{
                 closeMenu()
@@ -49,6 +60,7 @@ class Menu extends Component {
                 <View style={[s.menuItemWrapper,sep]}>
                   <EvilIcon name={t.icon} size={30} color="darkslateblue"/>
                   <Text style={s.menuItemText}>{t.title}</Text>
+                  {badge}
                 </View>
               </TouchableOpacity>
             )

@@ -107,7 +107,7 @@ export default styles = StyleSheet.create({
   },
   replyToWrapper:{
     flexDirection:'row',
-    backgroundColor:'#008cd5',
+    backgroundColor:'#00acfe',
     padding:4,
     borderRadius:2,
     marginLeft: 4
@@ -346,5 +346,12 @@ export default styles = StyleSheet.create({
   },
   bold:{
     fontWeight: 'bold'
+  },
+  badge:{
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'red',
+    marginLeft: 10
   }
 })

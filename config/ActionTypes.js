@@ -12,6 +12,7 @@ export const FETCH_TOPIC_IN_ARRAY = 'FETCH_TOPIC_IN_ARRAY'
 
 export const OTHEZ = 'OTHEZ'
 export const FETCH_NOTICE = 'FETCH_NOTICE'
+export const READ_NOTICE = 'READ_NOTICE'
 
 export const FETCH_USER = 'FETCH_USER'
 export const LOCATE_FEZ = 'LOCATE_FEZ'

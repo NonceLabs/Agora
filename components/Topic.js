@@ -67,7 +67,7 @@ class Topic extends Component {
                 avatarUrl: fez.avatarUrl
               },
               to: cozeTo!=null ? cozeTo.cozeId : undefined
-            },joined)
+            },joined, cozeTo)
           }} hide={()=> this.setState({cozeModalVisible:false})} extra={cozeTo}/>
         )}
         <Header
@@ -94,8 +94,9 @@ class Topic extends Component {
               <Card key={idx} press={()=>{
                 if (t.author.id != fez._id) {
                   this.setState({cozeModalVisible: true,cozeTo:{
-                    name: t.author.nickname,
-                    coze: t.content,
+                    nickname: t.author.nickname,
+                    authorId: t.author.id,
+                    content: t.content,
                     cozeId: t._id
                   }});                  
                 }

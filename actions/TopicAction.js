@@ -91,11 +91,14 @@ function topicCreated(topicId){
   }
 }
 
-export function createCoze(topicId, one, joined){
+export function createCoze(topicId, one, joined,cozeTo){
   const urlto = joined ? 'continueTopic' : 'joinTopic'
-  io.emit(urlto, Object.assign({}, one, {
-    topicId
-  }))
+  io.emit(urlto, {
+    coze: Object.assign({}, one, {
+      topicId
+    }),
+    cozeTo
+  })
   return (dispatch)=>{
     if (!joined) {
       dispatch(topicJoined(topicId))

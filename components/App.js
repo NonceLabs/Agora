@@ -20,7 +20,7 @@ import { Header,HomeHeader } from './widgets/Header'
 import Home from './Home'
 import Square from './Square'
 import Fez from './Fez'
-import Noti from './Noti'
+import Notice from './Notice'
 import EvilIcon from  'react-native-vector-icons/EvilIcons'
 import Menu from './Menu'
 const {height, width} = Dimensions.get('window')
@@ -104,7 +104,7 @@ class App extends Component {
 
   componentDidMount() {
 
-    const uid = '57f1f59b46df4f1ebd65053a'//'57f64f59eef28e59742c3132'
+    const uid = '57f64f59eef28e59742c3132'//'57f1f59b46df4f1ebd65053a'
     this.props.fetchUser(uid)
     this._locate(uid)    
   }
@@ -171,7 +171,7 @@ class App extends Component {
         )}
         
         <Animated.View style={[s.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
-          <Menu closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
+          <Menu fez={fez} closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
         </Animated.View>
         <Animated.View style={[
           s.flipCard,{backgroundColor: 'blue',top: 0,left: this.state.offsetX}]}>
@@ -221,7 +221,7 @@ class App extends Component {
         )
         break;
       case "消息":
-        content = <Noti navigator={navigator} toggle={this._toggle.bind(this)} menuOpen={this.props.op.menuOpen}/>
+        content = <Notice navigator={navigator} toggle={this._toggle.bind(this)} menuOpen={this.props.op.menuOpen} fez={fez}/>
         head = null
         break;
       case "反馈":
