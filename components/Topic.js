@@ -50,7 +50,6 @@ class Topic extends Component {
     const { cozeModalVisible,cozeTo } = this.state
 
     const unity = this.richTo(home.cozes)
-    
     return (
       <View>
         {cozeModalVisible && (
@@ -87,15 +86,20 @@ class Topic extends Component {
          }}
          />
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
+          <Text style={[s.h4,s.bold,s.black,{marginTop:10,textAlign:'left'}]}>
+            {unity.length>0 && unity[0].title}
+          </Text>
           {unity.map((t,idx)=>{
             return (
               <Card key={idx} press={()=>{
-                this.setState({cozeModalVisible: true,cozeTo:{
-                  name: t.author.nickname,
-                  coze: t.content,
-                  cozeId: t._id
-                }});
-              }} t={t}/>
+                if (t.author.id != fez._id) {
+                  this.setState({cozeModalVisible: true,cozeTo:{
+                    name: t.author.nickname,
+                    coze: t.content,
+                    cozeId: t._id
+                  }});                  
+                }
+              }} t={t} mine={t.author.id==fez._id} operatable={true}/>
             )
           })}
         </ScrollView>

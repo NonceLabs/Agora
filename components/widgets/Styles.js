@@ -97,12 +97,20 @@ export default styles = StyleSheet.create({
     backgroundColor: 'darkslateblue'
   },
   toTopicContent:{
-    backgroundColor: 'skyblue',
-    padding: 4,
-    borderRadius: 4
-  },
-  toAuthor:{
     
+  },
+  white:{
+    color: 'white'
+  },
+  azure:{
+    color: 'azure'
+  },
+  replyToWrapper:{
+    flexDirection:'row',
+    backgroundColor:'#008cd5',
+    padding:4,
+    borderRadius:2,
+    marginLeft: 4
   },
   toContent:{
     color: '#333'
@@ -123,7 +131,7 @@ export default styles = StyleSheet.create({
     width: width*0.9,
     height: width*0.5,
     borderColor: '#999',
-    marginTop: 20,
+    marginTop: 12,
     alignSelf: 'center',
     borderBottomWidth: 3,
     borderTopWidth: 3,
@@ -132,7 +140,17 @@ export default styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 4,
     color: '#333',
-    fontWeight: 'bold'
+    fontWeight: 'normal'
+  },
+  titleInput:{
+    width: width*0.7,
+    height: 24,
+    borderColor: '#999',
+    marginTop: 12,
+    alignSelf: 'center',
+    fontSize: 16,  
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   btnView:{
     backgroundColor: '#008cd5',
@@ -322,5 +340,11 @@ export default styles = StyleSheet.create({
     width: width-20,
     padding: 4,
     marginBottom: 5
+  },
+  black:{
+    color: 'black'
+  },
+  bold:{
+    fontWeight: 'bold'
   }
 })

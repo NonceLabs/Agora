@@ -8,6 +8,10 @@ export const FETCH_COZES = 'FETCH_COZES'
 export const NEW_COZE = 'NEW_COZE'
 export const VIEW_TOPIC = 'VIEW_TOPIC'
 export const JOIN_TOPIC = 'JOIN_TOPIC'
+export const FETCH_TOPIC_IN_ARRAY = 'FETCH_TOPIC_IN_ARRAY'
+
+export const OTHEZ = 'OTHEZ'
+export const FETCH_NOTICE = 'FETCH_NOTICE'
 
 export const FETCH_USER = 'FETCH_USER'
 export const LOCATE_FEZ = 'LOCATE_FEZ'

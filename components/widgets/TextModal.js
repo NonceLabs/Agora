@@ -26,12 +26,13 @@ class TextModal extends Component {
     super(props)
     this.state = {
       addons: [],
-      value: ""
+      value: "",
+      titleValue: ""
     }
   }
   render() {
-    const { title,btnText,submit,hide,extra } = this.props
-    const { addons,value } = this.state
+    const { title,btnText,submit,hide,extra,titleInput } = this.props
+    const { addons,value,titleValue } = this.state
 
     return (
       <View>
@@ -49,6 +50,18 @@ class TextModal extends Component {
             </TouchableOpacity>
             <View style={{width: width*0.9}}>
               <Text style={[s.h1,s.gray]}>{title}</Text>
+              {titleInput && (
+                <View style={{borderBottomWidth: 2,borderColor:'#999',width:width*0.7,alignSelf:'center'}}>
+                  <TextInput
+                    multiline={false}
+                    maxLength={20}
+                    placeholder="标题"
+                    style={s.titleInput}
+                    onChangeText={(titleValue) => this.setState({titleValue})}
+                    value={titleValue}
+                    />
+                </View>                
+              )}
               <Text style={[s.h6,s.gray,{marginTop: 10}]}>
                 {extra!=null && (
                   <Text style={[s.deepGray]}>{extra.name+" : "}</Text>
@@ -84,7 +97,7 @@ class TextModal extends Component {
               )}
             </View>
             <TouchableOpacity onPress={()=>{
-              submit(value, addons)
+              submit(value, addons, titleValue)
               hide()
             }}>
               <View style={s.btnView}>
@@ -108,10 +121,7 @@ class TextModal extends Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
-        // You can display the image using either data...
-        // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
         let source = null
-        // or a reference to the platform specific asset location
         if (Platform.OS === 'ios') {
           source = {uri: response.uri.replace('file://', ''), isStatic: true};
         } else {
@@ -144,3 +154,7 @@ class TextModal extends Component {
 }
 
 export default TextModal;
+
+TextModal.defaultProps = {
+  titleInput: false
+}

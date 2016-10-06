@@ -4,8 +4,10 @@ import {
   FETCH_COZES,
   FETCH_FEZ_JOINED,
   FETCH_FEZ_CREATED,
-  FETCH_FEZ_VIEWED
+  FETCH_FEZ_VIEWED,
+  OTHEZ
 } from '../config/ActionTypes'
+import _ from 'lodash'
 
 const initial = {
   topics:[],
@@ -32,10 +34,15 @@ const initial = {
     content: '去你的',
     addons: [],
     date: (new Date()).toLocaleTimeString()
-  }]
+  }],
+  othez: []
 }
 export default function home(state=initial,action){
   switch(action.type){
+    case OTHEZ:
+      return Object.assign({},state,{
+        othez: _.uniq(state.othez.concat(action.othez),(t)=> t._id)
+      })
     case FETCH_FEZ_CREATED:
       return Object.assign({},state,{
         created: action.topics
@@ -54,11 +61,37 @@ export default function home(state=initial,action){
       })
     case FETCH_COZES:
       return Object.assign({},state,{
-        cozes: action.cozes
+        cozes: action.cozes.map((t)=>{
+          const fezs = state.othez.filter((f)=> f._id==t.author.id)
+          let author = {}, toauthor={}
+          if (fezs.length == 1) {
+            author = {
+              nickname: fezs[0].nickname,
+              avatarUrl: fezs[0].avatarUrl,
+              id: t.author.id
+            }
+          }
+          return Object.assign({},t,{
+            author
+          })
+        })
       })
     case FETCH_TOPICS:
       return Object.assign({},state,{
-        topics: action.topics
+        topics: action.topics.map((t)=>{
+          const fezs = state.othez.filter((f)=> f._id==t.author.id)
+          let author = {}
+          if (fezs.length == 1) {
+            author = {
+              nickname: fezs[0].nickname,
+              avatarUrl: fezs[0].avatarUrl,
+              id: t.author.id
+            }
+          }
+          return Object.assign({},t,{
+            author
+          })
+        })
       })
     default:
       return state

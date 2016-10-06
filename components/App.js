@@ -51,16 +51,6 @@ class App extends Component {
     }
   }
   componentWillMount() {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const coords = pos.coords
-        this.props.fetchTopics(coords.longitude,coords.latitude,1)
-        this.props.locateFez(coords)
-        console.log(coords);
-      },
-      (error) => alert(JSON.stringify(error)),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState)=> true,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => {
@@ -113,10 +103,29 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchUser('57f1f59b46df4f1ebd65053a')
+
+    const uid = '57f1f59b46df4f1ebd65053a'//'57f64f59eef28e59742c3132'
+    this.props.fetchUser(uid)
+    this._locate(uid)    
   }
   
-
+  _locate(uid){
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords = pos.coords
+        this.props.fetchTopics({
+          long: coords.longitude,
+          lat: coords.latitude,
+          page: 1,
+          uid
+        })
+        this.props.locateFez(coords)
+        console.log(coords);
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+  }
   _animate(v, dur) {
     this.setState({animateV:v})
     Animated.timing(this.state.offsetX, {
@@ -153,8 +162,11 @@ class App extends Component {
       <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
         {fezModalVisible && (
           <FezModal fez={fez} hide={()=> this.setState({fezModalVisible:false})} submit={(nfez)=>{
-            console.log(nfez);
-            updateFez(nfez)
+            updateFez(fez._id,{
+              nickname: nfez.nickname,
+              gender: nfez.gender,
+              avatarUrl: nfez.avatarUrl
+            })
           }} btnText={"更新"}/>
         )}
         

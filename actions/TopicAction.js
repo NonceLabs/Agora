@@ -1,5 +1,6 @@
 import {
   FETCH_TOPICS,
+  FETCH_NOTICE,
   JOIN_TOPIC,
   VIEW_TOPIC,
   FETCH_COZES,
@@ -7,24 +8,32 @@ import {
   NEW_TOPIC,
   FETCH_FEZ_JOINED,
   FETCH_FEZ_CREATED,
-  FETCH_FEZ_VIEWED
+  FETCH_TOPIC_IN_ARRAY,
+  FETCH_FEZ_VIEWED,
+  OTHEZ
 } from '../config/ActionTypes'
 import axios from 'axios'
+import { io } from '../store/io'
 
-export function fetchTopics(long,lat,page){
+export function fetchTopics(meta){
+  io.emit('fetchNearTopics', meta)
   return (dispatch)=>{
-    axios.get(`http://localhost:3000/topic`,{
-      params: {
-        long,
-        lat,
-        page
-      }
-    }).then((response) => {
-        dispatch(topicsFetched(response.data))
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    io.on('nearTopicsFetched',(data)=>{
+      dispatch(addOthez(data.fezs))
+      dispatch(topicsFetched(data.topics))
+    })
+    // axios.get(`http://192.168.1.100:3000/topic`,{
+    //   params: {
+    //     long,
+    //     lat,
+    //     page
+    //   }
+    // }).then((response) => {
+    //     dispatch(topicsFetched(response.data))
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 }
 
@@ -36,16 +45,24 @@ function topicsFetched(topics){
 }
 
 export function fetchCozes(topicId, id){
+  io.emit('fetchTopicById',{
+    tid: topicId
+  })
   return (dispatch)=>{
-    axios.get(`http://localhost:3000/topic/${topicId}`,{
-      id
-    }).then((response) => {
-      const rd = response.data
-      dispatch(cozesFetched([rd.topic].concat(rd.cozes)))
+    io.on('topicByIdFetched',(rd)=>{
+      dispatch(addOthez(rd.fezs))
+      const cozes = [rd.topic].concat(rd.cozes)
+      dispatch(cozesFetched(cozes))
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    // axios.get(`http://192.168.1.100:3000/topic/${topicId}`,{
+    //   id
+    // }).then((response) => {
+    //   const rd = response.data
+    //   dispatch(cozesFetched([rd.topic].concat(rd.cozes)))
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    // });
   }
 }
 
@@ -58,7 +75,7 @@ function cozesFetched(cozes){
 
 export function createTopic(one){
   return (dispatch)=>{
-    axios.put(`http://localhost:3000/topic`, one).then((response) => {
+    axios.put(`http://192.168.1.100:3000/topic`, one).then((response) => {
         dispatch(topicCreated(response.data))
       })
       .catch((error) => {
@@ -75,20 +92,30 @@ function topicCreated(topicId){
 }
 
 export function createCoze(topicId, one, joined){
+  const urlto = joined ? 'continueTopic' : 'joinTopic'
+  io.emit(urlto, Object.assign({}, one, {
+    topicId
+  }))
   return (dispatch)=>{
-    const urlto = joined ? 'topic' : 'join'
     if (!joined) {
       dispatch(topicJoined(topicId))
     }
-    axios.put(`http://localhost:3000/${urlto}/${topicId}`,one).then((response) => {
-        dispatch(cozeCreated( Object.assign({},one,{
-          _id: response.data,
-          topicId
-        })))
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    io.on('cozeCreated',(data)=>{
+      dispatch(cozeCreated( Object.assign({},one,{
+        _id: data.cid,
+        topicId
+      })))
+    })
+    // const urlto = joined ? 'topic' : 'join'
+    // axios.put(`http://192.168.1.100:3000/${urlto}/${topicId}`,one).then((response) => {
+    //     dispatch(cozeCreated( Object.assign({},one,{
+    //       _id: response.data,
+    //       topicId
+    //     })))
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 }
 
@@ -99,9 +126,31 @@ function cozeCreated(coze){
   }
 }
 
+export function fetchTopicInArray(tids, type, uid){
+  io.emit('fetchTopicInArray',{
+    tids
+  })
+
+  return (dispatch)=>{
+    io.on('topicInArrayFetched',(data)=>{
+      switch(type){
+        case "joined":
+          dispatch(fezJoinedFetched(data.topics))
+          break;
+        case "created":
+          dispatch(fezCreatedFetched(data.topics))
+          break;
+        default:
+          dispatch(fezViewedFetched(data.topics))
+          break;
+      }
+    })
+  }
+}
+
 export function fetchFezViewed(uid){
   return (dispatch)=>{
-    axios.get(`http://localhost:3000/viewed/${uid}`)
+    axios.get(`http://192.168.1.100:3000/viewed/${uid}`)
       .then((response) => {
         dispatch(fezViewedFetched( response.data ))
       }).catch((error) => {
@@ -119,7 +168,7 @@ function fezViewedFetched(topics){
 
 export function fetchFezJoined(uid){
   return (dispatch)=>{
-    axios.get(`http://localhost:3000/joined/${uid}`)
+    axios.get(`http://192.168.1.100:3000/joined/${uid}`)
       .then((response) => {
         const rd = response.data
         const cozes = rd.cozes.map((t)=>{
@@ -148,16 +197,16 @@ function fezJoinedFetched(topics){
 
 export function fetchFezCreated(uid){
   return (dispatch)=>{
-    axios.get(`http://localhost:3000/created/${uid}`)
+    axios.get(`http://192.168.1.100:3000/created/${uid}`)
       .then((response) => {        
-        dispatch(fezCreatedCreated( response.data ))
+        dispatch(fezCreatedFetched( response.data ))
       }).catch((error) => {
         console.log(error);
       });
   }
 }
 
-function fezCreatedCreated(topics){
+function fezCreatedFetched(topics){
   return {
     type: FETCH_FEZ_CREATED,
     topics
@@ -166,7 +215,7 @@ function fezCreatedCreated(topics){
 
 export function viewTopic(tid,uid){
   return (dispatch)=>{
-    axios.put(`http://localhost:3000/view/${tid}`,{
+    axios.put(`http://192.168.1.100:3000/view/${tid}`,{
       uid
     }).then((response) => {        
         dispatch(topicViewed( response.data ))
@@ -187,5 +236,12 @@ function topicJoined(tid){
   return {
     type: JOIN_TOPIC,
     tid
+  }
+}
+
+function addOthez(othez){
+  return {
+    type: OTHEZ,
+    othez
   }
 }

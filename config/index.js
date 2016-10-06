@@ -1,5 +1,5 @@
 
-export const SIP = 'http://localhost:3000/'
+export const SIP = 'http://192.168.1.100:3000/'
 
 export const AVATAR = `${SIP}images/avatar.png`
 export const EULA = `${SIP}EULA.txt`

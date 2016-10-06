@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { Provider } from 'react-redux'
 import { store } from './store/store'
+import { io } from './store/io'
 import App from './components/App'
 
 class Menu extends Component {

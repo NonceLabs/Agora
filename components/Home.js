@@ -55,12 +55,12 @@ class Home extends Component {
         title: '标记',
         subtitle: '久未放晴的天空',
         rightCalloutAccessory: {
-          source: { uri: 'http://localhost:3000/images/view.png' },
+          source: { uri: 'http://192.168.1.100:3000/images/view.png' },
           height: 50,
           width: 50
         },
         annotationImage: {
-          source: { uri: 'http://localhost:3000/images/topic.png' },
+          source: { uri: 'http://192.168.1.100:3000/images/topic.png' },
           height: 50,
           width: 50
         },
@@ -71,10 +71,11 @@ class Home extends Component {
     return (
       <View style={s.root}>
         {textModalVisible && (
-          <TextModal title="话题" submit={(content,addons)=>{
+          <TextModal title="话题" submit={(content,addons,title)=>{
             createTopic({
               content,
               addons,
+              title,
               date: new Date(),
               author: {
                 id: fez._id,
@@ -83,7 +84,7 @@ class Home extends Component {
               },
               location: [location.longitude,location.latitude]
             })
-          }} btnText="发布" hide={()=>{ this.setState({textModalVisible:false});}}/>
+          }} btnText="发布" titleInput={true} hide={()=>{ this.setState({textModalVisible:false});}}/>
         )}
         <Modal
           animationType={"slide"}
@@ -101,7 +102,7 @@ class Home extends Component {
               <MapView 
                 style={s.map}
                 initialCenterCoordinate={location}
-                initialZoomLevel={16}
+                initialZoomLevel={14}
                 initialDirection={0}
                 rotateEnabled={false}
                 scrollEnabled={false}

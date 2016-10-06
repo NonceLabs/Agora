@@ -39,9 +39,7 @@ class Setting extends Component {
                         updatedNoti={fez.updatedNoti}
                         navigator={navigator} 
                         updateFez={(obj)=>{
-                          updateFez(Object.assign({},obj,{
-                            _id: fez._id
-                          }))
+                          updateFez(fez._id,obj)
                         }}/>
                       )
                   })

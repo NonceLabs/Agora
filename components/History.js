@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import Icon from  'react-native-vector-icons/MaterialIcons'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
-import { fetchFezCreated,fetchFezJoined,fetchFezViewed } from '../actions/TopicAction'
+import { fetchFezCreated,fetchFezJoined,fetchFezViewed,fetchTopicInArray } from '../actions/TopicAction'
 import { Card } from './widgets/Card'
 import { Header,SwipeHeader } from './widgets/Header'
 import Topic from './Topic'
@@ -32,7 +32,7 @@ class History extends Component {
   }
   
   render() {
-    const { tabs,home,fez,fetchFezViewed,fetchFezJoined,navigator,menuOpen,toggle,fetchFezCreated } = this.props
+    const { tabs,home,fez,fetchFezViewed,fetchFezJoined,navigator,menuOpen,toggle,fetchFezCreated,fetchTopicInArray } = this.props
     const { selected } = this.state
     return (
       <View style={[s.root,{paddingTop: 10}]}>
@@ -103,6 +103,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchTopicInArray: bindActionCreators(fetchTopicInArray, dispatch),
     fetchFezCreated: bindActionCreators(fetchFezCreated, dispatch),
     fetchFezJoined: bindActionCreators(fetchFezJoined, dispatch),
     fetchFezViewed: bindActionCreators(fetchFezViewed, dispatch)

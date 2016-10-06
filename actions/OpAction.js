@@ -20,7 +20,7 @@ export function selectMenuitem(item){
 }
 
 export function feedback(one){
-  axios.put(`http://localhost:3000/feedback`, one)
+  axios.put(`http://192.168.1.100:3000/feedback`, one)
     .then((response) => {
       
     })
