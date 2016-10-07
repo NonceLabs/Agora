@@ -1,17 +1,46 @@
 import {
   FETCH_USER,
+  SIGNUP_FEZ,
   LOCATE_FEZ,
   UPDATE_FEZ,
   FETCH_NOTICE,
   READ_NOTICE
 } from '../config/ActionTypes'
+import {
+  AsyncStorage
+} from 'react-native'
+
 import axios from 'axios'
 import { io } from '../store/io'
+import { SIP } from '../config/index'
+
+export function signupFez(one){
+  return (dispatch)=>{
+    axios.put(`${SIP}user`,one).then((response) => {
+      const fez = response.data
+      dispatch(fezSigned(fez))
+      AsyncStorage.setItem('fezId',fez._id,(error)=>{
+
+      })
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+}
+
+function fezSigned(fez){
+  return {
+    type: SIGNUP_FEZ,
+    fez
+  }
+}
+
 
 export function updateFez(uid,obj){
   return (dispatch)=>{
     dispatch(fezUpdated(obj))
-    axios.post(`http://192.168.1.100:3000/user/${uid}`,obj).then((response) => {
+    axios.post(`${SIP}user/${uid}`,obj).then((response) => {
         
       })
       .catch((error) => {
@@ -62,10 +91,9 @@ export function fetchUser(id){
           }
         }
       })
-      console.log(notices);
       dispatch(noticeFetched(notices))
     })
-    // axios.get(`http://192.168.1.100:3000/enter/${id}`)
+    // axios.get(`${SIP}/enter/${id}`)
     //   .then((response) => {
     //     dispatch(userFetched(response.data))
     //   })

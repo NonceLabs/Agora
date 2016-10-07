@@ -19,7 +19,7 @@ import s from './Styles'
 import ImagePicker from 'react-native-image-picker'
 import { IMAGER_OPTION } from '../../config/index'
 import Qiniu,{Auth,ImgOps,Conf,Rs,Rpc} from 'react-native-qiniu';
-
+import _ from 'lodash'
 
 class TextModal extends Component {
   constructor(props){
@@ -97,7 +97,9 @@ class TextModal extends Component {
               )}
             </View>
             <TouchableOpacity onPress={()=>{
-              submit(value, addons, titleValue)
+              if (_.trim(value).length!=0) {
+                submit(value, addons, titleValue)                
+              }
               hide()
             }}>
               <View style={s.btnView}>

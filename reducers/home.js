@@ -5,7 +5,8 @@ import {
   FETCH_FEZ_JOINED,
   FETCH_FEZ_CREATED,
   FETCH_FEZ_VIEWED,
-  OTHEZ
+  OTHEZ,
+  NEW_TOPIC
 } from '../config/ActionTypes'
 import _ from 'lodash'
 
@@ -39,6 +40,10 @@ const initial = {
 }
 export default function home(state=initial,action){
   switch(action.type){
+    case NEW_TOPIC:
+      return Object.assign({},state,{
+        topics: [...state.topics,action.one]
+      })
     case OTHEZ:
       return Object.assign({},state,{
         othez: _.uniq(state.othez.concat(action.othez),(t)=> t._id)

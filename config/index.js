@@ -1,6 +1,6 @@
 
-export const SIP = 'http://192.168.1.100:3000/'
-
+export const SIP = 'http://120.76.251.99:3000/'
+export const WSIP = 'ws://120.76.251.99:3001'
 export const AVATAR = `${SIP}images/avatar.png`
 export const EULA = `${SIP}EULA.txt`
 

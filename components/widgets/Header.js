@@ -54,7 +54,7 @@ export class Header extends Component {
 
 export class HomeHeader extends Component {
   render(){
-    const { left } = this.props
+    const { left,right } = this.props
     return (
       <View style={[styles.header]}>
         <View style={[styles.left]}>
@@ -72,10 +72,27 @@ export class HomeHeader extends Component {
             </View>
           </TouchableOpacity>
         </View>
-        <Image source={require('../../assets/logo.png')} style={{
-          width: 40,height: 32,marginTop: 10
-        }}/>
-        <Text style={[s.deepGray,s.h4,{marginTop:12,fontWeight:'800',marginLeft: 8}]}>TUK</Text>
+        <View style={[styles.center,{flexDirection:'row',justifyContent:'flex-start',paddingBottom: 16}]}>
+          <Image source={require('../../assets/logo.png')} style={{
+            width: 40,height: 32,marginTop: 10
+            }}/>
+          <Text style={[s.deepGray,s.h4,{marginTop:12,fontWeight:'800',marginLeft: 8}]}>TUK</Text>        
+        </View>
+        <View style={[styles.right]}>
+          <TouchableOpacity
+            onPress={(e) => {
+              right.call(e);
+            }}
+            >
+            <View style={styles.back}>
+              <EvilIcon
+                name={right.icon}
+                size={42}
+                color="black"
+                />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
@@ -107,7 +124,7 @@ export class SearchHeader extends Component {
 export class SwipeHeader extends Component {
   render(){
     const { swiper,left,select,selected } = this.props
-    const selectedStyle = { borderBottomWidth: 2,borderColor:'#999',paddingBottom:0}
+    const selectedStyle = { fontWeight: '900' }
 
     return (
       <View style={[styles.header]}>
@@ -132,8 +149,8 @@ export class SwipeHeader extends Component {
               <TouchableOpacity key={idx} onPress={()=>{
                 select(t)
               }}>
-                <View style={[styles.swiperTextWrapper,t.key==selected && selectedStyle]}>
-                  <Text style={[s.h3,s.deepGray]}>{t.title}</Text>
+                <View style={[styles.swiperTextWrapper]}>
+                  <Text style={[s.h3,s.deepGray,{fontWeight:'300'},t.key==selected && selectedStyle]}>{t.title}</Text>
                 </View>
               </TouchableOpacity>
             )
@@ -203,7 +220,7 @@ const styles = StyleSheet.create({
   left:{
     width: width/8,
     marginTop: 18,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   center:{
     width: width*3/4,
@@ -215,6 +232,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    alignSelf: 'flex-end'
   },
   back:{
     flexDirection: 'row',

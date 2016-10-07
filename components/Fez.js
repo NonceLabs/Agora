@@ -31,7 +31,7 @@ class Fez extends Component {
         <View style={{flexDirection:'row',paddingTop: 20,alignItems:'center'}}>
           <Text style={[s.fezName,{fontSize: 16,marginRight: 5}]}>{fez.province}</Text>
           <Text style={[s.fezName,{fontSize: 16,marginRight: 5,marginLeft:5}]}>{fez.city}</Text>
-          <Text style={[s.fezName,{fontSize: 16,marginRight:0}]}>{", "+fez.country}</Text>
+          <Text style={[s.fezName,{fontSize: 16,marginRight:0}]}>{" "+fez.country}</Text>
         </View>
       </View>
     );

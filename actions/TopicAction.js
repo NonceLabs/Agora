@@ -15,6 +15,7 @@ import {
 } from '../config/ActionTypes'
 import axios from 'axios'
 import { io } from '../store/io'
+import { SIP } from '../config/index'
 
 export function fetchTopics(meta){
   io.emit('fetchNearTopics', meta)
@@ -23,7 +24,7 @@ export function fetchTopics(meta){
       dispatch(addOthez(data.fezs))
       dispatch(topicsFetched(data.topics))
     })
-    // axios.get(`http://192.168.1.100:3000/topic`,{
+    // axios.get(`${SIP}topic`,{
     //   params: {
     //     long,
     //     lat,
@@ -55,7 +56,7 @@ export function fetchCozes(topicId, id){
       const cozes = [rd.topic].concat(rd.cozes)
       dispatch(cozesFetched(cozes))
     })
-    // axios.get(`http://192.168.1.100:3000/topic/${topicId}`,{
+    // axios.get(`${SIP}topic/${topicId}`,{
     //   id
     // }).then((response) => {
     //   const rd = response.data
@@ -76,7 +77,7 @@ function cozesFetched(cozes){
 
 export function createTopic(one){
   return (dispatch)=>{
-    axios.put(`http://192.168.1.100:3000/topic`, one).then((response) => {
+    axios.put(`${SIP}topic`, one).then((response) => {
         dispatch(topicCreated(response.data))
       })
       .catch((error) => {
@@ -85,10 +86,10 @@ export function createTopic(one){
   }
 }
 
-function topicCreated(topicId){
+function topicCreated(one){
   return {
     type: NEW_TOPIC,
-    topicId
+    one
   }
 }
 
@@ -111,7 +112,7 @@ export function createCoze(topicId, one, joined,cozeTo){
       })))
     })
     // const urlto = joined ? 'topic' : 'join'
-    // axios.put(`http://192.168.1.100:3000/${urlto}/${topicId}`,one).then((response) => {
+    // axios.put(`${SIP}${urlto}/${topicId}`,one).then((response) => {
     //     dispatch(cozeCreated( Object.assign({},one,{
     //       _id: response.data,
     //       topicId
@@ -154,7 +155,7 @@ export function fetchTopicInArray(tids, type, uid){
 
 export function fetchFezViewed(uid){
   return (dispatch)=>{
-    axios.get(`http://192.168.1.100:3000/viewed/${uid}`)
+    axios.get(`${SIP}viewed/${uid}`)
       .then((response) => {
         dispatch(fezViewedFetched( response.data ))
       }).catch((error) => {
@@ -172,7 +173,7 @@ function fezViewedFetched(topics){
 
 export function fetchFezJoined(uid){
   return (dispatch)=>{
-    axios.get(`http://192.168.1.100:3000/joined/${uid}`)
+    axios.get(`${SIP}joined/${uid}`)
       .then((response) => {
         const rd = response.data
         const cozes = rd.cozes.map((t)=>{
@@ -201,7 +202,7 @@ function fezJoinedFetched(topics){
 
 export function fetchFezCreated(uid){
   return (dispatch)=>{
-    axios.get(`http://192.168.1.100:3000/created/${uid}`)
+    axios.get(`${SIP}created/${uid}`)
       .then((response) => {        
         dispatch(fezCreatedFetched( response.data ))
       }).catch((error) => {
@@ -219,7 +220,7 @@ function fezCreatedFetched(topics){
 
 export function viewTopic(tid,uid){
   return (dispatch)=>{
-    axios.put(`http://192.168.1.100:3000/view/${tid}`,{
+    axios.put(`${SIP}view/${tid}`,{
       uid
     }).then((response) => {        
         dispatch(topicViewed( response.data ))
@@ -252,7 +253,7 @@ function addOthez(othez){
 
 export function reportCoze(one){
   return (dispatch)=>{
-    axios.put(`http://192.168.1.100:3000/report`,one).then((response) => {        
+    axios.put(`${SIP}report`,one).then((response) => {        
         dispatch(cozeReported( response.data.code ))
       }).catch((error) => {
         console.log(error);

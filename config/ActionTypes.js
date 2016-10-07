@@ -15,6 +15,7 @@ export const OTHEZ = 'OTHEZ'
 export const FETCH_NOTICE = 'FETCH_NOTICE'
 export const READ_NOTICE = 'READ_NOTICE'
 
+export const SIGNUP_FEZ = 'SIGNUP_FEZ'
 export const FETCH_USER = 'FETCH_USER'
 export const LOCATE_FEZ = 'LOCATE_FEZ'
 export const UPDATE_FEZ = 'UPDATE_FEZ'

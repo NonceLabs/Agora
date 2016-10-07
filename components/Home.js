@@ -22,6 +22,7 @@ import s from './widgets/Styles'
 const {height, width} = Dimensions.get('window')
 import TextModal from './widgets/TextModal'
 import { Card } from './widgets/Card'
+import { SIP } from '../config/index'
 import { createTopic,viewTopic } from '../actions/TopicAction'
 import Mapbox,{ MapView } from 'react-native-mapbox-gl';
 Mapbox.setAccessToken('pk.eyJ1IjoiY2hlemhlMTQzIiwiYSI6ImNpdHV4ZnU3dDAwMGIzb3A2ZDY4dXB1cHcifQ.lNI7a0-kJ8u_AXE4yIJVXg');
@@ -46,28 +47,27 @@ class Home extends Component {
     const { home,navigator,createTopic,fez,viewTopic } = this.props
     const { content, addons, textModalVisible,mapModal } = this.state
 
-    const location = fez.location
-    
     this.annotations = home.topics.map((t)=>{
+      console.log(t);
       return {
         coordinates: [t.location[1],t.location[0]],
         type: 'point',
         title: '标记',
         subtitle: '久未放晴的天空',
         rightCalloutAccessory: {
-          source: { uri: 'http://192.168.1.100:3000/images/view.png' },
+          source: { uri: `${SIP}images/view.png` },
           height: 50,
           width: 50
         },
         annotationImage: {
-          source: { uri: 'http://192.168.1.100:3000/images/topic.png' },
+          source: { uri: `${SIP}images/topic.png` },
           height: 50,
           width: 50
         },
         id: t._id
       }
     })
-    
+    const location = fez.location
     return (
       <View style={s.root}>
         {textModalVisible && (
@@ -101,7 +101,7 @@ class Home extends Component {
             <View style={s.rowCenter}>
               <MapView 
                 style={s.map}
-                initialCenterCoordinate={location}
+                initialCenterCoordinate={fez.location}
                 initialZoomLevel={14}
                 initialDirection={0}
                 rotateEnabled={false}

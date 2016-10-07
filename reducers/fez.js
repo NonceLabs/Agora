@@ -1,5 +1,6 @@
 import {
   FETCH_USER,
+  SIGNUP_FEZ,
   VIEW_TOPIC,
   NEW_TOPIC,
   LOCATE_FEZ,
@@ -29,6 +30,12 @@ const initial = {
 export default function user(state=initial,action){
   console.log(action);
   switch(action.type){
+    case SIGNUP_FEZ:
+      return Object.assign({},action.fez,{
+        replyToMe: [],
+        replyToAll: [],
+        location: {"longitude":-122.0312186,"latitude":37.33233141},
+      })
     case READ_NOTICE:
       return Object.assign({},state,{
         replyToMe: state.replyToMe.map((t)=>{
@@ -68,7 +75,7 @@ export default function user(state=initial,action){
       })
     case NEW_TOPIC:
       return Object.assign({},state,{
-        created: state.created==undefined?[action.topicId]:[...state.created,action.topicId]
+        created: state.created==undefined?[action.topicId]:[...state.created,action.one._id]
       })
     case FETCH_USER:
       return Object.assign({}, state, action.user)

@@ -12,7 +12,8 @@ import {
   Easing,
   Modal,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  AsyncStorage
 } from 'react-native';
 
 import Icon from  'react-native-vector-icons/MaterialIcons'
@@ -26,11 +27,13 @@ import Menu from './Menu'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import { openMenu,selectMenuitem,feedback } from '../actions/OpAction'
-import { fetchUser,updateFez,locateFez } from '../actions/FezAction'
+import { fetchUser,updateFez,locateFez,signupFez } from '../actions/FezAction'
 import { fetchTopics } from '../actions/TopicAction'
 
 import TextModal from './widgets/TextModal'
 import FezModal from './widgets/FezModal'
+import SignupModal from './widgets/SignupModal'
+import TargetModal from './widgets/TargetModal'
 import History from './History'
 import Hot from './Hot'
 import Setting from './Setting'
@@ -47,10 +50,17 @@ class App extends Component {
       animateV: 0,
       feedback: "",
       open: false,
-      fezModalVisible: false
+      fezModalVisible: false,
+      signupModalVisible: false,
+      targetModalVisible: false,
+      location: {
+        longitude: 0,
+        latitude: 0
+      }
     }
   }
   componentWillMount() {
+    this.initUserInfo()
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState)=> true,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => {
@@ -103,24 +113,32 @@ class App extends Component {
   }
 
   componentDidMount() {
-
-    const uid = '57f64f59eef28e59742c3132'//'57f1f59b46df4f1ebd65053a'
-    this.props.fetchUser(uid)
-    this._locate(uid)    
+        
+  }
+  async initUserInfo(){
+    try {
+      const fezId = await AsyncStorage.getItem('fezId')
+      
+      if (fezId !== null){
+        this.props.fetchUser(fezId)
+        this._locate()
+      }else{
+        this.setState({signupModalVisible: true});
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
   }
   
-  _locate(uid){
+  _locate(){
+    this.setState({targetModalVisible: true});
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const coords = pos.coords
-        this.props.fetchTopics({
-          long: coords.longitude,
-          lat: coords.latitude,
-          page: 1,
-          uid
-        })
-        this.props.locateFez(coords)
-        console.log(coords);
+        this.setState({location:{
+          longitude: coords.longitude,
+          latitude: coords.latitude
+        }});
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
@@ -155,11 +173,14 @@ class App extends Component {
   }
   
   render() {
-    const { navigator,defaultOffset,op,selectMenuitem,fez,updateFez } = this.props
-    const { animateV,fezModalVisible } = this.state
+    const { navigator,defaultOffset,op,selectMenuitem,fez,updateFez,signupFez } = this.props
+    const { animateV,fezModalVisible,signupModalVisible,targetModalVisible,location } = this.state
 
     return (
       <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
+        {signupModalVisible && fez._id==undefined && (
+          <SignupModal signupFez={signupFez} />
+        )}
         {fezModalVisible && (
           <FezModal fez={fez} hide={()=> this.setState({fezModalVisible:false})} submit={(nfez)=>{
             updateFez(fez._id,{
@@ -169,12 +190,40 @@ class App extends Component {
             })
           }} btnText={"更新"}/>
         )}
-        
+        {!signupModalVisible && targetModalVisible && (
+          <TargetModal location={location} retarget={()=>{
+            this._locate()
+          }} gotopics={()=>{
+            this.setState({targetModalVisible: false});
+            this.props.fetchTopics({
+              long: location.longitude,
+              lat: location.latitude,
+              page: 1,
+              uid: fez._id
+            })
+            this.props.locateFez(location)
+          }}/>
+        )}
         <Animated.View style={[s.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
           <Menu fez={fez} closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
         </Animated.View>
         <Animated.View style={[
           s.flipCard,{backgroundColor: 'blue',top: 0,left: this.state.offsetX}]}>
+          {op.menuOpen && (
+            <TouchableOpacity style={{
+              position: 'absolute',
+              left: 0,top: 0,zIndex: 10
+            }} onPress={()=>{
+              if (op.menuOpen) {
+                this.close()
+              }
+            }}>
+              <View style={[s.columnCenter,{
+                backgroundColor: 'black',
+                opacity: 0.2,              
+              }]}></View>
+            </TouchableOpacity>            
+          )}
           {this.renderMain(op.menuItem,navigator,op.menuOpen)}
         </Animated.View>
         {op.menuItem=="反馈" && (
@@ -253,9 +302,14 @@ class App extends Component {
           <HomeHeader
             left={{
               icon: menuOpen ? "arrow-left" : "navicon",
-              call: (e)=>{ this._toggle(); }
+              call: ()=>{ this._toggle(); }
             }}
-            center={{title:''}}
+            right={{
+              icon:'refresh',
+              call: ()=>{
+                this.refresh()
+              }
+            }}
             />
         )
     }
@@ -266,6 +320,23 @@ class App extends Component {
         {content}
       </View>
     )
+  }
+
+  refresh(){
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords = pos.coords
+        this.props.fetchTopics({
+          long: coords.longitude,
+          lat: coords.latitude,
+          page: 1,
+          uid: this.props.fez._id
+        })
+        this.props.locateFez(location)
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
   }
 }
 
@@ -299,7 +370,8 @@ function mapDispatchToProps(dispatch) {
     fetchUser: bindActionCreators(fetchUser, dispatch),
     fetchTopics: bindActionCreators(fetchTopics, dispatch),
     updateFez: bindActionCreators(updateFez, dispatch),
-    locateFez: bindActionCreators(locateFez, dispatch)
+    locateFez: bindActionCreators(locateFez, dispatch),
+    signupFez: bindActionCreators(signupFez, dispatch)
   }
 }
 

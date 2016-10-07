@@ -1,9 +1,9 @@
 import './UserAgent'
 import socket from 'socket.io-client/socket.io'
-
+import { WSIP } from '../config/index'
 let status = "connecting"
 
-export const io = socket('ws://192.168.1.100:3001',{
+export const io = socket(WSIP,{
   jsonp: false,
   transports: ['websocket']
 })

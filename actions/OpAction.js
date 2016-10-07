@@ -4,6 +4,7 @@ import {
   FEEDBACK
 } from '../config/ActionTypes'
 import axios from 'axios'
+import { SIP } from '../config/index'
 
 export function openMenu(open){
   return {
@@ -20,7 +21,7 @@ export function selectMenuitem(item){
 }
 
 export function feedback(one){
-  axios.put(`http://192.168.1.100:3000/feedback`, one)
+  axios.put(`${SIP}feedback`, one)
     .then((response) => {
       
     })

@@ -5,6 +5,14 @@ import {
 const {height, width} = Dimensions.get('window')
 
 export default styles = StyleSheet.create({
+  columnCenter:{
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width,
+    height: height,
+    backgroundColor: '#008cd5'
+  },
   root:{
     flexDirection: 'column',
     width: width,
@@ -309,6 +317,16 @@ export default styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 4
   },
+  roundMap:{
+    width: width*0.9,
+    height:width*0.9,
+    borderRadius: width*0.45
+  },
+  roundMapWrapper:{
+    width: width*0.9,
+    height:width*0.9,
+    borderRadius: width*0.45
+  },
   singleLineInput:{
     borderWidth: 1,
     borderColor: '#999',
@@ -318,11 +336,11 @@ export default styles = StyleSheet.create({
     color: '#666'
   },
   changeGender:{
-    width:30,
-    height:30,
+    width:60,
+    height:60,
     marginLeft: 10,
     marginRight:10,
-    borderRadius: 15,
+    borderRadius: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -330,8 +348,8 @@ export default styles = StyleSheet.create({
   },
   changeAvatar:{
     position: 'absolute',
-    top: 80,
-    left: 100
+    top: width*0.2,
+    left: width*0.35
   },
   cozeWithTitle:{
     backgroundColor: '#008cd5',

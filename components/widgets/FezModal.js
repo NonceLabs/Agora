@@ -91,7 +91,7 @@ class FezModal extends Component {
     );
   }
   getGender(gender){
-    const size = 20
+    const size = 40
     switch(gender){
       case 1:
         return <Ionicon name="ios-man" size={size} color="blue"/>
