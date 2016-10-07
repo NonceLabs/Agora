@@ -65,13 +65,17 @@ class History extends Component {
         <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {home[selected].map((t,idx)=>{            
             return (
-              <Card navigator={navigator} key={idx} t={t} press={()=>{
-                const tid = t.topicId || t._id
-                navigator.push({
-                  id: 'nav',
-                  nav: <Topic navigator={navigator} topicId={tid}/>,
-                })
-              }}/>
+              <Card
+                navigator={navigator}
+                key={idx}
+                t={t}
+                press={()=>{
+                  const tid = t.topicId || t._id
+                  navigator.push({
+                    id: 'nav',
+                    nav: <Topic navigator={navigator} topicId={tid}/>,
+                  })
+                }}/>
             )
           })}
         </ScrollView>

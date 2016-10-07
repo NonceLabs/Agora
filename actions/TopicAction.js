@@ -10,7 +10,8 @@ import {
   FETCH_FEZ_CREATED,
   FETCH_TOPIC_IN_ARRAY,
   FETCH_FEZ_VIEWED,
-  OTHEZ
+  OTHEZ,
+  REPORT
 } from '../config/ActionTypes'
 import axios from 'axios'
 import { io } from '../store/io'
@@ -246,5 +247,21 @@ function addOthez(othez){
   return {
     type: OTHEZ,
     othez
+  }
+}
+
+export function reportCoze(one){
+  return (dispatch)=>{
+    axios.put(`http://192.168.1.100:3000/report`,one).then((response) => {        
+        dispatch(cozeReported( response.data.code ))
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
+}
+
+function cozeReported(code){
+  return {
+    type: REPORT
   }
 }

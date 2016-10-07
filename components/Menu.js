@@ -79,9 +79,6 @@ Menu.defaultProps = {
     icon: 'bell',
     title: '消息'
   },{
-    icon: 'tag',
-    title: '热门'
-  },{
     icon: 'clock',
     title: '历史'
   },{
@@ -94,3 +91,8 @@ Menu.defaultProps = {
 }
 
 export default Menu;
+
+// ,{
+//     icon: 'tag',
+//     title: '热门'
+//   }

@@ -9,6 +9,7 @@ export const NEW_COZE = 'NEW_COZE'
 export const VIEW_TOPIC = 'VIEW_TOPIC'
 export const JOIN_TOPIC = 'JOIN_TOPIC'
 export const FETCH_TOPIC_IN_ARRAY = 'FETCH_TOPIC_IN_ARRAY'
+export const REPORT = 'REPORT'
 
 export const OTHEZ = 'OTHEZ'
 export const FETCH_NOTICE = 'FETCH_NOTICE'

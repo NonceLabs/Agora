@@ -31,7 +31,7 @@ class TextModal extends Component {
     }
   }
   render() {
-    const { title,btnText,submit,hide,extra,titleInput } = this.props
+    const { title,btnText,submit,hide,extra,titleInput,addonEnable } = this.props
     const { addons,value,titleValue } = this.state
 
     return (
@@ -64,7 +64,7 @@ class TextModal extends Component {
               )}
               <Text style={[s.h6,s.gray,{marginTop: 10}]}>
                 {extra!=null && (
-                  <Text style={[s.deepGray]}>{extra.name+" : "}</Text>
+                  <Text style={[s.deepGray]}>{extra.nickname+" : "}</Text>
                 )}
                 {extra!=null && extra.content}
               </Text>            
@@ -88,7 +88,7 @@ class TextModal extends Component {
                   </TouchableOpacity>
                 )
               })}
-              {addons.length<3 && (
+              {addonEnable && addons.length<3 && (
                 <TouchableOpacity style={{marginLeft:20,marginTop:18,alignSelf:'flex-start'}} onPress={()=>{
                   this.addImage()
                 }}>
@@ -156,5 +156,6 @@ class TextModal extends Component {
 export default TextModal;
 
 TextModal.defaultProps = {
-  titleInput: false
+  titleInput: false,
+  addonEnable: true
 }

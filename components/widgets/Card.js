@@ -19,22 +19,19 @@ import s from './Styles'
 import { AVATAR } from '../../config/index'
 import Icon from  'react-native-vector-icons/MaterialIcons'
 import Topic from '../Topic'
+import TextModal from './TextModal'
 
 export class Card extends Component {
   constructor(props){
     super(props)
     this.state = {
-      operating: false
+      reportModal: false
     }
   }
   
-  componentWillMount() {
-    
-  }
-  
   render() {
-    const { t,edge,press,operations,operatable,mine } = this.props
-    const { operating } = this.state
+    const { t,edge,press,operations,operatable,mine,moreOp } = this.props
+    const { reportModal } = this.state
     const edgeStyle = edge? {width: width-20,borderRadius: 4}:{}
     const withTitleStyle = t.showTitle!=undefined ? {}:{paddingTop:10}
     
@@ -45,37 +42,6 @@ export class Card extends Component {
             <Text style={[s.h6,{color:'white'}]}>{t.topicTitle}</Text>
           </View>
         )}
-        <Modal 
-          animationType={"slide"}
-          transparent={true}
-          visible={operating}
-          onRequestClose={() => {}}>
-          <View style={[{width,height,backgroundColor:'black',opacity:0.3}]}>
-            
-          </View>
-          <View style={[{flexDirection:'column',justifyContent:'flex-end',width,height,backgroundColor:'transparent',position:'absolute',left:0,top:0}]}>
-            {operations.filter((t)=>{
-              return !mine
-            }).map((op,idx)=>{
-              return (
-                <TouchableOpacity key={idx} onPress={()=>{
-                  switch(op.title){
-                    case "点赞":
-                      break;
-                    default:                        
-                      break;
-                  }
-                  this.setState({operating: false});
-                }}>
-                  <View style={[s.rowCenter,{width,backgroundColor:'white',marginTop: 6,padding: 10}]}>
-                    <EvilIcon name={op.icon} size={30}/>
-                    <Text style={[s.h4,s.deepGray]}>{op.title}</Text>
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
-          </View>
-        </Modal>
         <TouchableOpacity        
           onPress={(e) => {
             press()
@@ -87,8 +53,8 @@ export class Card extends Component {
               <Text style={s.name}>{t.author.nickname}</Text>
               {operatable && !mine && (
                 <TouchableOpacity style={s.flexEnd} onPress={()=>{
-                this.setState({operating: true});
-              }}>
+                  moreOp()
+                }}>
                   <Icon name="more-horiz" size={20} color="#999"/>
                 </TouchableOpacity>
               )}
@@ -119,22 +85,9 @@ export class Card extends Component {
 
 Card.defaultProps = {
   edge: true,
-  operations: [{
-    title: '点赞',
-    key: 'like',
-    icon: 'like'
-  },{
-    title: '举报',
-    key: 'report',
-    icon: 'exclamation'
-  },{
-    title: '取消',
-    key: 'cancel',
-    icon: 'close'
-  }],
-  items: ['like','delete','report'],
   operatable: false,
-  mine: false
+  mine: false,
+  moreOp:()=>{}
 }
 
 // ,{

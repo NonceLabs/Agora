@@ -67,7 +67,7 @@ class Home extends Component {
         id: t._id
       }
     })
-    console.log(this.annotations);
+    
     return (
       <View style={s.root}>
         {textModalVisible && (
@@ -136,17 +136,19 @@ class Home extends Component {
         <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {home.topics.map((t,idx)=>{            
             return (
-              <Card edge={false} key={idx} t={t} press={()=>{
-                if (!fez.viewed.includes(t._id)) {
-                  console.log(fez.viewed);
-                  console.log(t._id);                
-                  viewTopic(t._id,fez._id)
-                }
-                navigator.push({
-                  id: 'nav',
-                  nav: <Topic navigator={navigator} topicId={t._id}/>,
-                })
-              }}/>
+              <Card
+                edge={false}
+                key={idx}
+                t={t}
+                press={()=>{
+                  if (!fez.viewed.includes(t._id)) {
+                    viewTopic(t._id,fez._id)
+                  }
+                  navigator.push({
+                    id: 'nav',
+                    nav: <Topic navigator={navigator} topicId={t._id}/>,
+                  })
+                }}/>
             )
           })}
         </ScrollView>
