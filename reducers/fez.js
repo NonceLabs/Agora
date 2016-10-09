@@ -1,5 +1,6 @@
 import {
   FETCH_USER,
+  FOLLOW_TOPIC,
   SIGNUP_FEZ,
   VIEW_TOPIC,
   NEW_TOPIC,
@@ -17,23 +18,30 @@ const initial = {
   province: '北京',
   city: '朝阳',
   country: '中国',
-  viewed:[],
+  followed:[],
   created:[],
   joined:[],
   location: {"longitude":-122.0312186,"latitude":37.33233141},
   repliedNoti: true,
   updatedNoti: true,
-  replyToMe: [],
-  replyToAll: []
+  replyToMe: []
 }
 
 export default function user(state=initial,action){
-  console.log(action);
   switch(action.type){
+    case FOLLOW_TOPIC:
+      if (action.follow) {
+        return Object.assign({},state,{
+          followed: [...state.followed, action.tid]
+        })        
+      }else{
+        return Object.assign({},state,{
+          followed: state.followed.filter((t)=> t!=action.tid)
+        })
+      }
     case SIGNUP_FEZ:
       return Object.assign({},action.fez,{
         replyToMe: [],
-        replyToAll: [],
         location: {"longitude":-122.0312186,"latitude":37.33233141},
       })
     case READ_NOTICE:
@@ -61,11 +69,7 @@ export default function user(state=initial,action){
       })
     case JOIN_TOPIC:
       return Object.assign({},state,{
-        joined: [...state.viewed, action.tid]
-      })
-    case VIEW_TOPIC:
-      return Object.assign({},state,{
-        viewed: [...state.viewed, action.tid]
+        joined: [...state.joined, action.tid]
       })
     case UPDATE_FEZ:
       return Object.assign({}, state, action.obj)

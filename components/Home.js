@@ -10,7 +10,8 @@ import {
   Dimensions,
   Alert,
   ScrollView,
-  TextInput
+  TextInput,
+  RefreshControl
 } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -23,7 +24,7 @@ const {height, width} = Dimensions.get('window')
 import TextModal from './widgets/TextModal'
 import { Card } from './widgets/Card'
 import { SIP } from '../config/index'
-import { createTopic,viewTopic } from '../actions/TopicAction'
+import { createTopic } from '../actions/TopicAction'
 import Mapbox,{ MapView } from 'react-native-mapbox-gl';
 Mapbox.setAccessToken('pk.eyJ1IjoiY2hlemhlMTQzIiwiYSI6ImNpdHV4ZnU3dDAwMGIzb3A2ZDY4dXB1cHcifQ.lNI7a0-kJ8u_AXE4yIJVXg');
 
@@ -34,26 +35,27 @@ class Home extends Component {
       textModalVisible: false,
       mapModal: false,
       content: "",
-      addons: []
+      addons: [],
+      isRefreshing: false
     }
   }
-
-  componentDidMount() {
-    
+  parseContent(content){
+    if (content.length > 16) {
+      return content.subString(0,16)+'...'
+    }else{
+      return content
+    }
   }
-  
-
   render() {
-    const { home,navigator,createTopic,fez,viewTopic } = this.props
+    const { home,navigator,createTopic,fez } = this.props
     const { content, addons, textModalVisible,mapModal } = this.state
 
     this.annotations = home.topics.map((t)=>{
-      console.log(t);
       return {
         coordinates: [t.location[1],t.location[0]],
         type: 'point',
-        title: '标记',
-        subtitle: '久未放晴的天空',
+        title: t.title,
+        subtitle: t.content,
         rightCalloutAccessory: {
           source: { uri: `${SIP}images/view.png` },
           height: 50,
@@ -68,6 +70,7 @@ class Home extends Component {
       }
     })
     const location = fez.location
+    console.log(location);
     return (
       <View style={s.root}>
         {textModalVisible && (
@@ -121,9 +124,6 @@ class Home extends Component {
                 }}
                 onRightAnnotationTapped={(anno)=>{
                   this.setState({mapModal: false});
-                  if (!fez.viewed.includes(anno.id)) {
-                    viewTopic(anno.id)
-                  }
                   navigator.push({
                     id: 'nav',
                     nav: <Topic navigator={navigator} topicId={anno.id}/>,
@@ -133,7 +133,24 @@ class Home extends Component {
             </View>
           </View>
         </Modal> 
-        <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
+        <ScrollView 
+          style={s.topicsContainer}
+          bounces={true}
+          automaticallyAdjustContentInsets={false}
+          scrollEventThrottle={200}
+          contentContainerStyle={s.topicsContentStyle}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={this._onRefresh.bind(this)}
+              tintColor="#ff0000"
+              title="加载中..."
+              titleColor="#00ff00"
+              colors={['#ff0000', '#00ff00', '#0000ff']}
+              progressBackgroundColor="#ffff00"
+            />
+          }
+          >
           {home.topics.map((t,idx)=>{            
             return (
               <Card
@@ -141,9 +158,6 @@ class Home extends Component {
                 key={idx}
                 t={t}
                 press={()=>{
-                  if (!fez.viewed.includes(t._id)) {
-                    viewTopic(t._id,fez._id)
-                  }
                   navigator.push({
                     id: 'nav',
                     nav: <Topic navigator={navigator} topicId={t._id}/>,
@@ -170,6 +184,13 @@ class Home extends Component {
       </View>
     );
   }
+  _onRefresh(){
+    this.setState({isRefreshing: true});
+    this.props.refresh()
+    setTimeout(()=>{
+      this.setState({isRefreshing: false});
+    },2000)
+  }
 }
 
 function mapStateToProps(state) {
@@ -181,8 +202,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createTopic: bindActionCreators(createTopic, dispatch),
-    viewTopic: bindActionCreators(viewTopic, dispatch)
+    createTopic: bindActionCreators(createTopic, dispatch)
+    
   }
 }
 

@@ -168,6 +168,34 @@ export default styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 30
   },
+  btnToFollowedView:{
+    backgroundColor: '#008cd5',
+    padding: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 4,
+    marginTop: 6,
+    borderWidth: 1,
+    borderColor: '#008cd5'
+  },
+  btnToFollowedText:{
+    color: 'white',
+    fontSize: 16
+  },
+  btnFollowedView:{
+    backgroundColor: 'white',
+    padding: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 4,
+    marginTop: 6,
+    borderWidth: 1,
+    borderColor: '#666'
+  },
+  btnFollowedText:{
+    color: '#666',
+    fontSize: 16
+  },
   btnText:{
     color: 'white',
     fontSize: 16
@@ -318,14 +346,17 @@ export default styles = StyleSheet.create({
     borderRadius: 4
   },
   roundMap:{
-    width: width*0.9,
-    height:width*0.9,
+    width: width*0.8,
+    height:width*0.8,
     borderRadius: width*0.45
   },
   roundMapWrapper:{
-    width: width*0.9,
-    height:width*0.9,
-    borderRadius: width*0.45
+    backgroundColor: 'white',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width*0.8,
+    height: width*0.8
   },
   singleLineInput:{
     borderWidth: 1,

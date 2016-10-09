@@ -36,17 +36,6 @@ class Notice extends Component {
     console.log(fez.replyToMe);
     return (
       <View style={s.root}>
-        <SwipeHeader
-          left={{
-            icon: menuOpen ? "arrow-left" : "navicon",
-            call: ()=>{ toggle() }
-          }}
-          swiper={tabs}
-          selected={selected}
-          select={(t)=>{
-            this.setState({selected: t.key});            
-          }}
-          />
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {fez[selected].map((t,idx)=>{            
             return (
@@ -73,9 +62,6 @@ Notice.defaultProps = {
   tabs: [{
     title: '@我',
     key: 'replyToMe'
-  },{
-    title: '更新',
-    key: 'replyToAll'
   }]
 }
 
@@ -96,3 +82,16 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Notice)
+
+// <SwipeHeader
+//           left={{
+//             icon: menuOpen ? "arrow-left" : "navicon",
+//             call: ()=>{ toggle() }
+//           }}
+//           swiper={tabs}
+//           selected={selected}
+//           select={(t)=>{
+//             this.setState({selected: t.key});            
+//           }}
+//           />
+        

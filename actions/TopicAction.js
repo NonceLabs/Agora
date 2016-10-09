@@ -9,7 +9,7 @@ import {
   FETCH_FEZ_JOINED,
   FETCH_FEZ_CREATED,
   FETCH_TOPIC_IN_ARRAY,
-  FETCH_FEZ_VIEWED,
+  FETCH_FEZ_FOLLOWED,
   OTHEZ,
   REPORT
 } from '../config/ActionTypes'
@@ -76,6 +76,7 @@ function cozesFetched(cozes){
 }
 
 export function createTopic(one){
+  console.log(one);
   return (dispatch)=>{
     axios.put(`${SIP}topic`, one).then((response) => {
         dispatch(topicCreated(response.data))
@@ -146,27 +147,29 @@ export function fetchTopicInArray(tids, type, uid){
           dispatch(fezCreatedFetched(data.topics))
           break;
         default:
-          dispatch(fezViewedFetched(data.topics))
+          dispatch(fezFollowedFetched(data.topics))
           break;
       }
     })
   }
 }
 
-export function fetchFezViewed(uid){
+export function fetchFezFollowed(all){
   return (dispatch)=>{
-    axios.get(`${SIP}viewed/${uid}`)
+    axios.get(`${SIP}topics`,{
+      params: {all:all}
+    })
       .then((response) => {
-        dispatch(fezViewedFetched( response.data ))
+        dispatch(fezFollowedFetched( response.data ))
       }).catch((error) => {
         console.log(error);
       });
   }
 }
 
-function fezViewedFetched(topics){
+function fezFollowedFetched(topics){
   return {
-    type: FETCH_FEZ_VIEWED,
+    type: FETCH_FEZ_FOLLOWED,
     topics
   }
 }
@@ -200,9 +203,12 @@ function fezJoinedFetched(topics){
   }
 }
 
-export function fetchFezCreated(uid){
+export function fetchFezCreated(all){
   return (dispatch)=>{
-    axios.get(`${SIP}created/${uid}`)
+    console.log(all);
+    axios.get(`${SIP}topics`,{
+      params: {all}  
+    })
       .then((response) => {        
         dispatch(fezCreatedFetched( response.data ))
       }).catch((error) => {
@@ -215,25 +221,6 @@ function fezCreatedFetched(topics){
   return {
     type: FETCH_FEZ_CREATED,
     topics
-  }
-}
-
-export function viewTopic(tid,uid){
-  return (dispatch)=>{
-    axios.put(`${SIP}view/${tid}`,{
-      uid
-    }).then((response) => {        
-        dispatch(topicViewed( response.data ))
-      }).catch((error) => {
-        console.log(error);
-      });
-  }
-}
-
-function topicViewed(tid){
-  return {
-    type: VIEW_TOPIC,
-    tid
   }
 }
 

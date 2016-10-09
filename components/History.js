@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import Icon from  'react-native-vector-icons/MaterialIcons'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
-import { fetchFezCreated,fetchFezJoined,fetchFezViewed,fetchTopicInArray } from '../actions/TopicAction'
+import { fetchFezCreated,fetchFezJoined,fetchFezFollowed,fetchTopicInArray } from '../actions/TopicAction'
 import { Card } from './widgets/Card'
 import { Header,SwipeHeader } from './widgets/Header'
 import Topic from './Topic'
@@ -22,17 +22,17 @@ class History extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selected: 'created'
+      selected: 'followed'
     }
   }
   
   componentWillMount() {
-    const { fez, home, fetchFezCreated } = this.props
-    fetchFezCreated(fez._id)
+    const { fez, home, fetchFezFollowed } = this.props
+    fetchFezFollowed(fez.followed)
   }
   
   render() {
-    const { tabs,home,fez,fetchFezViewed,fetchFezJoined,navigator,menuOpen,toggle,fetchFezCreated,fetchTopicInArray } = this.props
+    const { tabs,home,fez,navigator,menuOpen,toggle,fetchTopicInArray } = this.props
     const { selected } = this.state
     return (
       <View style={[s.root,{paddingTop: 10}]}>
@@ -48,13 +48,13 @@ class History extends Component {
             if (home[t.key].length == 0) {
               switch(t.key){
                 case "joined":
-                  fetchFezJoined(fez._id)
+                  this.props.fetchFezJoined(fez._id)
                   break;
-                case "viewed":
-                  fetchFezViewed(fez._id)
+                case "followed":
+                  this.props.fetchFezFollowed(fez.followed)
                   break;
                 case "created":
-                  fetchFezCreated(fez._id)
+                  this.props.fetchFezCreated(fez.created)
                   break;
                 default:
                   break;
@@ -86,15 +86,15 @@ class History extends Component {
 
 History.defaultProps = {
   tabs: [{
-    title: '创建',
-    key: 'created'
+    title: '关注',
+    key: 'followed'
   },{
     title: '参与',
     key: 'joined'
   },{
-    title: '浏览',
-    key: 'viewed'
-  }]
+    title: '创建',
+    key: 'created'
+  },]
 }
 
 
@@ -110,7 +110,7 @@ function mapDispatchToProps(dispatch) {
     fetchTopicInArray: bindActionCreators(fetchTopicInArray, dispatch),
     fetchFezCreated: bindActionCreators(fetchFezCreated, dispatch),
     fetchFezJoined: bindActionCreators(fetchFezJoined, dispatch),
-    fetchFezViewed: bindActionCreators(fetchFezViewed, dispatch)
+    fetchFezFollowed: bindActionCreators(fetchFezFollowed, dispatch)
   }
 }
 

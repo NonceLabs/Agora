@@ -117,7 +117,7 @@ class App extends Component {
       const fezId = '57f79192a0c80824a0a81258'//await AsyncStorage.getItem('fezId')
       
       if (fezId !== null){
-        this.props.fetchUser(fezId)
+        this.props.fetchUser('57f79192a0c80824a0a81258')
         this._locate()
       }else{
         this.setState({signupModalVisible: true});
@@ -268,7 +268,6 @@ class App extends Component {
         break;
       case "消息":
         content = <Notice navigator={navigator} toggle={this._toggle.bind(this)} menuOpen={this.props.op.menuOpen} fez={fez}/>
-        head = null
         break;
       case "反馈":
         head = null
@@ -294,7 +293,7 @@ class App extends Component {
         )
         break;
       default: 
-        content = <Home navigator={navigator}/>
+        content = <Home refresh={()=> this.refresh()} navigator={navigator}/>
         head = (
           <HomeHeader
             left={{
@@ -306,7 +305,7 @@ class App extends Component {
               call: ()=>{
                 this.refresh()
               }
-            }}
+            }}            
             />
         )
     }
@@ -329,7 +328,10 @@ class App extends Component {
           page: 1,
           uid: this.props.fez._id
         })
-        this.props.locateFez(location)
+        this.props.locateFez({
+          longitude: coords.longitude,
+          latitude: coords.latitude,
+        })
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}

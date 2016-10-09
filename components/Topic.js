@@ -19,6 +19,7 @@ const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import TextModal from './widgets/TextModal'
 import { fetchCozes,createCoze,reportCoze } from '../actions/TopicAction'
+import { followTopic } from '../actions/FezAction'
 import { Card } from './widgets/Card'
 import _ from 'lodash'
 
@@ -50,10 +51,11 @@ class Topic extends Component {
   }
 
   render() {
-    const { home,navigator,joinable,fez,createCoze,topicId,reportCoze,operations } = this.props
+    const { home,navigator,joinable,fez,createCoze,topicId,reportCoze,operations,followTopic } = this.props
     const { cozeModalVisible,cozeTo,operating,reportModal } = this.state
 
     const unity = this.richTo(home.cozes)
+    const followed = fez.followed.includes(topicId)
     return (
       <View>
         <Modal 
@@ -143,9 +145,18 @@ class Topic extends Component {
          }}
          />
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
-          <Text style={[s.h4,s.bold,s.black,{marginTop:10,textAlign:'left'}]}>
+          <View style={{flexDirection:'column',width,padding: 10}}>
+            <Text style={[s.h4,s.bold,s.black,{marginTop:10,alignSelf:'flex-start'}]}>
             {unity.length>0 && unity[0].title}
-          </Text>
+            </Text>
+            <TouchableOpacity onPress={()=>{
+              followTopic(fez._id, topicId, !followed)
+            }}>
+              <View style={[followed?s.btnFollowedView : s.btnToFollowedView,{alignSelf:'flex-end'}]}>
+                <Text style={followed?s.btnFollowedText: s.btnToFollowedText}>{followed?"已关注":"关  注"}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>          
           {unity.map((t,idx)=>{
             const mine = t.author.id == fez._id
             return (
@@ -210,7 +221,8 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchCozes: bindActionCreators(fetchCozes, dispatch),
     createCoze: bindActionCreators(createCoze, dispatch),
-    reportCoze: bindActionCreators(reportCoze, dispatch)
+    reportCoze: bindActionCreators(reportCoze, dispatch),
+    followTopic: bindActionCreators(followTopic, dispatch)
   }
 }
 

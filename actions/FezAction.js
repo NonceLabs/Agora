@@ -1,5 +1,6 @@
 import {
   FETCH_USER,
+  FOLLOW_TOPIC,
   SIGNUP_FEZ,
   LOCATE_FEZ,
   UPDATE_FEZ,
@@ -129,5 +130,26 @@ export function readNotice(nids){
 function noticeRead(){
   return {
     type: READ_NOTICE
+  }
+}
+
+export function followTopic(uid, tid, follow){
+  return (dispatch)=>{
+    dispatch(topicFollwed(uid, tid, follow))
+    axios.post(`${SIP}follow/${tid}`,{fezId: uid,follow}).then((response) => {
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+}
+
+function topicFollwed(uid, tid, follow){
+  return {
+    type: FOLLOW_TOPIC,
+    uid,
+    tid,
+    follow
   }
 }

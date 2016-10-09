@@ -10,6 +10,7 @@ export const VIEW_TOPIC = 'VIEW_TOPIC'
 export const JOIN_TOPIC = 'JOIN_TOPIC'
 export const FETCH_TOPIC_IN_ARRAY = 'FETCH_TOPIC_IN_ARRAY'
 export const REPORT = 'REPORT'
+export const FOLLOW_TOPIC = 'FOLLOW_TOPIC'
 
 export const OTHEZ = 'OTHEZ'
 export const FETCH_NOTICE = 'FETCH_NOTICE'
@@ -20,7 +21,7 @@ export const FETCH_USER = 'FETCH_USER'
 export const LOCATE_FEZ = 'LOCATE_FEZ'
 export const UPDATE_FEZ = 'UPDATE_FEZ'
 export const FETCH_FEZ_JOINED = 'FETCH_FEZ_JOINED'
-export const FETCH_FEZ_VIEWED = 'FETCH_FEZ_VIEWED'
+export const FETCH_FEZ_FOLLOWED = 'FETCH_FEZ_FOLLOWED'
 export const FETCH_FEZ_CREATED = 'FETCH_FEZ_CREATED'
 
 

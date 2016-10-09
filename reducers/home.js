@@ -4,7 +4,7 @@ import {
   FETCH_COZES,
   FETCH_FEZ_JOINED,
   FETCH_FEZ_CREATED,
-  FETCH_FEZ_VIEWED,
+  FETCH_FEZ_FOLLOWED,
   OTHEZ,
   NEW_TOPIC
 } from '../config/ActionTypes'
@@ -14,7 +14,7 @@ const initial = {
   topics:[],
   cozes: [],
   joined: [],
-  viewed: [],
+  followed: [],
   created: [],
   tome: [],
   tojoined: [{
@@ -56,9 +56,9 @@ export default function home(state=initial,action){
       return Object.assign({},state,{
         joined: action.topics
       })
-    case FETCH_FEZ_VIEWED:
+    case FETCH_FEZ_FOLLOWED:
       return Object.assign({},state,{
-        viewed: action.topics
+        followed: action.topics
       })
     case NEW_COZE:
       return Object.assign({},state,{
@@ -75,10 +75,11 @@ export default function home(state=initial,action){
               avatarUrl: fezs[0].avatarUrl,
               id: t.author.id
             }
+            return Object.assign({},t,{
+              author
+            })
           }
-          return Object.assign({},t,{
-            author
-          })
+          return t
         })
       })
     case FETCH_TOPICS:
@@ -92,10 +93,11 @@ export default function home(state=initial,action){
               avatarUrl: fezs[0].avatarUrl,
               id: t.author.id
             }
+            return Object.assign({},t,{
+              author
+            })
           }
-          return Object.assign({},t,{
-            author
-          })
+          return t
         })
       })
     default:

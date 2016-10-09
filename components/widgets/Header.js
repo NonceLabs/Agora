@@ -78,21 +78,7 @@ export class HomeHeader extends Component {
             }}/>
           <Text style={[s.deepGray,s.h4,{marginTop:12,fontWeight:'800',marginLeft: 8}]}>TUK</Text>        
         </View>
-        <View style={[styles.right]}>
-          <TouchableOpacity
-            onPress={(e) => {
-              right.call(e);
-            }}
-            >
-            <View style={styles.back}>
-              <EvilIcon
-                name={right.icon}
-                size={42}
-                color="black"
-                />
-            </View>
-          </TouchableOpacity>
-        </View>
+        
       </View>
     )
   }
@@ -255,3 +241,19 @@ const styles = StyleSheet.create({
     marginBottom: 50
   }
 })
+
+// <View style={[styles.right]}>
+//   <TouchableOpacity
+//     onPress={(e) => {
+//       right.call(e);
+//     }}
+//     >
+//     <View style={styles.back}>
+//       <EvilIcon
+//         name={right.icon}
+//         size={42}
+//         color="black"
+//         />
+//     </View>
+//   </TouchableOpacity>
+// </View>
