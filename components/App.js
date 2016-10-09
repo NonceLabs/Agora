@@ -112,12 +112,9 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
-        
-  }
   async initUserInfo(){
     try {
-      const fezId = await AsyncStorage.getItem('fezId')
+      const fezId = '57f79192a0c80824a0a81258'//await AsyncStorage.getItem('fezId')
       
       if (fezId !== null){
         this.props.fetchUser(fezId)

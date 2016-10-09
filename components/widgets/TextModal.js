@@ -138,8 +138,9 @@ class TextModal extends Component {
         let formInput = {
             key : "kkk.jpg",
         }
-        
-        Rpc.uploadFile(source.uri, uptoken, formInput)
+        console.log(response.uri);
+        console.log(source.uri);
+        Rpc.uploadFile(response.uri, uptoken, formInput)
           .then((response) => console.log(response))
           .catch((error) => {
             console.log(error);
