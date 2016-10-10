@@ -61,9 +61,14 @@ export default function home(state=initial,action){
         followed: action.topics
       })
     case NEW_COZE:
-      return Object.assign({},state,{
-        cozes: [...state.cozes,action.coze]
-      })
+      console.log(action.coze);
+      if (state.cozes.filter((t)=> t._id==action.coze._id).length>0) {
+        return state
+      }else{
+        return Object.assign({},state,{
+          cozes: [...state.cozes,action.coze]
+        })
+      }
     case FETCH_COZES:
       return Object.assign({},state,{
         cozes: action.cozes.map((t)=>{

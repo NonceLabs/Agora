@@ -16,7 +16,7 @@ import EvilIcon from 'react-native-vector-icons/EvilIcons';
 const {height, width} = Dimensions.get('window')
 import Spinner from 'react-native-spinkit'
 import s from './Styles'
-import { AVATAR } from '../../config/index'
+import { AVATAR,SIP } from '../../config/index'
 import Icon from  'react-native-vector-icons/MaterialIcons'
 import Topic from '../Topic'
 import TextModal from './TextModal'
@@ -25,16 +25,42 @@ export class Card extends Component {
   constructor(props){
     super(props)
     this.state = {
-      reportModal: false
+      reportModal: false,
+      viewUri: "",
+      viewSize:{
+        width: 100,
+        height: 100
+      }
     }
   }
   
   render() {
-    const { t,edge,press,operations,operatable,mine,moreOp } = this.props
-    const { reportModal } = this.state
+    const { t,edge,press,operations,operatable,mine,moreOp,index } = this.props
+    const { reportModal,viewUri,size } = this.state
     const edgeStyle = edge? {width: width-20,borderRadius: 4}:{}
     const withTitleStyle = t.showTitle!=undefined ? {}:{paddingTop:10}
-    
+    let imageModal = null
+    if (viewUri!="") {
+      imageModal = (
+        <Modal
+          animationType={"slide"}
+          transparent={true}
+          >
+          <View style={[s.columnCenter,s.cover]}>
+            
+          </View>
+          <View style={[s.columnCenter,s.mask]}>
+            <Image source={{uri: viewUri}} style={size} />
+            <TouchableOpacity style={{marginTop: 30}} onPress={()=>{
+              this.setState({viewUri:""});
+            }}>
+              <EvilIcon name="close-o" size={80} color="white"/>
+            </TouchableOpacity>
+          </View>          
+        </Modal>
+      )
+    }
+
     return (
       <View style={[s.topicWrapper, edgeStyle,withTitleStyle]}>
         {t.showTitle && (
@@ -42,6 +68,7 @@ export class Card extends Component {
             <Text style={[s.h6,{color:'white'}]}>{t.topicTitle}</Text>
           </View>
         )}
+        {imageModal}
         <TouchableOpacity        
           onPress={(e) => {
             press()
@@ -71,10 +98,33 @@ export class Card extends Component {
               )}
               <Text style={s.content}>{t.content}</Text>
             </View>
+            <View style={s.addonWrapper}>
+              {t.addons.map((addon,tidx)=>{
+                const uri = `${SIP}addons/${addon}`
+                return (
+                  <TouchableOpacity key={tidx} onPress={()=>{
+                    if (edge) {
+                      this.setState({viewUri:uri});
+                      Image.getSize(uri,(iwidth,iheight)=>{
+                        this.setState({size:{
+                          width: width*0.9,
+                          height: (iheight*width*0.9)/(iwidth)
+                        }});
+                      }) 
+                    }else{
+                      press()
+                    }
+                  }}>
+                  <Image source={{uri}} style={s.addon}/>
+                  </TouchableOpacity>
+                )
+              })}
+            </View>
             <View style={s.topicInfo}>
-              <Text style={s.metaInfo}>{"热度"}</Text>
-              <Text style={s.metaInfo}>{" · "}</Text>
               <Text style={s.metaInfo}>{(new Date(t.date)).toLocaleString()}</Text>
+              {index>0 && (
+                <Text style={[s.metaInfo,{alignSelf:'flex-end',color:'black'}]}>{"  F"+index}</Text>
+              )}
             </View>
           </View>
         </TouchableOpacity>
@@ -87,6 +137,7 @@ Card.defaultProps = {
   edge: true,
   operatable: false,
   mine: false,
+  index: -1,
   moreOp:()=>{}
 }
 

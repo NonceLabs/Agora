@@ -59,7 +59,9 @@ export default styles = StyleSheet.create({
   },
   topicInfo:{
     flexDirection: 'row',
-    alignSelf: 'flex-start'
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    width: width-40
   },
   metaInfo:{
     color: '#999',
@@ -82,11 +84,11 @@ export default styles = StyleSheet.create({
     fontWeight: '300'
   },
   addon:{
-    width: width*0.2,
-    height: width*0.2,
-    borderWidth: 1,
-    borderColor: '#999',
-    backgroundColor: 'steelblue'
+    width: 100,
+    height: 100,
+    marginLeft: 5,
+    marginRight: 5,
+    marginBottom: 5
   },
   addonWrapper:{
     flexDirection: 'row',
@@ -238,10 +240,14 @@ export default styles = StyleSheet.create({
     width: width,
     height: height,
     opacity: 1,
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
     position: 'absolute',
     left: 0,
     top: 0
+  },
+  cover:{
+    backgroundColor:'black',
+    opacity:0.5
   },
   menuImage:{
     width: width*0.7-2,

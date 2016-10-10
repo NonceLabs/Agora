@@ -34,6 +34,7 @@ class History extends Component {
   render() {
     const { tabs,home,fez,navigator,menuOpen,toggle,fetchTopicInArray } = this.props
     const { selected } = this.state
+
     return (
       <View style={[s.root,{paddingTop: 10}]}>
         <SwipeHeader
@@ -45,7 +46,7 @@ class History extends Component {
           selected={selected}
           select={(t)=>{
             this.setState({selected: t.key});
-            if (home[t.key].length == 0) {
+            if (home[t.key].length != fez[t.key].length) {
               switch(t.key){
                 case "joined":
                   this.props.fetchFezJoined(fez._id)
@@ -63,7 +64,10 @@ class History extends Component {
           }}
           />
         <ScrollView style={s.topicsContainer} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
-          {home[selected].map((t,idx)=>{            
+          {home[selected].map((t,idx)=>{
+            if (!fez[selected].includes(t._id)) {
+              return null
+            }
             return (
               <Card
                 navigator={navigator}

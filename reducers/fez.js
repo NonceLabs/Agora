@@ -24,7 +24,7 @@ const initial = {
   location: {"longitude":-122.0312186,"latitude":37.33233141},
   repliedNoti: true,
   updatedNoti: true,
-  replyToMe: []
+  notices: []
 }
 
 export default function user(state=initial,action){
@@ -41,7 +41,7 @@ export default function user(state=initial,action){
       }
     case SIGNUP_FEZ:
       return Object.assign({},action.fez,{
-        replyToMe: [],
+        notices: [],
         location: {"longitude":-122.0312186,"latitude":37.33233141},
       })
     case READ_NOTICE:
@@ -54,7 +54,7 @@ export default function user(state=initial,action){
       })
     case FETCH_NOTICE:
       return Object.assign({},state,{
-        replyToMe: action.notices.map((t)=>{
+        notices: action.notices.map((t)=>{
           return Object.assign({},t,{
             to:{
               content: t.to.content,

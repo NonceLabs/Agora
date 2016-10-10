@@ -27,7 +27,8 @@ class Notice extends Component {
   }
   
   componentWillMount() {
-    this.props.readNotice()
+    const { fez,readNotice } = props
+    readNotice(fez.notices.map((t)=> t.id))
   }
   
   render() {

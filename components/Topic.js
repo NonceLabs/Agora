@@ -63,9 +63,7 @@ class Topic extends Component {
           transparent={true}
           visible={operating}
           onRequestClose={() => {}}>
-          <View style={[{width,height,backgroundColor:'black',opacity:0.3}]}>
-            
-          </View>
+          <View style={[{width,height},s.cover]}></View>
           <View style={[{flexDirection:'column',justifyContent:'flex-end',width,height,backgroundColor:'transparent',position:'absolute',left:0,top:0}]}>
             {operations.filter((t)=>{
               return cozeTo!=null && cozeTo.authorId!=fez._id
@@ -173,6 +171,7 @@ class Topic extends Component {
                   }
                 }}
                 t={t}
+                index={idx+1}
                 operatable={true}
                 mine={mine}
                 moreOp={()=> {

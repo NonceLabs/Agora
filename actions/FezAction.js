@@ -72,7 +72,7 @@ export function fetchUser(id){
     io.on('identified',(data)=>{
       dispatch(userFetched(data))
     })
-    io.on('notices',(data)=>{
+    io.removeListener('notices').on('notices',(data)=>{
       const notices = data.notices.map((t)=>{
         const fezfrom = data.fezs.filter((f)=> f._id==t.fromId)
         if (fezfrom.length==1) {
@@ -94,13 +94,6 @@ export function fetchUser(id){
       })
       dispatch(noticeFetched(notices))
     })
-    // axios.get(`${SIP}/enter/${id}`)
-    //   .then((response) => {
-    //     dispatch(userFetched(response.data))
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }
 }
 
@@ -119,11 +112,15 @@ export function noticeFetched(notices){
 }
 
 export function readNotice(nids){
-  io.emit('readNotice',{
-    nids
-  })
   return (dispatch)=>{
-    dispatch(noticeRead())
+    axios.get(`${SIP}readnotice`,{
+      params: {all: nids}  
+    })
+      .then((response) => {        
+        dispatch(noticeRead())
+      }).catch((error) => {
+        console.log(error);
+      });
   }
 }
 

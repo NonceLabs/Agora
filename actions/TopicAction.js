@@ -20,22 +20,10 @@ import { SIP } from '../config/index'
 export function fetchTopics(meta){
   io.emit('fetchNearTopics', meta)
   return (dispatch)=>{
-    io.on('nearTopicsFetched',(data)=>{
+    io.removeListener('nearTopicsFetched').on('nearTopicsFetched',(data)=>{
       dispatch(addOthez(data.fezs))
       dispatch(topicsFetched(data.topics))
     })
-    // axios.get(`${SIP}topic`,{
-    //   params: {
-    //     long,
-    //     lat,
-    //     page
-    //   }
-    // }).then((response) => {
-    //     dispatch(topicsFetched(response.data))
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }
 }
 
@@ -51,20 +39,11 @@ export function fetchCozes(topicId, id){
     tid: topicId
   })
   return (dispatch)=>{
-    io.on('topicByIdFetched',(rd)=>{
+    io.removeListener('topicByIdFetched').on('topicByIdFetched',(rd)=>{
       dispatch(addOthez(rd.fezs))
       const cozes = [rd.topic].concat(rd.cozes)
       dispatch(cozesFetched(cozes))
     })
-    // axios.get(`${SIP}topic/${topicId}`,{
-    //   id
-    // }).then((response) => {
-    //   const rd = response.data
-    //   dispatch(cozesFetched([rd.topic].concat(rd.cozes)))
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
   }
 }
 
@@ -76,9 +55,9 @@ function cozesFetched(cozes){
 }
 
 export function createTopic(one){
-  console.log(one);
   return (dispatch)=>{
-    axios.put(`${SIP}topic`, one).then((response) => {
+    axios.put(`${SIP}topic`, one)
+      .then((response) => {
         dispatch(topicCreated(response.data))
       })
       .catch((error) => {
@@ -106,22 +85,9 @@ export function createCoze(topicId, one, joined,cozeTo){
     if (!joined) {
       dispatch(topicJoined(topicId))
     }
-    io.on('cozeCreated',(data)=>{
-      dispatch(cozeCreated( Object.assign({},one,{
-        _id: data.cid,
-        topicId
-      })))
+    io.removeListener('cozeCreated').on('cozeCreated',(data)=>{
+      dispatch(cozeCreated(data))
     })
-    // const urlto = joined ? 'topic' : 'join'
-    // axios.put(`${SIP}${urlto}/${topicId}`,one).then((response) => {
-    //     dispatch(cozeCreated( Object.assign({},one,{
-    //       _id: response.data,
-    //       topicId
-    //     })))
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }
 }
 
@@ -138,7 +104,7 @@ export function fetchTopicInArray(tids, type, uid){
   })
 
   return (dispatch)=>{
-    io.on('topicInArrayFetched',(data)=>{
+    io.removeListener('topicInArrayFetched').on('topicInArrayFetched',(data)=>{
       switch(type){
         case "joined":
           dispatch(fezJoinedFetched(data.topics))
@@ -205,7 +171,6 @@ function fezJoinedFetched(topics){
 
 export function fetchFezCreated(all){
   return (dispatch)=>{
-    console.log(all);
     axios.get(`${SIP}topics`,{
       params: {all}  
     })

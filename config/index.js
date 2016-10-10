@@ -12,6 +12,7 @@ export const IMAGER_OPTION = {
   chooseFromLibraryButtonTitle:'相册',
   mediaType: 'photo',
   cameraType: 'front',
+  quality: 0.5,
   storageOptions: {
     skipBackup: true,
     path: 'images'

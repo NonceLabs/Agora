@@ -10,16 +10,22 @@ import {
   Dimensions,
   Alert,
   TextInput,
-  Platform
+  Platform,
+  DeviceEventEmitter
 } from 'react-native';
-
-import EvilIcon from 'react-native-vector-icons/EvilIcons';
+import { RNUploader } from 'NativeModules'
+import EvilIcon from 'react-native-vector-icons/EvilIcons'
 const {height, width} = Dimensions.get('window')
 import s from './Styles'
 import ImagePicker from 'react-native-image-picker'
-import { IMAGER_OPTION } from '../../config/index'
-import Qiniu,{Auth,ImgOps,Conf,Rs,Rpc} from 'react-native-qiniu';
+import { IMAGER_OPTION,SIP } from '../../config/index'
 import _ from 'lodash'
+
+const opts = {
+    url: `${SIP}upload`,
+    method: 'POST',  // optional: POST or PUT
+    headers: { 'Accept': 'application/json' },
+};
 
 class TextModal extends Component {
   constructor(props){
@@ -30,6 +36,16 @@ class TextModal extends Component {
       titleValue: ""
     }
   }
+  componentDidMount() {
+    DeviceEventEmitter.addListener('RNUploaderProgress', (data)=>{
+      let bytesWritten = data.totalBytesWritten;
+      let bytesTotal   = data.totalBytesExpectedToWrite;
+      let progress     = data.progress;
+
+      console.log( "upload progress: " + progress + "%");
+    });
+  }
+  
   render() {
     const { title,btnText,submit,hide,extra,titleInput,addonEnable } = this.props
     const { addons,value,titleValue } = this.state
@@ -96,9 +112,13 @@ class TextModal extends Component {
                 </TouchableOpacity>
               )}
             </View>
-            <TouchableOpacity onPress={()=>{
-              if (_.trim(value).length!=0) {
-                submit(value, addons, titleValue)                
+            <TouchableOpacity onPress={()=>{                
+              if (_.trim(value).length!=0 || addons.length>0) {
+                if (addonEnable && addons.length>0) {
+                  this.uploadAddons()
+                }else{
+                  submit(value, addons, titleValue)
+                }                                
               }
               hide()
             }}>
@@ -110,6 +130,32 @@ class TextModal extends Component {
         </Modal>
       </View>
     );
+  }
+  uploadAddons(){
+    const { value, addons, titleValue } = this.state
+    
+    const files = addons.map((t)=>{
+      return {
+        name: 'files[]',
+        filepath: t.uri
+      }
+    })
+
+    const nopts = Object.assign({},opts,{
+      files
+    })
+    RNUploader.upload( nopts, (err, response) => {
+      if( err ){
+          console.log(err);
+          return;
+      }
+
+      const status = response.status
+      const naddons = JSON.parse(response.data)
+      if (status == 200) {
+        this.props.submit(value, naddons, titleValue)        
+      }
+    });
   }
   addImage(){
     ImagePicker.showImagePicker(IMAGER_OPTION, (response) => {
@@ -123,28 +169,13 @@ class TextModal extends Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
+        console.log(response);
         let source = null
         if (Platform.OS === 'ios') {
           source = {uri: response.uri.replace('file://', ''), isStatic: true};
         } else {
           source = {uri: response.uri, isStatic: true};
         }
-        Conf.ACCESS_KEY = 'PK87R6EAMpnIpTaukjNI51jJO013a5Y8mLNam8xq'
-        Conf.SECRET_KEY = '8dEFoCBC2wPXuWDe_jMCgU1p_zEDpKGRlUodu5Kw'
-        var putPolicy = new Auth.PutPolicy2(
-            {scope: "agora:kkk.jpg"}
-        );
-        var uptoken = putPolicy.token();
-        let formInput = {
-            key : "kkk.jpg",
-        }
-        console.log(response.uri);
-        console.log(source.uri);
-        Rpc.uploadFile(response.uri, uptoken, formInput)
-          .then((response) => console.log(response))
-          .catch((error) => {
-            console.log(error);
-          });
 
         const addons = this.state.addons.concat([source])
         this.setState({
