@@ -6,7 +6,10 @@ import {
   FETCH_FEZ_CREATED,
   FETCH_FEZ_FOLLOWED,
   OTHEZ,
-  NEW_TOPIC
+  NEW_TOPIC,
+  TOPIC_NEXT_PAGE,
+  LOADING_NEXT_PAGE,
+  COZE_NEXT_PAGE
 } from '../config/ActionTypes'
 import _ from 'lodash'
 
@@ -17,6 +20,15 @@ const initial = {
   followed: [],
   created: [],
   tome: [],
+  topicPage:{
+    total: 1,
+    current: 0
+  },
+  loadingNextPage: false,
+  cozePage:{
+    total: 1,
+    current: 0
+  },
   tojoined: [{
     author: {
       nickname: '刘德华',
@@ -40,6 +52,10 @@ const initial = {
 }
 export default function home(state=initial,action){
   switch(action.type){
+    case LOADING_NEXT_PAGE:
+      return Object.assign({},state,{
+        loadingNextPage: true
+      })
     case NEW_TOPIC:
       return Object.assign({},state,{
         topics: [...state.topics,action.one]
@@ -69,7 +85,7 @@ export default function home(state=initial,action){
           cozes: [...state.cozes,action.coze]
         })
       }
-    case FETCH_COZES:
+    case COZE_NEXT_PAGE:
       return Object.assign({},state,{
         cozes: action.cozes.map((t)=>{
           const fezs = state.othez.filter((f)=> f._id==t.author.id)
@@ -85,9 +101,10 @@ export default function home(state=initial,action){
             })
           }
           return t
-        })
+        }),
+        cozePage: action.pages
       })
-    case FETCH_TOPICS:
+    case TOPIC_NEXT_PAGE:
       return Object.assign({},state,{
         topics: action.topics.map((t)=>{
           const fezs = state.othez.filter((f)=> f._id==t.author.id)
@@ -103,7 +120,28 @@ export default function home(state=initial,action){
             })
           }
           return t
-        })
+        }).concat(state.topics),
+        topicPage: action.pages,
+        loadingNextPage: false
+      })
+    case FETCH_TOPICS:
+      return Object.assign({},state,{
+        topics: state.topics.concat(action.topics.map((t)=>{
+          const fezs = state.othez.filter((f)=> f._id==t.author.id)
+          let author = {}
+          if (fezs.length == 1) {
+            author = {
+              nickname: fezs[0].nickname,
+              avatarUrl: fezs[0].avatarUrl,
+              id: t.author.id
+            }
+            return Object.assign({},t,{
+              author
+            })
+          }
+          return t
+        })),
+        topicPage: action.pages
       })
     default:
       return state

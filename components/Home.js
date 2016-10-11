@@ -27,6 +27,7 @@ import { SIP } from '../config/index'
 import { createTopic } from '../actions/TopicAction'
 import Mapbox,{ MapView } from 'react-native-mapbox-gl';
 Mapbox.setAccessToken('pk.eyJ1IjoiY2hlemhlMTQzIiwiYSI6ImNpdHV4ZnU3dDAwMGIzb3A2ZDY4dXB1cHcifQ.lNI7a0-kJ8u_AXE4yIJVXg');
+import Spinner from 'react-native-spinkit';
 
 class Home extends Component {
   constructor(props){
@@ -36,7 +37,8 @@ class Home extends Component {
       mapModal: false,
       content: "",
       addons: [],
-      isRefreshing: false
+      isRefreshing: false,
+      scrollY: new Animated.Value(0)
     }
   }
   parseContent(content){
@@ -70,7 +72,7 @@ class Home extends Component {
       }
     })
     const location = fez.location
-    console.log(location);
+    
     return (
       <View style={s.root}>
         {textModalVisible && (
@@ -137,11 +139,15 @@ class Home extends Component {
           style={s.topicsContainer}
           bounces={true}
           automaticallyAdjustContentInsets={false}
-          scrollEventThrottle={200}
+          scrollEventThrottle={16}
           contentContainerStyle={s.topicsContentStyle}
+          pagingEnabled={true}
+          onScroll={(e)=>{
+            console.log(e.nativeEvent);
+          }}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.isRefreshing}
+              refreshing={home.loadingNextPage}
               onRefresh={this._onRefresh.bind(this)}
               tintColor="#ff0000"
               title="加载中..."
@@ -165,6 +171,9 @@ class Home extends Component {
                 }}/>
             )
           })}
+          {home.topics.length==0 && (
+            <Spinner style={s.spinner} isVisible={true} size={80} type={'ChasingDots'} color={'#008cd5'}/>
+          )}          
         </ScrollView>
 
         <View style={s.floatMenu}>
@@ -185,11 +194,7 @@ class Home extends Component {
     );
   }
   _onRefresh(){
-    this.setState({isRefreshing: true});
     this.props.refresh()
-    setTimeout(()=>{
-      this.setState({isRefreshing: false});
-    },2000)
   }
 }
 

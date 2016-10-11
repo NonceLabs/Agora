@@ -20,6 +20,7 @@ import s from './Styles'
 import Ionicon from  'react-native-vector-icons/Ionicons'
 import ImagePicker from 'react-native-image-picker'
 import { IMAGER_OPTION } from '../../config/index'
+import { RNUploader } from 'NativeModules'
 
 class FezModal extends Component {
   constructor(props){
@@ -28,6 +29,35 @@ class FezModal extends Component {
       fez: props.fez
     }
   }
+  
+  updateAvatar(){
+    if (this.props.fez.avatarUrl != this.state.fez.avatarUrl) {
+      const files = [this.state.fez.avatarUrl].map((t)=>{
+        return {
+          name: 'files[]',
+          filepath: t.uri
+        }
+      })
+
+      const nopts = Object.assign({},opts,{
+        files
+      })
+      RNUploader.upload( nopts, (err, response) => {
+        if( err ){
+            console.log(err);
+            return;
+        }
+
+        const status = response.status
+        const naddons = JSON.parse(response.data)
+        if (status == 200) {
+          this.props.submit(this.state.fez)
+          this.props.hide()
+        }
+      });
+    }
+  }
+
   render() {
     const { hide,btnText,submit } = this.props
     const { fez } = this.state
@@ -79,8 +109,7 @@ class FezModal extends Component {
           </View>
 
           <TouchableOpacity onPress={()=>{
-            submit(fez)
-            hide()
+            this.updateAvatar()
           }}>
             <View style={s.btnView}>
               <Text style={s.btnText}>{btnText}</Text>

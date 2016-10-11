@@ -170,7 +170,7 @@ class App extends Component {
   }
   
   render() {
-    const { navigator,defaultOffset,op,selectMenuitem,fez,updateFez,signupFez } = this.props
+    const { navigator,defaultOffset,op,selectMenuitem,fez,updateFez,signupFez,home } = this.props
     const { animateV,fezModalVisible,signupModalVisible,targetModalVisible,location } = this.state
 
     return (
@@ -195,7 +195,7 @@ class App extends Component {
             this.props.fetchTopics({
               long: location.longitude,
               lat: location.latitude,
-              page: 1,
+              page: home.topicPage.current,
               uid: fez._id
             })
             this.props.locateFez(location)
@@ -325,7 +325,7 @@ class App extends Component {
         this.props.fetchTopics({
           long: coords.longitude,
           lat: coords.latitude,
-          page: 1,
+          page: this.props.home.topicPage.current,
           uid: this.props.fez._id
         })
         this.props.locateFez({
@@ -358,7 +358,8 @@ App.defaultProps = {
 function mapStateToProps(state) {
   return {
     op: state.op,
-    fez: state.fez
+    fez: state.fez,
+    home: state.home
   }
 }
 

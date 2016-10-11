@@ -22,6 +22,8 @@ import { fetchCozes,createCoze,reportCoze } from '../actions/TopicAction'
 import { followTopic } from '../actions/FezAction'
 import { Card } from './widgets/Card'
 import _ from 'lodash'
+import Spinner from 'react-native-spinkit';
+import PageModal from './widgets/PageModal'
 
 class Topic extends Component {
   constructor(props){
@@ -30,13 +32,14 @@ class Topic extends Component {
       cozeModalVisible: false,
       cozeTo: null,
       operating: false,
-      reportModal: false
+      reportModal: false,
+      paging: false
     }
   }
   
   componentWillMount() {
     const { fetchCozes,topicId,fez } = this.props
-    fetchCozes(topicId,fez._id)
+    fetchCozes(topicId, 0)
   }
   
   richTo(cozes){
@@ -52,7 +55,7 @@ class Topic extends Component {
 
   render() {
     const { home,navigator,joinable,fez,createCoze,topicId,reportCoze,operations,followTopic } = this.props
-    const { cozeModalVisible,cozeTo,operating,reportModal } = this.state
+    const { cozeModalVisible,cozeTo,operating,reportModal,paging } = this.state
 
     const unity = this.richTo(home.cozes)
     const followed = fez.followed.includes(topicId)
@@ -127,6 +130,29 @@ class Topic extends Component {
             },joined, cozeTo)
           }} hide={()=> this.setState({cozeModalVisible:false})} extra={cozeTo}/>
         )}
+        {paging && (
+          <PageModal
+            total={home.cozePage.total}
+            current={home.cozePage.current}
+            pageTo={(page)=>{
+              if (page != home.cozePage.current) {
+                this.props.fetchCozes(topicId, page)                
+              }
+              this.setState({paging: false});
+            }}
+            />
+        )}
+        {true && (
+          <TouchableOpacity style={s.cozePage} onPress={()=>{
+              this.setState({paging: true});
+            }}>            
+            <View>
+                <Text style={[s.cozePageText,s.h4]}>
+                  {home.cozePage.current+"/"+home.cozePage.total}
+                </Text>
+            </View>
+          </TouchableOpacity>
+        )}
         <Header
          left={{
           icon: 'arrow-left',
@@ -154,7 +180,10 @@ class Topic extends Component {
                 <Text style={followed?s.btnFollowedText: s.btnToFollowedText}>{followed?"已关注":"关  注"}</Text>
               </View>
             </TouchableOpacity>
-          </View>          
+          </View>
+          {unity.length==0 && (
+            <Spinner style={s.spinner} isVisible={true} size={80} type={'ChasingDots'} color={'#008cd5'}/>
+          )}
           {unity.map((t,idx)=>{
             const mine = t.author.id == fez._id
             return (

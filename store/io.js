@@ -1,4 +1,8 @@
 import './UserAgent'
+import {
+  AppStateIOS,
+} from 'react-native'
+
 import socket from 'socket.io-client/socket.io'
 import { WSIP } from '../config/index'
 let status = "connecting"
@@ -24,4 +28,15 @@ io.on('reconnect', () => {
   status = "reconnecting"
 })
 
-
+// AppStateIOS.addEventListener('change',() => {
+//   switch (AppStateIOS.currentState) {
+//     case "inactive":
+//       io.disconnect()
+//       break;
+//     case "active":
+//       io.connect()
+//       break;
+//     default:
+//       break;
+//   }
+// })

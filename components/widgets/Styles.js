@@ -25,7 +25,8 @@ export default styles = StyleSheet.create({
     width: width,
     position: 'absolute',
     left: 0,
-    paddingTop: 0
+    paddingTop: 0,
+    paddingBottom: 100
   },
   topicsContentStyle:{
     flexDirection: 'column',
@@ -408,5 +409,44 @@ export default styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'red',
     marginLeft: 10
+  },
+  spinner: {
+    marginBottom: 0
+  },
+  cozePage:{
+    backgroundColor: 'black',
+    position: 'absolute',
+    left: width*0.85,
+    top: height*0.85,
+    zIndex: 10,
+    padding: 10,
+    borderRadius: 4
+  },
+  cozePageText:{
+    color: 'white'
+  },
+  pageWrapper:{
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    paddingLeft: 10,
+    paddingRight: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-end',
+    width,
+    paddingBottom: 20,
+    paddingTop: 10,
+    flexWrap: 'wrap'
+  },
+  pageDot:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginLeft: 20,
+    marginRight: 10,
+    marginTop: 10
   }
 })

@@ -46,7 +46,7 @@ class Menu extends Component {
                 sep = {borderBottomWidth:1,borderColor:'#999'}
                 break;
               case "消息":
-                if (fez.replyToMe.filter((rtm)=> !rtm.read).length!=0) {
+                if (fez.notices.filter((rtm)=> !rtm.read).length!=0) {
                   badge = (<View style={s.badge}></View>)
                 }
                 break;

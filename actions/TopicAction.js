@@ -11,38 +11,83 @@ import {
   FETCH_TOPIC_IN_ARRAY,
   FETCH_FEZ_FOLLOWED,
   OTHEZ,
-  REPORT
+  REPORT,
+  TOPIC_NEXT_PAGE,
+  COZE_NEXT_PAGE,
+  LOADING_NEXT_PAGE
 } from '../config/ActionTypes'
 import axios from 'axios'
 import { io } from '../store/io'
 import { SIP } from '../config/index'
+
+export function fetchNextPageTopics(meta){
+  io.emit('fetchNearTopics', meta)
+  return (dispatch)=>{
+    io.removeListener('nearTopicsFetched').on('nearTopicsFetched',(data)=>{
+      dispatch(addOthez(data.fezs))
+      dispatch((loadingTextPage(true)))
+      dispatch(topicsFetched(data.topics,data.topicPage))
+    })
+  }
+}
+
+function nextPageTopicFetched(topics, topicPage){
+  return {
+    type: TOPIC_NEXT_PAGE,
+    topics,
+    pages
+  }
+}
+
+function nextPageCozeFetched(cozes, pages){
+  return {
+    type: COZE_NEXT_PAGE,
+    cozes,
+    pages
+  }
+}
+
+function loadingTextPage(loading){
+  return {
+    type: LOADING_NEXT_PAGE,
+    loading
+  }
+}
 
 export function fetchTopics(meta){
   io.emit('fetchNearTopics', meta)
   return (dispatch)=>{
     io.removeListener('nearTopicsFetched').on('nearTopicsFetched',(data)=>{
       dispatch(addOthez(data.fezs))
-      dispatch(topicsFetched(data.topics))
+      dispatch(topicsFetched(data.topics,data.topicPage))
     })
   }
 }
 
-function topicsFetched(topics){
+function topicsFetched(topics,pages){
   return {
     type: FETCH_TOPICS,
-    topics
+    topics,
+    pages
   }
 }
 
-export function fetchCozes(topicId, id){
+export function fetchCozes(topicId, page){
   io.emit('fetchTopicById',{
-    tid: topicId
+    tid: topicId,
+    page
   })
+  
   return (dispatch)=>{
     io.removeListener('topicByIdFetched').on('topicByIdFetched',(rd)=>{
       dispatch(addOthez(rd.fezs))
-      const cozes = [rd.topic].concat(rd.cozes)
-      dispatch(cozesFetched(cozes))
+      let cozes = []
+      if (page == 0) {
+        cozes = [rd.topic].concat(rd.cozes)
+      }else{
+        cozes = rd.cozes
+      }
+      dispatch(nextPageCozeFetched(cozes,rd.pages))
     })
   }
 }
