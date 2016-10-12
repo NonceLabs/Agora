@@ -1,6 +1,5 @@
 import {
   FETCH_TOPICS,
-  FETCH_NOTICE,
   JOIN_TOPIC,
   VIEW_TOPIC,
   FETCH_COZES,
@@ -171,7 +170,11 @@ export function fetchFezFollowed(all){
       params: {all:all}
     })
       .then((response) => {
-        dispatch(fezFollowedFetched( response.data ))
+        dispatch(fezFollowedFetched( response.data.map((t)=>{
+          return Object.assign({},t,{
+            showTitle: true
+          })
+        }) ))
       }).catch((error) => {
         console.log(error);
       });
@@ -194,7 +197,7 @@ export function fetchFezJoined(uid){
           const topic = rd.topics.filter((tp)=>tp._id==t.topicId)
           if (topic.length==1) {
             return Object.assign({},t,{
-              topicTitle: topic[0].content,
+              title: topic[0].content,
               showTitle: true
             })
           }
@@ -220,7 +223,11 @@ export function fetchFezCreated(all){
       params: {all}  
     })
       .then((response) => {        
-        dispatch(fezCreatedFetched( response.data ))
+        dispatch(fezCreatedFetched( response.data.map((t)=>{
+          return Object.assign({},t,{
+            showTitle: true
+          })
+        })))
       }).catch((error) => {
         console.log(error);
       });

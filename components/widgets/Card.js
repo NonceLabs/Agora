@@ -40,6 +40,9 @@ export class Card extends Component {
     const edgeStyle = edge? {width: width-20,borderRadius: 4}:{}
     const withTitleStyle = t.showTitle!=undefined ? {}:{paddingTop:10}
     let imageModal = null
+    
+    console.log(t);
+
     if (viewUri!="") {
       imageModal = (
         <Modal
@@ -65,7 +68,7 @@ export class Card extends Component {
       <View style={[s.topicWrapper, edgeStyle,withTitleStyle]}>
         {t.showTitle && (
           <View style={s.cozeWithTitle}>
-            <Text style={[s.h6,{color:'white'}]}>{t.topicTitle}</Text>
+            <Text style={[s.h6,{color:'white'}]}>{t.title}</Text>
           </View>
         )}
         {imageModal}
@@ -92,14 +95,14 @@ export class Card extends Component {
               )}
               {(t.to!=undefined && typeof(t.to)=="object") && (
                 <View style={s.replyToWrapper}>
-                  <Text style={s.azure}>{t.to.author.nickname+" : "}</Text>
-                  <Text style={s.white}>{t.to.content}</Text>
+                  <Text style={s.replyToName}>{t.to.author.nickname+" : "}</Text>
+                  <Text style={s.replyToContent}>{t.to.content}</Text>
                 </View>
               )}
               <Text style={s.content}>{t.content}</Text>
             </View>
             <View style={s.addonWrapper}>
-              {t.addons.map((addon,tidx)=>{
+              {t.addons!=undefined && t.addons.map((addon,tidx)=>{
                 const uri = `${SIP}addons/${addon}`
                 return (
                   <TouchableOpacity key={tidx} onPress={()=>{

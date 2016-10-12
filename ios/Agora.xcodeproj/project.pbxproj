@@ -28,6 +28,7 @@
 		7BDECEC23AA64AE38E7DE6B2 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29C43CC4452E40E28D69BD03 /* Octicons.ttf */; };
 		7D4D1AB6CD374226A9730106 /* libRNUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F0D3842F7064014B8C115CD /* libRNUploader.a */; };
 		8169A9E6F06243D889B26575 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E48D76E93FE4B598109D10A /* libCodePush.a */; };
+		8314AD091DAE6618008BDAF0 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8314ACFE1DAE65F2008BDAF0 /* libRCTPushNotification.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		834FD7D91DA206AB00635557 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 834FD7D81DA206A000635557 /* libRNImagePicker.a */; };
 		83D471791DA3705B00086AAA /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D471781DA3705B00086AAA /* Mapbox.framework */; };
@@ -113,6 +114,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTLinking;
+		};
+		8314ACFD1DAE65F2008BDAF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8314ACF11DAE65F2008BDAF0 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTPushNotification;
 		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -224,6 +232,7 @@
 		7A153C727FE647D78AFBD6E8 /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
 		7F9D9738346D42F1AEAF8E1C /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		830338641DAD0AB0008E7884 /* Agora.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Agora.entitlements; path = Agora/Agora.entitlements; sourceTree = "<group>"; };
+		8314ACF11DAE65F2008BDAF0 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		834FD7D31DA2069F00635557 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		83D471611DA36FFA00086AAA /* RCTMapboxGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTMapboxGL.xcodeproj; path = "../node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj"; sourceTree = "<group>"; };
@@ -253,6 +262,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8314AD091DAE6618008BDAF0 /* libRCTPushNotification.a in Frameworks */,
 				83D4717D1DA370AE00086AAA /* libRCTMapboxGL.a in Frameworks */,
 				834FD7D91DA206AB00635557 /* libRNImagePicker.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -390,9 +400,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8314ACF21DAE65F2008BDAF0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8314ACFE1DAE65F2008BDAF0 /* libRCTPushNotification.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8314ACF11DAE65F2008BDAF0 /* RCTPushNotification.xcodeproj */,
 				83D471611DA36FFA00086AAA /* RCTMapboxGL.xcodeproj */,
 				834FD7D31DA2069F00635557 /* RNImagePicker.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -624,6 +643,10 @@
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
 				},
 				{
+					ProductGroup = 8314ACF21DAE65F2008BDAF0 /* Products */;
+					ProjectRef = 8314ACF11DAE65F2008BDAF0 /* RCTPushNotification.xcodeproj */;
+				},
+				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
 					ProjectRef = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
 				},
@@ -734,6 +757,13 @@
 			fileType = archive.ar;
 			path = libRCTLinking.a;
 			remoteRef = 78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8314ACFE1DAE65F2008BDAF0 /* libRCTPushNotification.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTPushNotification.a;
+			remoteRef = 8314ACFD1DAE65F2008BDAF0 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
@@ -966,6 +996,7 @@
 					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 				);
 				INFOPLIST_FILE = Agora/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1003,6 +1034,7 @@
 					"$(SRCROOT)/../node_modules/react-native-spinkit/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 				);
 				INFOPLIST_FILE = Agora/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

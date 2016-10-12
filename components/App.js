@@ -114,10 +114,10 @@ class App extends Component {
 
   async initUserInfo(){
     try {
-      const fezId = '57f79192a0c80824a0a81258'//await AsyncStorage.getItem('fezId')
+      const fezId = await AsyncStorage.getItem('fezId')
       
       if (fezId !== null){
-        this.props.fetchUser('57f79192a0c80824a0a81258')
+        this.props.fetchUser(fezId)
         this._locate()
       }else{
         this.setState({signupModalVisible: true});
@@ -172,7 +172,7 @@ class App extends Component {
   render() {
     const { navigator,defaultOffset,op,selectMenuitem,fez,updateFez,signupFez,home } = this.props
     const { animateV,fezModalVisible,signupModalVisible,targetModalVisible,location } = this.state
-
+    
     return (
       <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
         {signupModalVisible && fez._id==undefined && (

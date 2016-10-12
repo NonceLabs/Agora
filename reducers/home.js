@@ -48,6 +48,7 @@ const initial = {
     addons: [],
     date: (new Date()).toLocaleTimeString()
   }],
+  replied:[],
   othez: []
 }
 export default function home(state=initial,action){
@@ -58,7 +59,7 @@ export default function home(state=initial,action){
       })
     case NEW_TOPIC:
       return Object.assign({},state,{
-        topics: [...state.topics,action.one]
+        topics: [action.one].concat(state.topics)
       })
     case OTHEZ:
       return Object.assign({},state,{

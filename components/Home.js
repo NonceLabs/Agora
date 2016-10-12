@@ -40,7 +40,8 @@ class Home extends Component {
       isRefreshing: false,
       scrollY: new Animated.Value(0)
     }
-  }
+  }  
+
   parseContent(content){
     if (content.length > 16) {
       return content.subString(0,16)+'...'
@@ -141,7 +142,7 @@ class Home extends Component {
           automaticallyAdjustContentInsets={false}
           scrollEventThrottle={16}
           contentContainerStyle={s.topicsContentStyle}
-          pagingEnabled={true}
+          pagingEnabled={false}
           onScroll={(e)=>{
             console.log(e.nativeEvent);
           }}
@@ -171,9 +172,10 @@ class Home extends Component {
                 }}/>
             )
           })}
-          {home.topics.length==0 && (
+          {home.loadingNextPage && (
             <Spinner style={s.spinner} isVisible={true} size={80} type={'ChasingDots'} color={'#008cd5'}/>
-          )}          
+          )}
+          <View style={{height: 50, width, backgroundColor:'white'}}></View>
         </ScrollView>
 
         <View style={s.floatMenu}>

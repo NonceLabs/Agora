@@ -10,7 +10,8 @@ import {
   Dimensions,
   Alert,
   TextInput,
-  Platform
+  Platform,
+  PushNotificationIOS
 } from 'react-native';
 
 const {height, width} = Dimensions.get('window')
@@ -24,10 +25,24 @@ class SignupModal extends Component {
     this.state = {
       nfez:{
         nickname: "",
-        gender: 0       
+        gender: 0,
+        token: ""
       }
     }
   }
+
+  componentDidMount() {
+    PushNotificationIOS.requestPermissions();
+    PushNotificationIOS.addEventListener('register',this._registerToken.bind(this));
+  }
+
+  _registerToken(token){
+    this.setState({nfez:Object.assign({},this.state.nfez,{
+      token
+    })})
+    PushNotificationIOS.removeEventListener('register');
+  }
+
   render() {
     const { nfez } = this.state
     const { signupFez } = this.props

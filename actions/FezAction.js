@@ -88,7 +88,11 @@ export function fetchUser(id){
               content: t.toContent
             },
             content: t.fromContent,
-            topicId: t.topicId
+            topicId: t.topicId,
+            cozeId: t.fromCozeId,
+            title: t.title || "",
+            showTitle: true,
+            date: t.date
           }
         }
       })
@@ -113,9 +117,7 @@ export function noticeFetched(notices){
 
 export function readNotice(nids){
   return (dispatch)=>{
-    axios.get(`${SIP}readnotice`,{
-      params: {all: nids}  
-    })
+    axios.post(`${SIP}readnotice`,{all: nids})
       .then((response) => {        
         dispatch(noticeRead())
       }).catch((error) => {

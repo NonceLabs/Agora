@@ -35,7 +35,7 @@ class Menu extends Component {
             closeMenu()
             selectMenuitem("我")
           }}>
-            <Image source={require('../assets/avatar.png')} style={s.avatarInMenu}/>
+            <Image source={{uri: fez.avatarUrl}} style={s.avatarInMenu}/>
           </TouchableOpacity>
         </View>
         <View style={s.menuWrapper}>

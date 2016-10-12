@@ -118,12 +118,15 @@ export default styles = StyleSheet.create({
   },
   replyToWrapper:{
     flexDirection:'row',
-    backgroundColor:'#00acfe',
+    backgroundColor:'mistyrose',
     padding:4,
     borderRadius:2,
     marginLeft: 4
   },
-  toContent:{
+  replyToContent:{
+    color: '#666'
+  },
+  replyToName:{
     color: '#333'
   },
   flexEnd:{
@@ -247,8 +250,8 @@ export default styles = StyleSheet.create({
     top: 0
   },
   cover:{
-    backgroundColor:'black',
-    opacity:0.5
+    backgroundColor:'#333',
+    opacity:0.2
   },
   menuImage:{
     width: width*0.7-2,
@@ -275,8 +278,9 @@ export default styles = StyleSheet.create({
     position: 'absolute',
     top: width*0.1,
     left: width*0.05,
-    width: width*0.3,
-    height: width*0.3 
+    width: width*0.4,
+    height: width*0.4,
+    borderRadius: width*0.2 
   },
   flipCardContainer: {
     width: width,

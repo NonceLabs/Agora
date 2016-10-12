@@ -17,33 +17,69 @@ import { Header,SwipeHeader } from './widgets/Header'
 import { Card } from './widgets/Card'
 import Topic from './Topic'
 import { readNotice } from '../actions/FezAction'
+import { createCoze } from '../actions/TopicAction'
+import TextModal from './widgets/TextModal'
 
 class Notice extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selected: "replyToMe"
+      cozeTo: null,
+      operating: false
     }
   }
   
   componentWillMount() {
-    const { fez,readNotice } = props
-    readNotice(fez.notices.map((t)=> t.id))
+    const { fez,readNotice } = this.props
+    // readNotice(fez.notices.map((t)=> t.id))
   }
   
   render() {
-    const { comments, menuOpen, toggle, tabs, navigator, fez } = this.props
-    const { selected } = this.state
-    console.log(fez.replyToMe);
+    const { comments, menuOpen, toggle, tabs, navigator, fez, createCoze } = this.props
+    const { operating, cozeTo } = this.state
+    
     return (
       <View style={s.root}>
+        {operating && (
+          <TextModal 
+            title="回复" 
+            btnText="发送" 
+            submit={(content,addons)=>{
+              const joined = fez.joined.includes(cozeTo.topicId) 
+              createCoze(cozeTo.topicId,{
+                content,
+                addons,
+                date: new Date(),
+                author:{
+                  id: fez._id,
+                  nickname: fez.nickname,
+                  avatarUrl: fez.avatarUrl
+                },
+                to: cozeTo.cozeId
+              },joined, cozeTo)
+              this.setState({operating: true});
+            }} 
+            hide={()=> this.setState({operating:false})} 
+            extra={cozeTo}/>
+        )}
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
-          {fez[selected].map((t,idx)=>{            
+          {fez.notices.map((t,idx)=>{            
             return (
               <Card
                 navigator={navigator}
                 key={idx}
                 t={t}
+                operatable={true}
+                mine={false}
+                moreOp={()=>{
+                  this.setState({cozeTo: {
+                    nickname: t.author.nickname,
+                    authorId: t.author.id,
+                    content: t.content,
+                    cozeId: t.cozeId,
+                    topicId: t.topicId
+                  }, operating: true});
+                }}
                 press={()=>{
                   const tid = t.topicId || t._id
                   navigator.push({
@@ -75,7 +111,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    readNotice: bindActionCreators(readNotice, dispatch) 
+    readNotice: bindActionCreators(readNotice, dispatch),
+    createCoze: bindActionCreators(createCoze, dispatch)
   }
 }
 

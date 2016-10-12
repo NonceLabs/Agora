@@ -19,8 +19,15 @@ const {height, width} = Dimensions.get('window')
 import s from './Styles'
 import Ionicon from  'react-native-vector-icons/Ionicons'
 import ImagePicker from 'react-native-image-picker'
-import { IMAGER_OPTION } from '../../config/index'
+import { IMAGER_OPTION,SIP } from '../../config/index'
 import { RNUploader } from 'NativeModules'
+
+const opts = {
+    url: `${SIP}avatar`,
+    method: 'POST',  // optional: POST or PUT
+    headers: { 'Accept': 'application/json' },
+};
+
 
 class FezModal extends Component {
   constructor(props){
@@ -35,7 +42,7 @@ class FezModal extends Component {
       const files = [this.state.fez.avatarUrl].map((t)=>{
         return {
           name: 'files[]',
-          filepath: t.uri
+          filepath: t
         }
       })
 
@@ -55,6 +62,9 @@ class FezModal extends Component {
           this.props.hide()
         }
       });
+    }else{
+      this.props.submit(this.state.fez)
+      this.props.hide()
     }
   }
 
