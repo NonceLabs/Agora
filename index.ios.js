@@ -10,25 +10,53 @@ import {
   StyleSheet,
   Text,
   View,
-  Navigator
+  Navigator,
+  PushNotificationIOS,
+  AppStateIOS,
+  AppState
 } from 'react-native';
 import { Provider } from 'react-redux'
 import { store } from './store/store'
 import { io } from './store/io'
 import App from './components/App'
 
-class Menu extends Component {
-  render(){
-    return (
-      <View>
-        <Text>{"Hi, bitch"}</Text>
-      </View>
-    )
-  }
-}
-
-
 class Agora extends Component {
+  componentDidMount() {
+    PushNotificationIOS.addEventListener('notification',(noti)=>{
+      console.log(noti.getMessage());
+    })
+    PushNotificationIOS.getApplicationIconBadgeNumber((badge)=>{
+      if (badge > 0) {
+        PushNotificationIOS.setApplicationIconBadgeNumber(0)  
+      }
+    })
+
+    AppState.addEventListener('change',(newState)=>{
+      switch(newState){
+        case 'inactive':
+          
+          break;
+        case 'background':
+          io.disconnect()
+          break;
+        case 'active':
+          io.connect()
+          break;
+        default:
+          break;
+      }
+    })
+  }
+  componentWillUnmount() {
+    PushNotificationIOS.removeEventListener('notification',(noti)=>{
+      console.log(noti.getMessage());
+    })
+
+    AppState.addEventListener('change',(newState)=>{
+
+    })
+  }
+  
   renderScene(route, navigator) {
     if (route.id == 'tab-bar') {
       return <App navigator={navigator} />;

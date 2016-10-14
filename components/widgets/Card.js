@@ -41,8 +41,6 @@ export class Card extends Component {
     const withTitleStyle = t.showTitle!=undefined ? {}:{paddingTop:10}
     let imageModal = null
     
-    console.log(t);
-
     if (viewUri!="") {
       imageModal = (
         <Modal
@@ -124,6 +122,7 @@ export class Card extends Component {
               })}
             </View>
             <View style={s.topicInfo}>
+              <Text style={s.metaInfo}>{"赞 "+t.likes.length}</Text>
               <Text style={s.metaInfo}>{(new Date(t.date)).toLocaleString()}</Text>
               {index>0 && (
                 <Text style={[s.metaInfo,{alignSelf:'flex-end',color:'black'}]}>{"  F"+index}</Text>

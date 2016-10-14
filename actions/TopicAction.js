@@ -13,7 +13,8 @@ import {
   REPORT,
   TOPIC_NEXT_PAGE,
   COZE_NEXT_PAGE,
-  LOADING_NEXT_PAGE
+  LOADING_NEXT_PAGE,
+  LIKE_COZE
 } from '../config/ActionTypes'
 import axios from 'axios'
 import { io } from '../store/io'
@@ -78,14 +79,18 @@ export function fetchCozes(topicId, page){
   })
   
   return (dispatch)=>{
+    dispatch(nextPageCozeFetched([],{
+      current: page
+    }))
     io.removeListener('topicByIdFetched').on('topicByIdFetched',(rd)=>{
       dispatch(addOthez(rd.fezs))
       let cozes = []
-      if (page == 0) {
+      if (page == 1) {
         cozes = [rd.topic].concat(rd.cozes)
       }else{
         cozes = rd.cozes
       }
+      console.log(cozes);
       dispatch(nextPageCozeFetched(cozes,rd.pages))
     })
   }
@@ -268,5 +273,26 @@ export function reportCoze(one){
 function cozeReported(code){
   return {
     type: REPORT
+  }
+}
+
+export function likeCoze(cozeId, fezId, isTopic, like){
+  console.log(like);
+  return (dispatch)=>{
+    axios.post(`${SIP}coze/like/${cozeId}`,{fezId,isTopic,like})
+      .then((response) => {        
+        dispatch(cozeLiked(cozeId, fezId, like))
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
+}
+
+function cozeLiked(cozeId, fezId, like){
+  return {
+    type: LIKE_COZE,
+    cozeId,
+    fezId,
+    like
   }
 }

@@ -9,7 +9,8 @@ import {
   NEW_TOPIC,
   TOPIC_NEXT_PAGE,
   LOADING_NEXT_PAGE,
-  COZE_NEXT_PAGE
+  COZE_NEXT_PAGE,
+  LIKE_COZE
 } from '../config/ActionTypes'
 import _ from 'lodash'
 
@@ -53,6 +54,25 @@ const initial = {
 }
 export default function home(state=initial,action){
   switch(action.type){
+    case LIKE_COZE:
+    {
+      return Object.assign({},state,{
+        cozes: state.cozes.map((t)=>{
+          if (t._id == action.cozeId) {
+            if (action.like) {
+              return Object.assign({},t,{
+                likes: [...t.likes,action.fezId]
+              })
+            }else{
+              return Object.assign({},t,{
+                likes: t.likes.filter((tl)=> tl!=action.fezId)
+              })
+            }
+          }
+          return t
+        })
+      })
+    }
     case LOADING_NEXT_PAGE:
       return Object.assign({},state,{
         loadingNextPage: true
@@ -103,7 +123,7 @@ export default function home(state=initial,action){
           }
           return t
         }),
-        cozePage: action.pages
+        cozePage: Object.assign({},state.cozePage,action.pages)
       })
     case TOPIC_NEXT_PAGE:
       return Object.assign({},state,{
@@ -122,7 +142,7 @@ export default function home(state=initial,action){
           }
           return t
         }).concat(state.topics),
-        topicPage: action.pages,
+        topicPage: Object.assign({},state.topicPage,action.pages),
         loadingNextPage: false
       })
     case FETCH_TOPICS:

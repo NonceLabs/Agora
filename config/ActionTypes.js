@@ -15,6 +15,7 @@ export const FOLLOW_TOPIC = 'FOLLOW_TOPIC'
 export const OTHEZ = 'OTHEZ'
 export const FETCH_NOTICE = 'FETCH_NOTICE'
 export const READ_NOTICE = 'READ_NOTICE'
+export const LIKE_COZE = 'LIKE_COZE'
 
 export const SIGNUP_FEZ = 'SIGNUP_FEZ'
 export const FETCH_USER = 'FETCH_USER'

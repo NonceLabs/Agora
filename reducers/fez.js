@@ -23,7 +23,8 @@ const initial = {
   joined:[],
   location: {"longitude":-122.0312186,"latitude":37.33233141},
   repliedNoti: true,
-  updatedNoti: true,
+  followedNoti: true,
+  createdNoti: true,
   notices: []
 }
 

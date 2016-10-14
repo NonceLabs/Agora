@@ -1,6 +1,6 @@
 import './UserAgent'
 import {
-  AppStateIOS,
+  AppState,
 } from 'react-native'
 
 import socket from 'socket.io-client/socket.io'

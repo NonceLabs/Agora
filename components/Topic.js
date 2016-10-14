@@ -18,7 +18,7 @@ import { Header,SwipeHeader } from './widgets/Header'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import TextModal from './widgets/TextModal'
-import { fetchCozes,createCoze,reportCoze } from '../actions/TopicAction'
+import { fetchCozes,createCoze,reportCoze,likeCoze } from '../actions/TopicAction'
 import { followTopic } from '../actions/FezAction'
 import { Card } from './widgets/Card'
 import _ from 'lodash'
@@ -39,7 +39,7 @@ class Topic extends Component {
   
   componentWillMount() {
     const { fetchCozes,topicId,fez } = this.props
-    fetchCozes(topicId, 0)
+    fetchCozes(topicId, 1)
   }
   
   richTo(cozes){
@@ -54,7 +54,7 @@ class Topic extends Component {
   }
 
   render() {
-    const { home,navigator,joinable,fez,createCoze,topicId,reportCoze,operations,followTopic } = this.props
+    const { home,navigator,joinable,fez,createCoze,topicId,reportCoze,operations,followTopic,likeCoze } = this.props
     const { cozeModalVisible,cozeTo,operating,reportModal,paging } = this.state
 
     const unity = this.richTo(home.cozes)
@@ -71,22 +71,37 @@ class Topic extends Component {
             {operations.filter((t)=>{
               return cozeTo!=null && cozeTo.authorId!=fez._id
             }).map((op,idx)=>{
+              let opCall = ()=>{}, opTitle=op.title
+              
+              switch(op.title){
+                case "点赞":
+                  {
+                    if (cozeTo.likes && cozeTo.likes.includes(fez._id)) {
+                      opTitle = "取消点赞"
+                    }
+                    opCall = ()=>{
+                      likeCoze(cozeTo.cozeId, fez._id, cozeTo.isTopic,opTitle=="点赞")
+                    }
+                  }
+                  break;
+                case "举报":
+                  {
+                    opCall = ()=>{
+                      this.setState({reportModal: true});
+                    }
+                  }
+                  break;
+                default:                        
+                  break;
+              }
               return (
                 <TouchableOpacity key={idx} onPress={()=>{
-                  switch(op.title){
-                    case "点赞":
-                      break;
-                    case "举报":
-                      this.setState({reportModal: true});
-                      break;
-                    default:                        
-                      break;
-                  }
+                  opCall()
                   this.setState({operating: false});
                 }}>
                   <View style={[s.rowCenter,{width,backgroundColor:'white',marginTop: 6,padding: 10}]}>
                     <EvilIcon name={op.icon} size={30}/>
-                    <Text style={[s.h4,s.deepGray]}>{op.title}</Text>
+                    <Text style={[s.h4,s.deepGray]}>{opTitle}</Text>
                   </View>
                 </TouchableOpacity>
               )
@@ -142,10 +157,10 @@ class Topic extends Component {
             }}
             />
         )}
-        {true && (
+        {home.cozePage.total>1 && (
           <TouchableOpacity style={s.cozePage} onPress={()=>{
               this.setState({paging: true});
-            }}>            
+            }}>
             <View>
                 <Text style={[s.cozePageText,s.h4]}>
                   {home.cozePage.current+"/"+home.cozePage.total}
@@ -173,13 +188,13 @@ class Topic extends Component {
             <Text style={[s.h4,s.bold,s.black,{marginTop:10,alignSelf:'flex-start'}]}>
             {unity.length>0 && unity[0].title}
             </Text>
-            <TouchableOpacity onPress={()=>{
+            {home.cozePage.current==1 && (<TouchableOpacity style={[followed?s.btnFollowedView : s.btnToFollowedView,{alignSelf:'flex-end'}]} onPress={()=>{
               followTopic(fez._id, topicId, !followed)
             }}>
-              <View style={[followed?s.btnFollowedView : s.btnToFollowedView,{alignSelf:'flex-end'}]}>
+              <View>
                 <Text style={followed?s.btnFollowedText: s.btnToFollowedText}>{followed?"已关注":"关  注"}</Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity>)}
           </View>
           {unity.length==0 && (
             <Spinner style={s.spinner} isVisible={true} size={80} type={'ChasingDots'} color={'#008cd5'}/>
@@ -200,15 +215,17 @@ class Topic extends Component {
                   }
                 }}
                 t={t}
-                index={idx+1}
+                index={(home.cozePage.current-1)*12+idx+1}
                 operatable={true}
                 mine={mine}
                 moreOp={()=> {
                   this.setState({operating: true,cozeTo:{
+                    isTopic: t.title!=undefined,
                     nickname: t.author.nickname,
                     authorId: t.author.id,
                     content: t.content,
-                    cozeId: t._id
+                    cozeId: t._id,
+                    likes: t.likes
                   }})
                 }}
                 />
@@ -250,7 +267,8 @@ function mapDispatchToProps(dispatch) {
     fetchCozes: bindActionCreators(fetchCozes, dispatch),
     createCoze: bindActionCreators(createCoze, dispatch),
     reportCoze: bindActionCreators(reportCoze, dispatch),
-    followTopic: bindActionCreators(followTopic, dispatch)
+    followTopic: bindActionCreators(followTopic, dispatch),
+    likeCoze: bindActionCreators(likeCoze, dispatch)
   }
 }
 

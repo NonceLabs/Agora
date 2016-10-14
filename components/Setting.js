@@ -36,7 +36,8 @@ class Setting extends Component {
                     nav: (
                       <SetNotification 
                         repliedNoti={fez.repliedNoti}
-                        updatedNoti={fez.updatedNoti}
+                        followedNoti={fez.followedNoti}
+                        createdNoti={fez.createdNoti}
                         navigator={navigator} 
                         updateFez={(obj)=>{
                           updateFez(fez._id,obj)
@@ -96,12 +97,13 @@ class SetNotification extends Component {
     super(props)
     this.state = {
       repliedNoti: props.repliedNoti,
-      updatedNoti: props.updatedNoti
+      followedNoti: props.followedNoti,
+      createdNoti: props.createdNoti
     }
   }
   render() {
     const { navigator,updateFez } = this.props
-    const { repliedNoti, updatedNoti } = this.state
+    const { repliedNoti, followedNoti,createdNoti } = this.state
     return (
       <View style={s.root}>
         <Header
@@ -110,14 +112,15 @@ class SetNotification extends Component {
             call: ()=>{ 
               updateFez({
                 repliedNoti,
-                updatedNoti
+                followedNoti,
+                createdNoti
               })
               navigator.pop()
             }
           }}
           />
         <View style={s.setList}>
-          <Text style={[s.h4,s.deepGray]}>{"有人@我"}</Text>
+          <Text style={[s.h4,s.deepGray]}>{"有人回复我"}</Text>
           <Switch
             onValueChange={(value) => {
               this.setState({repliedNoti: value})
@@ -126,13 +129,22 @@ class SetNotification extends Component {
             value={repliedNoti} />
         </View>
         <View style={s.setList}>
-          <Text style={[s.h4,s.deepGray]}>{"有人回复"}</Text>
+          <Text style={[s.h4,s.deepGray]}>{"有人回复我创建的帖子"}</Text>
           <Switch
             onValueChange={(value) => {
-              this.setState({updatedNoti: value})
+              this.setState({createdNoti: value})
             }}
             style={{marginBottom: 10}}
-            value={updatedNoti} />
+            value={createdNoti} />
+        </View>
+        <View style={s.setList}>
+          <Text style={[s.h4,s.deepGray]}>{"有人回复我关注的帖子"}</Text>
+          <Switch
+            onValueChange={(value) => {
+              this.setState({followedNoti: value})
+            }}
+            style={{marginBottom: 10}}
+            value={followedNoti} />
         </View>        
       </View>
     );

@@ -33,13 +33,13 @@ class PageModal extends Component {
             </TouchableOpacity>
           
             {_.range(1, total+1).map((t,idx)=>{
-              const selected = t==current?{backgroundColor:'darkslateblue'}:{}
+              const selected = t==current?{backgroundColor:'#008cd5'}:{}
               return (
                 <TouchableOpacity key={t} onPress={()=>{
-                  pageTo(idx)
+                  pageTo(t)
                 }}>
                   <View style={[selected,s.pageDot]}>
-                    <Text style={[s.h2, t==current?s.white:s.black]}>{t}</Text>
+                    <Text style={[s.h2, t==current?s.white:s.deepGray]}>{t}</Text>
                   </View>
                 </TouchableOpacity>
               )

@@ -120,6 +120,7 @@ class App extends Component {
         this.props.fetchUser(fezId)
         this._locate()
       }else{
+        this._locate()
         this.setState({signupModalVisible: true});
       }
     } catch (error) {
@@ -175,9 +176,6 @@ class App extends Component {
     
     return (
       <View style={s.flipCardContainer} {...this._panResponder.panHandlers}>
-        {signupModalVisible && fez._id==undefined && (
-          <SignupModal signupFez={signupFez} />
-        )}
         {fezModalVisible && (
           <FezModal fez={fez} hide={()=> this.setState({fezModalVisible:false})} submit={(nfez)=>{
             updateFez(fez._id,{
@@ -200,6 +198,9 @@ class App extends Component {
             })
             this.props.locateFez(location)
           }}/>
+        )}
+        {signupModalVisible && fez._id==undefined && (
+          <SignupModal signupFez={signupFez} />
         )}
         <Animated.View style={[s.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
           <Menu fez={fez} closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
