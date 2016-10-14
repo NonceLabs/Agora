@@ -2,7 +2,6 @@ import {
   FETCH_TOPICS,
   NEW_COZE,
   FETCH_COZES,
-  FETCH_FEZ_JOINED,
   FETCH_FEZ_CREATED,
   FETCH_FEZ_FOLLOWED,
   OTHEZ,
@@ -17,7 +16,6 @@ import _ from 'lodash'
 const initial = {
   topics:[],
   cozes: [],
-  joined: [],
   followed: [],
   created: [],
   tome: [],
@@ -30,25 +28,6 @@ const initial = {
     total: 1,
     current: 0
   },
-  tojoined: [{
-    author: {
-      nickname: '刘德华',
-      avatarUrl: '../assets/avatar.png',
-      id: ''
-    },
-    to:{
-      id: 'a2',
-      author: {
-        id: '',
-        nickname: '万青'
-      },
-      content: '那东西我们早就不屑啦',
-      date: (new Date()).toLocaleTimeString()
-    },
-    content: '去你的',
-    addons: [],
-    date: (new Date()).toLocaleTimeString()
-  }],
   replied:[],
   othez: []
 }
@@ -88,10 +67,6 @@ export default function home(state=initial,action){
     case FETCH_FEZ_CREATED:
       return Object.assign({},state,{
         created: action.topics
-      })
-    case FETCH_FEZ_JOINED:
-      return Object.assign({},state,{
-        joined: action.topics
       })
     case FETCH_FEZ_FOLLOWED:
       return Object.assign({},state,{

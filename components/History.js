@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import Icon from  'react-native-vector-icons/MaterialIcons'
 const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
-import { fetchFezCreated,fetchFezJoined,fetchFezFollowed,fetchTopicInArray } from '../actions/TopicAction'
+import { fetchFezCreated,fetchFezFollowed,fetchTopicInArray } from '../actions/TopicAction'
 import { Card } from './widgets/Card'
 import { Header,SwipeHeader } from './widgets/Header'
 import Topic from './Topic'
@@ -48,9 +48,6 @@ class History extends Component {
             this.setState({selected: t.key});
             if (home[t.key].length != fez[t.key].length) {
               switch(t.key){
-                case "joined":
-                  this.props.fetchFezJoined(fez._id)
-                  break;
                 case "followed":
                   this.props.fetchFezFollowed(fez.followed)
                   break;
@@ -73,6 +70,7 @@ class History extends Component {
                 navigator={navigator}
                 key={idx}
                 t={t}
+                type={'history'}
                 press={()=>{
                   const tid = t.topicId || t._id
                   navigator.push({
@@ -93,9 +91,6 @@ History.defaultProps = {
     title: '关注',
     key: 'followed'
   },{
-    title: '参与',
-    key: 'joined'
-  },{
     title: '创建',
     key: 'created'
   },]
@@ -113,7 +108,6 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchTopicInArray: bindActionCreators(fetchTopicInArray, dispatch),
     fetchFezCreated: bindActionCreators(fetchFezCreated, dispatch),
-    fetchFezJoined: bindActionCreators(fetchFezJoined, dispatch),
     fetchFezFollowed: bindActionCreators(fetchFezFollowed, dispatch)
   }
 }

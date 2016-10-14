@@ -80,7 +80,17 @@ class Topic extends Component {
                       opTitle = "取消点赞"
                     }
                     opCall = ()=>{
-                      likeCoze(cozeTo.cozeId, fez._id, cozeTo.isTopic,opTitle=="点赞")
+                      likeCoze({
+                        id: cozeTo.cozeId,
+                        content: cozeTo.content,
+                        topicId,
+                        isTopic: cozeTo.isTopic
+                      }, {
+                        id: fez._id,
+                        nickname: fez.nickname
+                      },opTitle=="点赞", {
+                        id: cozeTo.authorId
+                      })
                     }
                   }
                   break;
@@ -131,7 +141,7 @@ class Topic extends Component {
         
         {cozeModalVisible && (
           <TextModal title="回复" btnText="发送" submit={(content,addons)=>{
-            const joined = fez.joined.includes(topicId) 
+            const followed = fez.followed.includes(topicId) 
             createCoze(topicId,{
               content,
               addons,
@@ -142,7 +152,7 @@ class Topic extends Component {
                 avatarUrl: fez.avatarUrl
               },
               to: cozeTo!=null ? cozeTo.cozeId : undefined
-            },joined, cozeTo)
+            },followed, cozeTo)
           }} hide={()=> this.setState({cozeModalVisible:false})} extra={cozeTo}/>
         )}
         {paging && (
@@ -216,6 +226,7 @@ class Topic extends Component {
                 }}
                 t={t}
                 index={(home.cozePage.current-1)*12+idx+1}
+                type={'coze'}
                 operatable={true}
                 mine={mine}
                 moreOp={()=> {

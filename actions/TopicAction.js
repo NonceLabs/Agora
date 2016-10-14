@@ -5,7 +5,6 @@ import {
   FETCH_COZES,
   NEW_COZE,
   NEW_TOPIC,
-  FETCH_FEZ_JOINED,
   FETCH_FEZ_CREATED,
   FETCH_TOPIC_IN_ARRAY,
   FETCH_FEZ_FOLLOWED,
@@ -19,6 +18,7 @@ import {
 import axios from 'axios'
 import { io } from '../store/io'
 import { SIP } from '../config/index'
+import { followTopic } from './FezAction'
 
 export function fetchNextPageTopics(meta){
   io.emit('fetchNearTopics', meta)
@@ -90,7 +90,6 @@ export function fetchCozes(topicId, page){
       }else{
         cozes = rd.cozes
       }
-      console.log(cozes);
       dispatch(nextPageCozeFetched(cozes,rd.pages))
     })
   }
@@ -122,17 +121,16 @@ function topicCreated(one){
   }
 }
 
-export function createCoze(topicId, one, joined,cozeTo){
-  const urlto = joined ? 'continueTopic' : 'joinTopic'
-  io.emit(urlto, {
+export function createCoze(topicId, one, followed, cozeTo){
+  io.emit('continueTopic', {
     coze: Object.assign({}, one, {
       topicId
     }),
     cozeTo
   })
   return (dispatch)=>{
-    if (!joined) {
-      dispatch(topicJoined(topicId))
+    if (!followed) {
+      dispatch(followTopic(one.author.id, topicId, true))
     }
     io.removeListener('cozeCreated').on('cozeCreated',(data)=>{
       dispatch(cozeCreated(data))
@@ -155,9 +153,6 @@ export function fetchTopicInArray(tids, type, uid){
   return (dispatch)=>{
     io.removeListener('topicInArrayFetched').on('topicInArrayFetched',(data)=>{
       switch(type){
-        case "joined":
-          dispatch(fezJoinedFetched(data.topics))
-          break;
         case "created":
           dispatch(fezCreatedFetched(data.topics))
           break;
@@ -193,35 +188,6 @@ function fezFollowedFetched(topics){
   }
 }
 
-export function fetchFezJoined(uid){
-  return (dispatch)=>{
-    axios.get(`${SIP}joined/${uid}`)
-      .then((response) => {
-        const rd = response.data
-        const cozes = rd.cozes.map((t)=>{
-          const topic = rd.topics.filter((tp)=>tp._id==t.topicId)
-          if (topic.length==1) {
-            return Object.assign({},t,{
-              title: topic[0].content,
-              showTitle: true
-            })
-          }
-        })
-        console.log(cozes);
-        dispatch(fezJoinedFetched( cozes ))
-      }).catch((error) => {
-        console.log(error);
-      });
-  }
-}
-
-function fezJoinedFetched(topics){
-  return {
-    type: FETCH_FEZ_JOINED,
-    topics
-  }
-}
-
 export function fetchFezCreated(all){
   return (dispatch)=>{
     axios.get(`${SIP}topics`,{
@@ -243,13 +209,6 @@ function fezCreatedFetched(topics){
   return {
     type: FETCH_FEZ_CREATED,
     topics
-  }
-}
-
-function topicJoined(tid){
-  return {
-    type: JOIN_TOPIC,
-    tid
   }
 }
 
@@ -276,12 +235,13 @@ function cozeReported(code){
   }
 }
 
-export function likeCoze(cozeId, fezId, isTopic, like){
-  console.log(like);
+export function likeCoze(coze, fromFez, like, toFez){
   return (dispatch)=>{
-    axios.post(`${SIP}coze/like/${cozeId}`,{fezId,isTopic,like})
-      .then((response) => {        
-        dispatch(cozeLiked(cozeId, fezId, like))
+    axios.post(`${SIP}coze/like/${coze.id}`,{
+      fromFez,like,toFez,coze
+    })
+      .then((response) => {
+        dispatch(cozeLiked(coze.id, fromFez.id, like))
       }).catch((error) => {
         console.log(error);
       });

@@ -45,7 +45,6 @@ class Notice extends Component {
             title="回复" 
             btnText="发送" 
             submit={(content,addons)=>{
-              const joined = fez.joined.includes(cozeTo.topicId) 
               createCoze(cozeTo.topicId,{
                 content,
                 addons,
@@ -56,7 +55,7 @@ class Notice extends Component {
                   avatarUrl: fez.avatarUrl
                 },
                 to: cozeTo.cozeId
-              },joined, cozeTo)
+              },true, cozeTo)
               this.setState({operating: true});
             }} 
             hide={()=> this.setState({operating:false})} 
@@ -69,6 +68,7 @@ class Notice extends Component {
                 navigator={navigator}
                 key={idx}
                 t={t}
+                type={'notice'}
                 operatable={true}
                 mine={false}
                 moreOp={()=>{

@@ -164,6 +164,7 @@ class Home extends Component {
                 edge={false}
                 key={idx}
                 t={t}
+                type={'topic'}
                 press={()=>{
                   navigator.push({
                     id: 'nav',

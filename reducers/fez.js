@@ -20,7 +20,6 @@ const initial = {
   country: '中国',
   followed:[],
   created:[],
-  joined:[],
   location: {"longitude":-122.0312186,"latitude":37.33233141},
   repliedNoti: true,
   followedNoti: true,
@@ -67,10 +66,6 @@ export default function user(state=initial,action){
             }
           })
         })
-      })
-    case JOIN_TOPIC:
-      return Object.assign({},state,{
-        joined: [...state.joined, action.tid]
       })
     case UPDATE_FEZ:
       return Object.assign({}, state, action.obj)

@@ -21,7 +21,6 @@ export const SIGNUP_FEZ = 'SIGNUP_FEZ'
 export const FETCH_USER = 'FETCH_USER'
 export const LOCATE_FEZ = 'LOCATE_FEZ'
 export const UPDATE_FEZ = 'UPDATE_FEZ'
-export const FETCH_FEZ_JOINED = 'FETCH_FEZ_JOINED'
 export const FETCH_FEZ_FOLLOWED = 'FETCH_FEZ_FOLLOWED'
 export const FETCH_FEZ_CREATED = 'FETCH_FEZ_CREATED'
 

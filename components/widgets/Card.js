@@ -80,10 +80,10 @@ export class Card extends Component {
               <Image style={s.avatar} source={{uri: t.author.avatarUrl||AVATAR}} />
               <Text style={s.name}>{t.author.nickname}</Text>
               {operatable && !mine && (
-                <TouchableOpacity style={s.flexEnd} onPress={()=>{
+                <TouchableOpacity style={[s.flexEnd,{top: 0}]} onPress={()=>{
                   moreOp()
                 }}>
-                  <Icon name="more-horiz" size={20} color="#999"/>
+                  <Icon name="more-vert" size={30} color="#999"/>
                 </TouchableOpacity>
               )}
             </View>
@@ -122,7 +122,7 @@ export class Card extends Component {
               })}
             </View>
             <View style={s.topicInfo}>
-              <Text style={s.metaInfo}>{"赞 "+t.likes.length}</Text>
+              <Text style={s.metaInfo}>{"赞 "+(t.lieks || t.likes.length)}</Text>
               <Text style={s.metaInfo}>{(new Date(t.date)).toLocaleString()}</Text>
               {index>0 && (
                 <Text style={[s.metaInfo,{alignSelf:'flex-end',color:'black'}]}>{"  F"+index}</Text>
