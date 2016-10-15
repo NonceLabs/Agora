@@ -46,7 +46,7 @@ export default function user(state=initial,action){
       })
     case READ_NOTICE:
       return Object.assign({},state,{
-        replyToMe: state.replyToMe.map((t)=>{
+        notices: state.notices.map((t)=>{
           return Object.assign({},t,{
             read: true
           })

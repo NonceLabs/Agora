@@ -77,7 +77,7 @@ export function fetchUser(id){
         const fezfrom = data.fezs.filter((f)=> f._id==t.fromId)
         if (fezfrom.length==1) {
           return {
-            nid: t._id,
+            _id: t._id,
             read: false,
             author:{
               id: t.fromId,
@@ -91,8 +91,8 @@ export function fetchUser(id){
             topicId: t.topicId,
             cozeId: t.fromCozeId,
             title: t.title || "",
-            showTitle: true,
-            date: t.date
+            date: t.date,
+            type: t.type
           }
         }
       })
@@ -117,6 +117,7 @@ export function noticeFetched(notices){
 
 export function readNotice(nids){
   return (dispatch)=>{
+    console.log(nids);
     axios.post(`${SIP}readnotice`,{all: nids})
       .then((response) => {        
         dispatch(noticeRead())

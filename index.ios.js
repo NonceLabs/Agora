@@ -19,9 +19,11 @@ import { Provider } from 'react-redux'
 import { store } from './store/store'
 import { io } from './store/io'
 import App from './components/App'
+import codePush from 'react-native-code-push'
 
 class Agora extends Component {
   componentDidMount() {
+
     PushNotificationIOS.addEventListener('notification',(noti)=>{
       console.log(noti.getMessage());
     })
@@ -40,6 +42,7 @@ class Agora extends Component {
           io.disconnect()
           break;
         case 'active':
+          codePush.sync()
           io.connect()
           break;
         default:

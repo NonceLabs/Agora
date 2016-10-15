@@ -69,6 +69,43 @@ export default styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '200'
   },
+  dialogWrapper:{
+    flexDirection: 'row',
+    paddingTop: 10,
+    paddingBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dialogFezWrapper:{
+    flexDirection:'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70
+  },
+  dialogAvatar:{
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginBottom: 4
+  },
+  dialogContentWrapper:{
+    flexDirection:'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: '#999',
+    paddingBottom: 4,
+    shadowRadius: 1,
+    shadowColor: '#999',
+    shadowOpacity: 0.3,
+    shadowOffset: {height: 1,width: 1}
+  },
+  dialogName:{
+    fontSize: 12,
+    marginBottom: 4
+  },
   avatar:{
     width: 20,
     height: 20,
@@ -395,8 +432,8 @@ export default styles = StyleSheet.create({
   },
   cozeWithTitle:{
     backgroundColor: '#008cd5',
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
     width: width-20,
     padding: 4,
     marginBottom: 5
@@ -452,5 +489,8 @@ export default styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 10,
     marginTop: 10
+  },
+  red:{
+    color: 'red'
   }
 })

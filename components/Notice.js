@@ -19,6 +19,7 @@ import Topic from './Topic'
 import { readNotice } from '../actions/FezAction'
 import { createCoze } from '../actions/TopicAction'
 import TextModal from './widgets/TextModal'
+import Dialog from './widgets/Dialog'
 
 class Notice extends Component {
   constructor(props){
@@ -31,7 +32,7 @@ class Notice extends Component {
   
   componentWillMount() {
     const { fez,readNotice } = this.props
-    // readNotice(fez.notices.map((t)=> t.id))
+    readNotice(fez.notices.map((t)=> t._id))
   }
   
   render() {
@@ -64,12 +65,10 @@ class Notice extends Component {
         <ScrollView style={[s.topicsContainer,{height: height-60}]} bounces={true} automaticallyAdjustContentInsets={false} scrollEventThrottle={200} contentContainerStyle={s.topicsContentStyle}>
           {fez.notices.map((t,idx)=>{            
             return (
-              <Card
+              <Dialog
                 navigator={navigator}
                 key={idx}
                 t={t}
-                type={'notice'}
-                operatable={true}
                 mine={false}
                 moreOp={()=>{
                   this.setState({cozeTo: {

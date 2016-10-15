@@ -170,11 +170,7 @@ export function fetchFezFollowed(all){
       params: {all:all}
     })
       .then((response) => {
-        dispatch(fezFollowedFetched( response.data.map((t)=>{
-          return Object.assign({},t,{
-            showTitle: true
-          })
-        }) ))
+        dispatch(fezFollowedFetched(response.data))
       }).catch((error) => {
         console.log(error);
       });
@@ -194,11 +190,7 @@ export function fetchFezCreated(all){
       params: {all}  
     })
       .then((response) => {        
-        dispatch(fezCreatedFetched( response.data.map((t)=>{
-          return Object.assign({},t,{
-            showTitle: true
-          })
-        })))
+        dispatch(fezCreatedFetched(response.data))
       }).catch((error) => {
         console.log(error);
       });

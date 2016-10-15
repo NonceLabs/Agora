@@ -76,7 +76,7 @@ export class HomeHeader extends Component {
           <Image source={require('../../assets/logo.png')} style={{
             width: 40,height: 32,marginTop: 10
             }}/>
-          <Text style={[s.deepGray,s.h4,{marginTop:12,fontWeight:'800',marginLeft: 8}]}>TUK</Text>        
+          <Text style={[s.deepGray,s.h4,{marginTop:12,fontWeight:'800',marginLeft: 8}]}>OASIS</Text>        
         </View>
         
       </View>

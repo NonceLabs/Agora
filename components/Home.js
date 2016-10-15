@@ -61,8 +61,8 @@ class Home extends Component {
         subtitle: t.content,
         rightCalloutAccessory: {
           source: { uri: `${SIP}images/view.png` },
-          height: 50,
-          width: 50
+          height: 60,
+          width: 37
         },
         annotationImage: {
           source: { uri: `${SIP}images/topic.png` },

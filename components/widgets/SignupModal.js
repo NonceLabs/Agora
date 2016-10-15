@@ -11,12 +11,14 @@ import {
   Alert,
   TextInput,
   Platform,
-  PushNotificationIOS
+  PushNotificationIOS,
+  Linking
 } from 'react-native';
 
 const {height, width} = Dimensions.get('window')
 import s from './Styles'
-import Ionicon from  'react-native-vector-icons/Ionicons'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import MDIcon from 'react-native-vector-icons/MaterialIcons'
 import _ from 'lodash'
 
 class SignupModal extends Component {
@@ -27,7 +29,9 @@ class SignupModal extends Component {
         nickname: "",
         gender: 0,
         token: ""
-      }
+      },
+      agreed: false,
+      messageVisible: false
     }
   }
 
@@ -44,7 +48,7 @@ class SignupModal extends Component {
   }
 
   render() {
-    const { nfez } = this.state
+    const { nfez,agreed,messageVisible } = this.state
     const { signupFez } = this.props
     return (
       <Modal
@@ -86,8 +90,24 @@ class SignupModal extends Component {
             })}
           </View>
           <TouchableOpacity onPress={()=>{
-            if (_.trim(nfez.nickname).length != 0) {
+            this.setState({agreed: !agreed});
+          }}>
+            <View style={[s.btnView,{flexDirection:'row'}]}>
+              <MDIcon name={agreed?"check-box":"check-box-outline-blank"} size={24} color="white" style={{top: -4}}/>
+              <Text style={[s.btnText,{color:'black',marginRight:5,marginLeft: 5}]}>{"同意"}</Text>
+              <TouchableOpacity onPress={()=>{
+                this.goEULA()
+              }}>
+                <Text style={s.btnText}>{"《用户协议》"}</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+          {messageVisible && (<Text style={s.red}>在同意协议之前，你不能注册</Text>)}
+          <TouchableOpacity onPress={()=>{
+            if (agreed && _.trim(nfez.nickname).length != 0) {
               signupFez(nfez)
+            }else{
+              this.setState({messageVisible: true});
             }
           }}>
             <View style={[s.btnView,{borderColor:'white',borderWidth:1}]}>
@@ -97,6 +117,15 @@ class SignupModal extends Component {
         </View>
       </Modal>
     );
+  }
+  goEULA(){
+    Linking.canOpenURL('http://www.cinext.cc').then(supported => {
+      if (supported) {
+        Linking.openURL('http://www.cinext.cc');
+      } else {
+        console.log('Don\'t know how to open URI: ' + this.props.url);
+      }
+    });
   }
   getGender(gender){
     const size = 40

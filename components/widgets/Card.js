@@ -35,12 +35,30 @@ export class Card extends Component {
   }
   
   render() {
-    const { t,edge,press,operations,operatable,mine,moreOp,index } = this.props
+    const { t,edge,press,operations,operatable,mine,moreOp,index,type } = this.props
     const { reportModal,viewUri,size } = this.state
     const edgeStyle = edge? {width: width-20,borderRadius: 4}:{}
     const withTitleStyle = t.showTitle!=undefined ? {}:{paddingTop:10}
     let imageModal = null
-    
+    console.log(t);
+
+    let showTitle = false, showLike = true, showOp = false
+    switch(type){
+      case 'notice':
+        showTitle = true;
+        showLike = false;
+        break;
+      case 'history':
+        showTitle = true
+        break;
+      case 'coze':
+        showOp = true
+        break;
+      case 'topic':
+        
+        break;
+    }
+
     if (viewUri!="") {
       imageModal = (
         <Modal
@@ -64,7 +82,7 @@ export class Card extends Component {
 
     return (
       <View style={[s.topicWrapper, edgeStyle,withTitleStyle]}>
-        {t.showTitle && (
+        {showTitle && (
           <View style={s.cozeWithTitle}>
             <Text style={[s.h6,{color:'white'}]}>{t.title}</Text>
           </View>
@@ -79,8 +97,8 @@ export class Card extends Component {
             <View style={[s.topicAuthor, edge && {width: width-40}]}>
               <Image style={s.avatar} source={{uri: t.author.avatarUrl||AVATAR}} />
               <Text style={s.name}>{t.author.nickname}</Text>
-              {operatable && !mine && (
-                <TouchableOpacity style={[s.flexEnd,{top: 0}]} onPress={()=>{
+              {showOp && !mine && (
+                <TouchableOpacity style={[s.flexEnd,{marginTop: -10,marginLeft: 10}]} onPress={()=>{
                   moreOp()
                 }}>
                   <Icon name="more-vert" size={30} color="#999"/>
@@ -122,7 +140,7 @@ export class Card extends Component {
               })}
             </View>
             <View style={s.topicInfo}>
-              <Text style={s.metaInfo}>{"赞 "+(t.lieks || t.likes.length)}</Text>
+              {showLike && (<Text style={s.metaInfo}>{"赞 "+(t.likes.length)}</Text>)}
               <Text style={s.metaInfo}>{(new Date(t.date)).toLocaleString()}</Text>
               {index>0 && (
                 <Text style={[s.metaInfo,{alignSelf:'flex-end',color:'black'}]}>{"  F"+index}</Text>
