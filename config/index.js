@@ -1,4 +1,4 @@
-const IP = '192.168.1.3'
+const IP = '120.76.251.99'
 
 export const SIP = `http://${IP}:3000/`
 export const WSIP = `ws://${IP}:3001`

@@ -154,14 +154,16 @@ export default styles = StyleSheet.create({
     color: 'azure'
   },
   replyToWrapper:{
-    flexDirection:'row',
+    flexWrap: 'wrap',
     backgroundColor:'mistyrose',
     padding:4,
     borderRadius:2,
     marginLeft: 4
   },
   replyToContent:{
-    color: '#666'
+    color: '#666',
+    fontSize: 14,
+    lineHeight: 20,
   },
   replyToName:{
     color: '#333'

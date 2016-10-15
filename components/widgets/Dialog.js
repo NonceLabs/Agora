@@ -40,16 +40,18 @@ class Dialog extends Component {
       )
     }else{
       content = (
-        <View  style={[s.dialogContentWrapper,{width: width-100}]}>
+        <View  style={[s.dialogContentWrapper,{width: width-120}]}>
           <TouchableOpacity onPress={()=> press()}>
-            <View style={{backgroundColor: '#008cd5',width: width-102,marginBottom: 4}}>
+            <View style={{backgroundColor: '#008cd5',width: width-122,marginBottom: 4}}>
               <Text style={[s.h6,s.white,{padding: 4}]}>{t.title}</Text>
             </View>
           </TouchableOpacity>
           {(t.to!=undefined && typeof(t.to)=="object") && (
-            <View style={s.replyToWrapper}>
-              <Text style={s.replyToName}>{t.to.author.nickname+" : "}</Text>
-              <Text style={s.replyToContent}>{t.to.content}</Text>
+            <View style={[s.replyToWrapper]}>
+              <Text style={s.replyToName}>
+                {t.to.author.nickname+" : "}
+                <Text style={s.replyToContent}>{t.to.content}</Text>
+              </Text>
             </View>
           )}
           <Text style={[s.content,{marginLeft: 4}]}>{t.content}</Text>

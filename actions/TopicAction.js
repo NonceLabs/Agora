@@ -25,7 +25,6 @@ export function fetchNextPageTopics(meta){
   return (dispatch)=>{
     io.removeListener('nearTopicsFetched').on('nearTopicsFetched',(data)=>{
       dispatch(addOthez(data.fezs))
-      dispatch((loadingTextPage(true)))
       dispatch(topicsFetched(data.topics,data.topicPage))
     })
   }
@@ -47,7 +46,8 @@ function nextPageCozeFetched(cozes, pages){
   }
 }
 
-function loadingTextPage(loading){
+export function loadingTextPage(loading){
+  console.log('loading');
   return {
     type: LOADING_NEXT_PAGE,
     loading
@@ -57,6 +57,7 @@ function loadingTextPage(loading){
 export function fetchTopics(meta){
   io.emit('fetchNearTopics', meta)
   return (dispatch)=>{
+    dispatch(loadingTextPage(true))
     io.removeListener('nearTopicsFetched').on('nearTopicsFetched',(data)=>{
       dispatch(addOthez(data.fezs))
       dispatch(topicsFetched(data.topics,data.topicPage))

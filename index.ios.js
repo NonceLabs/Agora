@@ -42,7 +42,7 @@ class Agora extends Component {
           io.disconnect()
           break;
         case 'active':
-          codePush.sync()
+          // codePush.sync()
           io.connect()
           break;
         default:
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
 
 
 
-AppRegistry.registerComponent('Agora', () => Agora);
+AppRegistry.registerComponent('Agora', () => codePush(Agora));

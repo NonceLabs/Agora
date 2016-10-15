@@ -207,7 +207,7 @@ class Topic extends Component {
             </TouchableOpacity>)}
           </View>
           {unity.length==0 && (
-            <Spinner style={s.spinner} isVisible={true} size={80} type={'ChasingDots'} color={'#008cd5'}/>
+            <Spinner style={s.spinner} isVisible={true} size={80} type={'9CubeGrid'} color={'#008cd5'}/>
           )}
           {unity.map((t,idx)=>{
             const mine = t.author.id == fez._id

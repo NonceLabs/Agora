@@ -127,24 +127,6 @@ class SetNotification extends Component {
             }}
             style={{marginBottom: 10}}
             value={repliedNoti} />
-        </View>
-        <View style={s.setList}>
-          <Text style={[s.h4,s.deepGray]}>{"有人回复我创建的帖子"}</Text>
-          <Switch
-            onValueChange={(value) => {
-              this.setState({createdNoti: value})
-            }}
-            style={{marginBottom: 10}}
-            value={createdNoti} />
-        </View>
-        <View style={s.setList}>
-          <Text style={[s.h4,s.deepGray]}>{"有人回复我关注的帖子"}</Text>
-          <Switch
-            onValueChange={(value) => {
-              this.setState({followedNoti: value})
-            }}
-            style={{marginBottom: 10}}
-            value={followedNoti} />
         </View>        
       </View>
     );
@@ -165,7 +147,7 @@ class About extends Component {
           }}
          />
         <WebView
-          source={{uri: 'http://www.douban.com'}}
+          source={{uri: 'https://www.cinext.cc'}}
           style={{marginTop: 10,width: width, height: height-70}}
           javaScriptEnabled={true}
           domStorageEnabled={true}
@@ -175,3 +157,22 @@ class About extends Component {
     );
   }
 }
+
+// <View style={s.setList}>
+//     <Text style={[s.h4,s.deepGray]}>{"有人回复我创建的帖子"}</Text>
+//     <Switch
+//       onValueChange={(value) => {
+//         this.setState({createdNoti: value})
+//       }}
+//       style={{marginBottom: 10}}
+//       value={createdNoti} />
+//   </View>
+//   <View style={s.setList}>
+//     <Text style={[s.h4,s.deepGray]}>{"有人回复我关注的帖子"}</Text>
+//     <Switch
+//       onValueChange={(value) => {
+//         this.setState({followedNoti: value})
+//       }}
+//       style={{marginBottom: 10}}
+//       value={followedNoti} />
+//   </View>

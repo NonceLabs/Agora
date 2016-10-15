@@ -137,7 +137,8 @@ export default function home(state=initial,action){
           }
           return t
         })),
-        topicPage: action.pages
+        topicPage: action.pages,
+        loadingNextPage: false
       })
     default:
       return state

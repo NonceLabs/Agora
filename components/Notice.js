@@ -30,7 +30,7 @@ class Notice extends Component {
     }
   }
   
-  componentWillMount() {
+  componentDidMount() {
     const { fez,readNotice } = this.props
     readNotice(fez.notices.map((t)=> t._id))
   }
@@ -88,6 +88,13 @@ class Notice extends Component {
                 }}/>
             )
           })}
+          {fez.notices.length==0 && (
+            <View style={{alignSelf:'center',marginTop: 100}}>
+              <Text style={[s.deepGray,s.h2]}>
+                你什么消息也没收到
+              </Text>
+            </View>            
+          )}
         </ScrollView>        
       </View>
     );

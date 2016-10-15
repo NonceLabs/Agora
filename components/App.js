@@ -28,7 +28,7 @@ const {height, width} = Dimensions.get('window')
 import s from './widgets/Styles'
 import { openMenu,selectMenuitem,feedback } from '../actions/OpAction'
 import { fetchUser,updateFez,locateFez,signupFez } from '../actions/FezAction'
-import { fetchTopics } from '../actions/TopicAction'
+import { fetchTopics,loadingTextPage } from '../actions/TopicAction'
 
 import TextModal from './widgets/TextModal'
 import FezModal from './widgets/FezModal'
@@ -120,7 +120,6 @@ class App extends Component {
         this.props.fetchUser(fezId)
         this._locate()
       }else{
-        this._locate()
         this.setState({signupModalVisible: true});
       }
     } catch (error) {
@@ -138,7 +137,7 @@ class App extends Component {
           latitude: coords.latitude
         }});
       },
-      (error) => alert(JSON.stringify(error)),
+      (error) => {},
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
   }
@@ -200,7 +199,10 @@ class App extends Component {
           }}/>
         )}
         {signupModalVisible && fez._id==undefined && (
-          <SignupModal signupFez={signupFez} />
+          <SignupModal signupFez={(nfez)=>{
+            signupFez(nfez)
+            this._locate()
+          }} />
         )}
         <Animated.View style={[s.flipCard, {backgroundColor: 'red',position:'absolute',left: 0,top: 0}]}>
           <Menu fez={fez} closeMenu={this.close.bind(this)} selectMenuitem={selectMenuitem}/>
@@ -320,6 +322,7 @@ class App extends Component {
   }
 
   refresh(){
+    this.props.loadingTextPage(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const coords = pos.coords
@@ -372,7 +375,8 @@ function mapDispatchToProps(dispatch) {
     fetchTopics: bindActionCreators(fetchTopics, dispatch),
     updateFez: bindActionCreators(updateFez, dispatch),
     locateFez: bindActionCreators(locateFez, dispatch),
-    signupFez: bindActionCreators(signupFez, dispatch)
+    signupFez: bindActionCreators(signupFez, dispatch),
+    loadingTextPage: bindActionCreators(loadingTextPage, dispatch)
   }
 }
 

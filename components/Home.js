@@ -122,9 +122,6 @@ class Home extends Component {
                 logoIsHidden={true}
                 compassIsHidden={true}
                 annotations={this.annotations}
-                onRightAnnotationTapped={()=>{
-                  
-                }}
                 onRightAnnotationTapped={(anno)=>{
                   this.setState({mapModal: false});
                   navigator.push({
@@ -149,15 +146,18 @@ class Home extends Component {
           refreshControl={
             <RefreshControl
               refreshing={home.loadingNextPage}
-              onRefresh={this._onRefresh.bind(this)}
-              tintColor="#ff0000"
+              onRefresh={()=> this.props.refresh()}
+              tintColor="#fff"
               title="加载中..."
-              titleColor="#00ff00"
-              colors={['#ff0000', '#00ff00', '#0000ff']}
-              progressBackgroundColor="#ffff00"
+              titleColor="#fff"
+              colors={['#fff', '#fff', '#fff']}
+              progressBackgroundColor="#fff"
             />
           }
           >
+          {home.loadingNextPage && (
+            <Spinner style={[s.spinner,{marginTop: -60}]} isVisible={true} size={80} type={'WordPress'} color={'#008cd5'}/>
+          )}
           {home.topics.map((t,idx)=>{            
             return (
               <Card
@@ -173,9 +173,6 @@ class Home extends Component {
                 }}/>
             )
           })}
-          {home.loadingNextPage && (
-            <Spinner style={s.spinner} isVisible={true} size={80} type={'ChasingDots'} color={'#008cd5'}/>
-          )}
           <View style={{height: 50, width, backgroundColor:'white'}}></View>
         </ScrollView>
 
@@ -195,9 +192,6 @@ class Home extends Component {
         </View>
       </View>
     );
-  }
-  _onRefresh(){
-    this.props.refresh()
   }
 }
 

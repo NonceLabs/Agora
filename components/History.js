@@ -34,7 +34,7 @@ class History extends Component {
   render() {
     const { tabs,home,fez,navigator,menuOpen,toggle,fetchTopicInArray } = this.props
     const { selected } = this.state
-
+    const message = selected=='followed' ? "这里什么也没有，快去关注几条吧":"你还没发言呢"
     return (
       <View style={[s.root,{paddingTop: 10}]}>
         <SwipeHeader
@@ -80,6 +80,13 @@ class History extends Component {
                 }}/>
             )
           })}
+          {home[selected].length==0 && (
+            <View style={{alignSelf:'center',marginTop: 100}}>
+              <Text style={[s.deepGray,s.h2]}>
+                {message}
+              </Text>
+            </View>            
+          )}
         </ScrollView>
       </View>
     );
