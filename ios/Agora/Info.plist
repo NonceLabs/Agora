@@ -21,7 +21,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
+	<key>CodePushDeploymentKey</key>
+	<string>Cfe0IwtodS_0qhwe8Qbg6zhgl8EqEkEMSfCaW</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -67,7 +69,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CodePushDeploymentKey</key>
-	<string>Cfe0IwtodS_0qhwe8Qbg6zhgl8EqEkEMSfCaW</string>
 </dict>
 </plist>
