@@ -59,12 +59,12 @@ class TargetModal extends Component {
       velocity: 1,  // Velocity makes it move
       tension: -10, // Slow
       friction: 1,  // Oscillate a lot
-      duration: 1000
+      duration: 2000
     }).start();
 
     setTimeout(()=>{
       this.setState({mapVisible: true});
-    }, 1000);
+    }, 2500);
   }
   
   render() {

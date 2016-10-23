@@ -61,6 +61,7 @@ export function fetchTopics(meta){
     io.removeListener('nearTopicsFetched').on('nearTopicsFetched',(data)=>{
       dispatch(addOthez(data.fezs))
       dispatch(topicsFetched(data.topics,data.topicPage))
+      dispatch(loadingTextPage(false))
     })
   }
 }

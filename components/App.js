@@ -187,15 +187,10 @@ class App extends Component {
         {!signupModalVisible && targetModalVisible && (
           <TargetModal location={location} retarget={()=>{
             this._locate()
+            this._fetchNearTopics()
           }} gotopics={()=>{
             this.setState({targetModalVisible: false});
-            this.props.fetchTopics({
-              long: location.longitude,
-              lat: location.latitude,
-              page: home.topicPage.current,
-              uid: fez._id
-            })
-            this.props.locateFez(location)
+            this._fetchNearTopics()
           }}/>
         )}
         {signupModalVisible && fez._id==undefined && (
@@ -340,6 +335,18 @@ class App extends Component {
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
+  }
+
+  _fetchNearTopics(){
+    const { location } = this.state
+    const { home,fez } = this.props
+    this.props.fetchTopics({
+      long: location.longitude,
+      lat: location.latitude,
+      page: home.topicPage.current,
+      uid: fez._id
+    })
+    this.props.locateFez(location)
   }
 }
 

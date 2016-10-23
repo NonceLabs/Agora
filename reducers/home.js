@@ -54,7 +54,7 @@ export default function home(state=initial,action){
     }
     case LOADING_NEXT_PAGE:
       return Object.assign({},state,{
-        loadingNextPage: true
+        loadingNextPage: action.loading
       })
     case NEW_TOPIC:
       return Object.assign({},state,{
